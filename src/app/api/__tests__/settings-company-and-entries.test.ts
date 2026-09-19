@@ -80,7 +80,7 @@ describe('POST /api/settings/company', () => {
 
   it('returns 500 when database throws', async () => {
     updateCompanyInfoAction.mockRejectedValue(
-      new Error('Yrityksen tietojen tallennus epäonnistui'),
+      new Error('Failed to save company info'),
     );
 
     const req = new Request('http://localhost/api/settings/company', {
@@ -124,7 +124,7 @@ describe('PATCH /api/entries/[id]', () => {
 
   it('returns 404 when entry is missing', async () => {
     updateEntryDescriptionAction.mockRejectedValue(
-      new ApiRouteError('Vientiriviä ei löytynyt', 404),
+      new ApiRouteError('Entry row not found', 404),
     );
     const req = new Request('http://localhost/api/entries/99', {
       method: 'PATCH',
@@ -137,7 +137,7 @@ describe('PATCH /api/entries/[id]', () => {
 
   it('returns 404 when accountId is set but account does not exist', async () => {
     updateEntryAccountAction.mockRejectedValue(
-      new ApiRouteError('Tiliä ei löytynyt', 404),
+      new ApiRouteError('Account not found', 404),
     );
     const req = new Request('http://localhost/api/entries/10', {
       method: 'PATCH',
@@ -147,7 +147,7 @@ describe('PATCH /api/entries/[id]', () => {
     const res = await patchEntry(req, routeParams('10'));
     expect(res.status).toBe(404);
     const data = await res.json();
-    expect(data.error).toBe('Tiliä ei löytynyt');
+    expect(data.error).toBe('Account not found');
     expect(updateEntryAccountAction).toHaveBeenCalledWith(10, { accountId: 999 });
   });
 
@@ -220,7 +220,7 @@ describe('PATCH /api/entries/[id]', () => {
 
   it('returns 500 when database throws', async () => {
     updateEntryDescriptionAction.mockRejectedValue(
-      new Error('Vientirivin päivitys epäonnistui'),
+      new Error('Failed to update entry row'),
     );
 
     const req = new Request('http://localhost/api/entries/10', {

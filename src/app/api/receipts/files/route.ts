@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   try {
     const source = resolveRequestDataSource(request);
     if (!source) {
-      return jsonError('Aktiivista tietolähdettä ei löytynyt.', 400);
+      return jsonError('Active datasource not found.', 400);
     }
     const pdfRoot = getPdfRoot(source);
     const files = listPdfFiles(pdfRoot);
@@ -15,6 +15,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ files });
   } catch (error) {
     console.error('Error listing receipt PDFs:', error);
-    return jsonError('PDF-tiedostojen listaus epäonnistui');
+    return jsonError('PDF file listing failed');
   }
 }

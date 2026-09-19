@@ -50,7 +50,7 @@ describe('PATCH /api/documents/[id]', () => {
 
   it('returns 404 when document does not exist', async () => {
     updateDocumentAction.mockRejectedValue(
-      new ApiRouteError('Tositetta ei löytynyt', 404),
+      new ApiRouteError('Document not found', 404),
     );
     const res = await PATCH(
       patchRequest('99', { date: 1 }) as NextRequest,
@@ -58,12 +58,12 @@ describe('PATCH /api/documents/[id]', () => {
     );
     expect(res.status).toBe(404);
     const data = await res.json();
-    expect(data.error).toBe('Tositetta ei löytynyt');
+    expect(data.error).toBe('Document not found');
   });
 
   it('returns 400 when body has no valid date or metadata fields', async () => {
     updateDocumentAction.mockRejectedValue(
-      new ApiRouteError('Virheellinen tositteen päivitys', 400),
+      new ApiRouteError('Invalid document update', 400),
     );
 
     const res = await PATCH(
@@ -117,28 +117,28 @@ describe('PATCH /api/documents/[id]', () => {
     updateDocumentAction.mockResolvedValue({
       id: 5,
       date: 1_700_000_000_000,
-      category: 'muu',
+      category: 'other',
       name: 'Tosite',
     });
 
     const res = await PATCH(
-      patchRequest('5', { category: 'muu', name: 'Tosite' }) as NextRequest,
+      patchRequest('5', { category: 'other', name: 'Tosite' }) as NextRequest,
       routeParams('5'),
     );
     expect(res.status).toBe(200);
     expect(updateDocumentAction).toHaveBeenCalledWith(5, {
-      category: 'muu',
+      category: 'other',
       name: 'Tosite',
     });
     const data = await res.json();
     expect(data.id).toBe(5);
-    expect(data.category).toBe('muu');
+    expect(data.category).toBe('other');
     expect(data.name).toBe('Tosite');
   });
 
   it('returns 500 when database throws', async () => {
     updateDocumentAction.mockRejectedValue(
-      new Error('Tositteen päivitys epäonnistui'),
+      new Error('Failed to update document'),
     );
 
     const res = await PATCH(
@@ -156,7 +156,7 @@ describe('DELETE /api/documents/[id]', () => {
 
   it('returns 404 when document is missing', async () => {
     deleteDocumentAction.mockRejectedValue(
-      new ApiRouteError('Tositetta ei löytynyt', 404),
+      new ApiRouteError('Document not found', 404),
     );
     const req = new Request('http://localhost/api/documents/3', {
       method: 'DELETE',

@@ -72,8 +72,8 @@ export function SortableHeader<K extends string>({
         <div
           role="separator"
           aria-orientation="vertical"
-          aria-label={`Muuta sarakkeen ${label} leveyttä`}
-          title="Vedä säätääksesi leveyttä. Kaksoisklikkaa palauttaaksesi."
+          aria-label={`Resize column ${label} width`}
+          title="Drag to resize. Double-click to reset."
           className="absolute inset-y-0 right-0 z-10 w-3 cursor-col-resize touch-none after:absolute after:bottom-2 after:right-1.5 after:top-2 after:w-px after:bg-white/10 after:transition-colors hover:after:bg-accent/60"
           onPointerDown={onResizePointerDown}
           onDoubleClick={onResizeDoubleClick}

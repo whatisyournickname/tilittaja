@@ -23,7 +23,7 @@ export async function createVatSettlementAction(input: unknown) {
 
     if (!preview) {
       throw new ApiRouteError(
-        'ALV-tileillä ei ole siirrettävää saldoa tai tilitystili puuttuu.',
+        'VAT accounts have no transferable balance or settlement account is missing.',
       );
     }
 
@@ -55,5 +55,5 @@ export async function createVatSettlementAction(input: unknown) {
     updateDocumentMetadata(document.id, 'ALV', 'ALV-ilmoitus');
     revalidateApp();
     return { id: document.id, number: document.number };
-  }, 'ALV-ilmoituksen muodostus epäonnistui.');
+  }, 'Failed to generate VAT return.');
 }

@@ -70,8 +70,8 @@ function ResizableHeaderCell({
       <div
         role="separator"
         aria-orientation="vertical"
-        aria-label={`Muuta sarakkeen ${label} leveyttä`}
-        title="Vedä säätääksesi leveyttä. Kaksoisklikkaa palauttaaksesi."
+        aria-label={`Resize column ${label} width`}
+        title="Drag to resize. Double-click to reset."
         className="absolute inset-y-0 right-0 z-10 w-3 cursor-col-resize touch-none after:absolute after:bottom-2 after:right-1.5 after:top-2 after:w-px after:bg-white/10 after:transition-colors hover:after:bg-accent/60"
         onPointerDown={onResizePointerDown}
         onDoubleClick={onResizeDoubleClick}
@@ -341,19 +341,19 @@ export default function DocumentsFilter({
 
   const handleDeleteSelected = async () => {
     if (periodLocked) {
-      setBulkDeleteError('Lukitun tilikauden tositteita ei voi poistaa.');
+      setBulkDeleteError('Locked period documents cannot be deleted.');
       return;
     }
 
     if (!hasSelection) {
-      setBulkDeleteError('Valitse vähintään yksi tosite poistettavaksi.');
+      setBulkDeleteError('Select at least one document to delete.');
       return;
     }
 
     const confirmMessage = [
-      `Poistetaanko ${selectedDocuments.length} valittua tositetta?`,
+      `Delete ${selectedDocuments.length} selected documents?`,
       '',
-      'Valittujen tositteiden viennit ja mahdolliset PDF-linkitykset poistetaan.',
+      'Entries and linked PDFs will also be removed.',
     ].join('\n');
 
     if (!window.confirm(confirmMessage)) {
@@ -373,7 +373,7 @@ export default function DocumentsFilter({
       setBulkDeleteError(
         error instanceof Error
           ? error.message
-          : 'Tositteiden poisto epäonnistui.',
+          : 'Document deletion failed.',
       );
     } finally {
       setIsDeletingSelected(false);
@@ -390,17 +390,17 @@ export default function DocumentsFilter({
                 <SearchInput
                   value={search}
                   onChange={setSearch}
-                  placeholder="Hae tositteita kuvauksella, tilillä, päivällä tai summalla..."
+                  placeholder="Search documents by description, account, date, or amount..."
                   className="flex-1"
                 />
                 <div className="relative md:w-64 md:min-w-64">
                   <select
                     value={month}
                     onChange={(e) => setMonth(e.target.value)}
-                    aria-label="Kuukausisuodatin"
+                    aria-label="Month filter"
                     className={`${filterControlClass} appearance-none pr-10`}
                   >
-                    <option value="all">Kaikki kuukaudet</option>
+                    <option value="all">All months</option>
                     {monthOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
@@ -420,14 +420,14 @@ export default function DocumentsFilter({
                   />
                   <span className="inline-flex items-center gap-2 whitespace-nowrap">
                     <ReceiptText className="h-4 w-4 text-text-muted" />
-                    Puuttuu tosite
+                    Missing receipt
                   </span>
                 </label>
               </div>
             </div>
             {periodLocked ? (
               <div className="mt-2.5 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-3 py-1.5 text-xs text-yellow-100">
-                Tilikausi on lukittu. Tositteet ovat vain luku -tilassa.
+                Period is locked. Documents are read-only.
               </div>
             ) : null}
           </div>
@@ -444,10 +444,10 @@ export default function DocumentsFilter({
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <div className="text-sm font-medium text-text-primary">
-                      {selectedDocuments.length} tositetta valittu
+                      {selectedDocuments.length} document(s) selected
                     </div>
                     <div className="mt-1 text-xs text-text-secondary">
-                      Poista valitut tositteet kerralla.
+                      Delete selected documents in one go.
                     </div>
                   </div>
                   <button
@@ -461,7 +461,7 @@ export default function DocumentsFilter({
                     ) : (
                       <Trash2 className="h-4 w-4" />
                     )}
-                    Poista valitut
+                    Delete selected
                   </button>
                 </div>
               )}
@@ -494,7 +494,7 @@ export default function DocumentsFilter({
                           type="checkbox"
                           checked={allSelected}
                           onChange={toggleAll}
-                          aria-label="Valitse kaikki tositteet"
+                          aria-label="Select all documents"
                           className="h-4 w-4"
                           disabled={selectionDisabled || sorted.length === 0}
                         />
@@ -502,7 +502,7 @@ export default function DocumentsFilter({
                     </th>
                     <th className="w-8" />
                     <SortableHeader
-                      label="Nro"
+                      label="No."
                       sortKey="number"
                       current={sort}
                       onSort={handleSort}
@@ -511,7 +511,7 @@ export default function DocumentsFilter({
                       onResizeDoubleClick={() => resetColumnWidth('number')}
                     />
                     <SortableHeader
-                      label="Päivä"
+                      label="Date"
                       sortKey="date"
                       current={sort}
                       onSort={handleSort}
@@ -520,7 +520,7 @@ export default function DocumentsFilter({
                       onResizeDoubleClick={() => resetColumnWidth('date')}
                     />
                     <SortableHeader
-                      label="Kuvaus"
+                      label="Description"
                       sortKey="description"
                       current={sort}
                       onSort={handleSort}
@@ -531,19 +531,19 @@ export default function DocumentsFilter({
                       }
                     />
                     <ResizableHeaderCell
-                      label="Tosite PDF"
+                      label="Receipt PDF"
                       width={columnWidths.receipt}
                       onResizePointerDown={startColumnResize('receipt')}
                       onResizeDoubleClick={() => resetColumnWidth('receipt')}
                     />
                     <ResizableHeaderCell
-                      label="Tiliote"
+                      label="Statement"
                       width={columnWidths.statement}
                       onResizePointerDown={startColumnResize('statement')}
                       onResizeDoubleClick={() => resetColumnWidth('statement')}
                     />
                     <SortableHeader
-                      label="Summa"
+                      label="Amount"
                       sortKey="debitTotal"
                       current={sort}
                       onSort={handleSort}
@@ -661,7 +661,7 @@ export default function DocumentsFilter({
                       : savedId === doc.id || savedMetadataDocumentId === doc.id
                         ? {
                             tone: 'success' as const,
-                            text: 'Tosite tallennettu.',
+                            text: 'Document saved.',
                           }
                         : null;
                     const duplicateMessage = duplicateErrors[doc.id]
@@ -674,7 +674,7 @@ export default function DocumentsFilter({
                           doc.id === duplicatedDocumentId
                         ? {
                             tone: 'success' as const,
-                            text: `Kopio luotu: ${doc.code}.`,
+                            text: `Copy created: ${doc.code}.`,
                           }
                         : null;
                     const deleteMessage = deleteErrors[doc.id]
@@ -692,26 +692,24 @@ export default function DocumentsFilter({
                       : savedAmountsDocumentId === doc.id
                         ? {
                             tone: 'success' as const,
-                            text: 'Summat tallennettu.',
+                            text: 'Amounts saved.',
                           }
                         : pendingDeletionCount > 0
                           ? {
                               tone: 'success' as const,
-                              text: `${pendingDeletionCount} vienti${
-                                pendingDeletionCount === 1 ? '' : 'ä'
-                              } poistetaan tallennettaessa.`,
+                              text: `${pendingDeletionCount} ${pendingDeletionCount === 1 ? 'entry' : 'entries'} marked for deletion on save.`,
                             }
                           : visibleEntries.length < 2
                             ? {
                                 tone: 'error' as const,
-                                text: 'Tositteelle pitää jäädä vähintään kaksi vientiriviä.',
+                                text: 'Document must have at least two entry rows remaining.',
                               }
                             : !amountsBalanced
                               ? {
                                   tone: 'error' as const,
                                   text: hasInvalidAmounts
-                                    ? 'Korjaa kaikki summat muotoon 0,00.'
-                                    : 'Debet- ja kredit-summien pitää täsmätä ennen tallennusta.',
+                                    ? 'Fix all amounts to 0.00.'
+                                    : 'Debit and credit totals must match before saving.',
                                 }
                               : null;
 
@@ -734,7 +732,7 @@ export default function DocumentsFilter({
                                 checked={selectedIds.has(doc.id)}
                                 onChange={() => toggleSelection(doc.id)}
                                 onClick={(event) => event.stopPropagation()}
-                                aria-label={`Valitse tosite ${doc.code}`}
+                                aria-label={`Select document ${doc.code}`}
                                 className="h-4 w-4"
                                 disabled={selectionDisabled}
                               />
@@ -772,7 +770,7 @@ export default function DocumentsFilter({
                                 <div className="mt-0.5 truncate text-[11px] text-text-muted">
                                   {primaryAccount}
                                   {additionalAccountCount > 0
-                                    ? ` + ${additionalAccountCount} muuta`
+                                    ? ` + ${additionalAccountCount} more`
                                     : ''}
                                 </div>
                               )}
@@ -781,11 +779,11 @@ export default function DocumentsFilter({
                           <td className="px-3 py-1.5 text-xs">
                             {doc.hasReceiptPdf ? (
                               <span className="inline-flex rounded-full border border-green-400/20 bg-green-500/10 px-2 py-0.5 font-medium text-[11px] text-green-300">
-                                Löytyy
+                                Found
                               </span>
                             ) : (
                               <span className="inline-flex rounded-full border border-red-400/20 bg-red-500/10 px-2 py-0.5 font-medium text-[11px] text-red-300">
-                                Puuttuu
+                                Missing
                               </span>
                             )}
                           </td>
@@ -797,7 +795,7 @@ export default function DocumentsFilter({
                                     href={`/bank-statements/${primaryBankStatementLink.bank_statement_id}`}
                                     onClick={(event) => event.stopPropagation()}
                                     className="block min-h-[32px] truncate text-[11px] text-accent-light transition hover:underline leading-[32px]"
-                                    title={`Avaa tiliote ${periodLabel(
+                                    title={`Open statement ${periodLabel(
                                       primaryBankStatementLink.bank_statement_period_start,
                                       primaryBankStatementLink.bank_statement_period_end,
                                     )}`}
@@ -819,17 +817,17 @@ export default function DocumentsFilter({
                                     }
                                     {primaryBankStatementLink.linked_entry_count >
                                     1
-                                      ? ` · ${primaryBankStatementLink.linked_entry_count} riviä`
+                                      ? ` · ${primaryBankStatementLink.linked_entry_count} rows`
                                       : ''}
                                     {additionalBankStatementCount > 0
-                                      ? ` + ${additionalBankStatementCount} muuta`
+                                      ? ` + ${additionalBankStatementCount} more`
                                       : ''}
                                   </div>
                                 </div>
                               </div>
                             ) : (
                               <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-2 py-0.5 font-medium text-[11px] text-text-muted">
-                                Ei linkkiä
+                                No link
                               </span>
                             )}
                           </td>
@@ -837,19 +835,19 @@ export default function DocumentsFilter({
                             {reverseChargeVat ? (
                               <div
                                 className="flex flex-col items-end leading-tight"
-                                title={`Veroton ${formatCurrency(visibleNetTotal)}, Käänt. EU ALV ${formatCurrency(vatAmount)}`}
+                                title={`VAT-exempt ${formatCurrency(visibleNetTotal)}, Reverse-charge EU VAT ${formatCurrency(vatAmount)}`}
                               >
                                 <span className="whitespace-nowrap font-mono text-[11px] tabular-nums text-text-primary">
                                   {formatCurrency(displayAmount)}
                                 </span>
                                 <span className="mt-0.5 whitespace-nowrap text-[10px] text-text-muted">
-                                  Käänt. EU ALV {formatCurrency(vatAmount)}
+                                  Reverse-charge EU VAT {formatCurrency(vatAmount)}
                                 </span>
                               </div>
                             ) : hasVatAmount ? (
                               <div
                                 className="flex flex-col items-end leading-tight"
-                                title={`Veroton ${formatCurrency(visibleNetTotal)}, ALV ${formatCurrency(vatAmount)}, sis. ALV ${formatCurrency(visibleDebitTotal)}`}
+                                title={`VAT-exempt ${formatCurrency(visibleNetTotal)}, ALV ${formatCurrency(vatAmount)}, sis. ALV ${formatCurrency(visibleDebitTotal)}`}
                               >
                                 <span className="whitespace-nowrap font-mono text-[11px] tabular-nums text-text-primary">
                                   {formatCurrency(visibleDebitTotal)}
@@ -952,24 +950,23 @@ export default function DocumentsFilter({
             {sorted.length === 0 && (
               <div className="py-10 text-center text-sm text-text-muted">
                 {search || month !== 'all' || showMissingReceiptsOnly
-                  ? 'Ei tositteita valituilla suodattimilla'
-                  : 'Ei tositteita tällä tilikaudella'}
+                  ? 'No documents with current filters'
+                  : 'No documents in this fiscal year'}
               </div>
             )}
           </div>
 
           {showFilteredCount ? (
             <p className="text-xs text-text-muted">
-              Naytetaan {filtered.length} / {documentsWithResolvedLabels.length}{' '}
-              tositetta
+              Showing {filtered.length} / {documentsWithResolvedLabels.length} documents
             </p>
           ) : null}
         </div>
 
         {accountPickerEntry && (
           <AccountPickerModal
-            title="Vaihda vientirivin tili"
-            subtitle={`${accountPickerEntry.doc.code} · nykyinen tili ${accountPickerEntry.entry.account_number} ${accountPickerEntry.entry.account_name}`}
+            title="Change entry row account"
+            subtitle={`${accountPickerEntry.doc.code} · current account ${accountPickerEntry.entry.account_number} ${accountPickerEntry.entry.account_name}`}
             searchValue={accountSearch}
             onSearchChange={setAccountSearch}
             onClearSearch={() => setAccountSearch('')}
@@ -986,8 +983,8 @@ export default function DocumentsFilter({
             }}
             confirmLabel={
               savingAccountEntryId === accountPickerEntry.entry.id
-                ? 'Tallennetaan...'
-                : 'Vaihda tili'
+                ? 'Saving...'
+                : 'Change account'
             }
             confirmDisabled={
               accountPicker.selectedAccountId == null ||
@@ -999,10 +996,10 @@ export default function DocumentsFilter({
             isSaving={savingAccountEntryId === accountPickerEntry.entry.id}
             error={accountModalError}
             contextItems={[
-              { label: 'Tosite', value: accountPickerEntry.doc.code },
+              { label: 'Document', value: accountPickerEntry.doc.code },
               {
-                label: 'Vientirivi',
-                value: `${accountPickerEntry.entry.debit ? 'Debet' : 'Kredit'} · ${formatCurrency(
+                label: 'Entry row',
+                value: `${accountPickerEntry.entry.debit ? 'Debit' : 'Credit'} · ${formatCurrency(
                   accountPickerEntry.entry.amount,
                 )}`,
               },
@@ -1015,16 +1012,16 @@ export default function DocumentsFilter({
           <div className="rounded-xl border border-border-subtle bg-surface-1/50 p-3">
             <div className="mb-3">
               <h2 className="text-xs font-semibold text-text-primary">
-                Esikatselu
+                Preview
               </h2>
               {activeDocument ? (
                 <p className="mt-1 text-xs text-text-secondary">
                   {activeDocument.code} -{' '}
-                  {activeDocument.description || 'Ei kuvausta'}
+                  {activeDocument.description || 'No description'}
                 </p>
               ) : (
                 <p className="mt-1 text-xs text-text-muted">
-                  Valitse vasemmalta tosite, niin PDF näkyy tässä.
+                  Select a document on the left to see its PDF here.
                 </p>
               )}
             </div>
@@ -1046,10 +1043,10 @@ export default function DocumentsFilter({
               <div className="flex aspect-210/297 items-center justify-center rounded-lg border border-dashed border-border-subtle bg-surface-2/30 p-6 text-center">
                 <div>
                   <div className="text-sm font-medium text-text-secondary">
-                    Ei valittua tositetta
+                    No document selected
                   </div>
                   <div className="mt-2 text-xs text-text-muted">
-                    Preview-alue on varattu valitun tositteen PDF:lle.
+                    The preview area is reserved for the selected document's PDF.
                   </div>
                 </div>
               </div>

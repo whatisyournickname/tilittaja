@@ -24,8 +24,8 @@ export default function PeriodLockToggle({
 
   async function toggle() {
     const nextLocked = !currentLocked;
-    const action = currentLocked ? 'avata' : 'lukita';
-    if (!confirm(`Haluatko ${action} tilikauden ${label}?`)) return;
+    const action = currentLocked ? 'unlock' : 'lock';
+    if (!confirm(`${action === 'unlock' ? 'Unlock' : 'Lock'} period ${label}?`)) return;
 
     setBusy(true);
     try {
@@ -50,17 +50,17 @@ export default function PeriodLockToggle({
       {busy ? (
         <>
           <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          Tallennetaan
+          Saving
         </>
       ) : currentLocked ? (
         <>
           <LockOpen className="h-3.5 w-3.5" />
-          Avaa lukitus
+          Unlock
         </>
       ) : (
         <>
           <Lock className="h-3.5 w-3.5" />
-          Lukitse
+          Lock
         </>
       )}
     </button>

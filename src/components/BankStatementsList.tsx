@@ -19,7 +19,7 @@ function getStatus(statement: BankStatementWithStats) {
   const noneProcessed = statement.processed_count === 0;
 
   if (statement.entry_count === 0) {
-    return <span className="text-xs text-text-muted">Tyhjä</span>;
+    return <span className="text-xs text-text-muted">Empty</span>;
   }
 
   if (allProcessed) {
@@ -33,7 +33,7 @@ function getStatus(statement: BankStatementWithStats) {
   if (noneProcessed) {
     return (
       <span className="inline-flex items-center gap-1 text-xs font-medium text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded-full">
-        Käsittelemätön
+        Unprocessed
       </span>
     );
   }
@@ -94,14 +94,14 @@ export default function BankStatementsList({ statements }: Props) {
 
   const handleDeleteSelected = async () => {
     if (!hasSelection) {
-      setActionError('Valitse vähintään yksi tiliote poistettavaksi.');
+      setActionError('Select at least one bank statement to delete.');
       return;
     }
 
     const confirmMessage = [
       `Poistetaanko ${selectedStatements.length} valittua tiliotetta listasta?`,
       '',
-      'Valittujen tiliotteiden rivit poistetaan, mutta tositteita ei poisteta.',
+      'Valittujen tiliotteiden rowt poistetaan, mutta tositteita ei poisteta.',
     ].join('\n');
 
     if (!window.confirm(confirmMessage)) {
@@ -122,7 +122,7 @@ export default function BankStatementsList({ statements }: Props) {
       setActionError(
         error instanceof Error
           ? error.message
-          : 'Tiliotteiden poisto epäonnistui.',
+          : 'Bank statement deletion failed.',
       );
     } finally {
       setIsDeleting(false);
@@ -190,19 +190,19 @@ export default function BankStatementsList({ statements }: Props) {
                 Kausi
               </th>
               <th className="text-left text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2">
-                Pankkitili
+                Bank account
               </th>
               <th className="text-right text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2">
-                Alkusaldo
+                Start balance
               </th>
               <th className="text-right text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2">
-                Loppusaldo
+                End balance
               </th>
               <th className="text-center text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2">
-                Rivit
+                Rows
               </th>
               <th className="text-center text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2">
-                Tila
+                Status
               </th>
             </tr>
           </thead>
@@ -262,7 +262,7 @@ export default function BankStatementsList({ statements }: Props) {
         </table>
         {statements.length === 0 && (
           <div className="text-center py-12 text-text-muted text-sm">
-            Ei tilioteita. Lisää ensimmäinen tiliote.
+            No bank statements. Add your first one.
           </div>
         )}
       </div>

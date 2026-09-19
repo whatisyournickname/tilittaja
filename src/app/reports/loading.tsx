@@ -3,9 +3,9 @@ import PageLoadingState from '@/components/PageLoadingState';
 export default function Loading() {
   return (
     <PageLoadingState
-      eyebrow="Raportit"
-      title="Ladataan raporttia"
-      description="Lasketaan raporttirivit, vertailutiedot ja erittelyt."
+      eyebrow="Reports"
+      title="Loading report"
+      description="Calculating report rows, comparison data, and details."
     />
   );
 }

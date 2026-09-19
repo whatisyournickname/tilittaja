@@ -85,7 +85,7 @@ describe('DocumentEntriesEditor', () => {
   it('shows save button as disabled when no changes', () => {
     render(<DocumentEntriesEditor documentId={1} initialEntries={entries} />);
 
-    const saveButton = screen.getByRole('button', { name: /Ei muutoksia/ });
+    const saveButton = screen.getByRole('button', { name: /No changes/ });
     expect(saveButton).toBeDisabled();
   });
 
@@ -105,7 +105,7 @@ describe('DocumentEntriesEditor', () => {
 
   it('shows error when description save fails', async () => {
     updateEntryDescriptionAction.mockRejectedValue(
-      new Error('Kuvauksen tallennus epäonnistui.'),
+      new Error('Failed to save description.'),
     );
 
     render(<DocumentEntriesEditor documentId={1} initialEntries={entries} />);
@@ -116,7 +116,7 @@ describe('DocumentEntriesEditor', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Kuvauksen tallennus epäonnistui.'),
+        screen.getByText('Failed to save description.'),
       ).toBeInTheDocument();
     });
   });

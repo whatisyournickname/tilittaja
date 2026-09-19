@@ -21,7 +21,7 @@ const uploadSchema = z.object({
 
 export const POST = withDb(async (request: NextRequest) => {
   if (!isMultipartRequest(request)) {
-    return jsonError('Lähetä PDF:t multipart-lomakkeena', 400);
+    return jsonError('Send PDFs as multipart form', 400);
   }
 
   const formData = await readRequestFormData(request);
@@ -31,11 +31,11 @@ export const POST = withDb(async (request: NextRequest) => {
     .filter((file): file is File => file instanceof File);
 
   if (files.length === 0) {
-    return jsonError('Lähetä vähintään yksi PDF-tiedosto kentässä `files`', 400);
+    return jsonError('Send at least one PDF file in the .files. field', 400);
   }
 
   if (files.length > 10) {
-    return jsonError('Voit lähettää korkeintaan 10 PDF-tiedostoa', 400);
+    return jsonError('You can send at most 10 PDF files', 400);
   }
 
   if (files.some((file) => !isPdfFile(file))) {
@@ -61,4 +61,4 @@ export const POST = withDb(async (request: NextRequest) => {
     ...result,
   };
   return NextResponse.json(response);
-}, 'Tilikauden avauksen PDF-tuonti epäonnistui');
+}, 'Opening balance PDF import failed');

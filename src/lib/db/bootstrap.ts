@@ -133,7 +133,7 @@ export function linkExternalDatabase(
   slug: string,
 ): string {
   if (!fs.existsSync(externalPath)) {
-    throw new Error('Tiedostoa ei löydy: ' + externalPath);
+    throw new Error('File not found: ' + externalPath);
   }
 
   const db = new Database(externalPath, { readonly: true });
@@ -145,7 +145,7 @@ export function linkExternalDatabase(
     const required = ['settings', 'period', 'account', 'entry', 'document'];
     const missing = required.filter((t) => !tableNames.has(t));
     if (missing.length > 0) {
-      throw new Error('Tietokannasta puuttuu taulut: ' + missing.join(', '));
+      throw new Error('Database missing tables: ' + missing.join(', '));
     }
 
     const requiredColumns: Record<string, string[]> = {
@@ -162,7 +162,7 @@ export function linkExternalDatabase(
       const missingCols = columns.filter((c) => !colNames.has(c));
       if (missingCols.length > 0) {
         throw new Error(
-          `Taulusta '${table}' puuttuu sarakkeet: ${missingCols.join(', ')}`,
+          `Table '${table}' missing columns: ${missingCols.join(', ')}`,
         );
       }
     }
@@ -183,11 +183,11 @@ export function linkExternalDatabase(
   return slug;
 }
 
-// Account types: 0=Vastaavaa, 1=Vastattavaa, 2=Oma pääoma, 3=Tulot, 4=Menot, 5=Ed.tk voitto, 6=Tk voitto
+// Account types: 0=Assets, 1=Liabilities, 2=Equity, 3=Revenue, 4=Expenses, 5=Prior periods' profit, 6=Current period profit
 type AccountSeed = [string, string, number];
 
 const DEFAULT_ACCOUNTS: AccountSeed[] = [
-  // Vastaavaa (Assets)
+  // Assets (Assets)
   ['1000', 'Perustamismenot', 0],
   ['1010', 'Kehittämismenot', 0],
   ['1060', 'Aineettomat oikeudet', 0],
@@ -197,22 +197,22 @@ const DEFAULT_ACCOUNTS: AccountSeed[] = [
   ['1170', 'Muut aineelliset hyödykkeet', 0],
   ['1300', 'Osuudet saman konsernin yrityksissä', 0],
   ['1500', 'Myyntisaamiset', 0],
-  ['1510', 'Saamiset saman konsernin yrityksiltä', 0],
+  ['1510', 'Receivables saman konsernin yrityksiltä', 0],
   ['1530', 'Lainasaamiset', 0],
   ['1560', 'Muut saamiset', 0],
-  ['1700', 'Siirtosaamiset', 0],
-  ['1800', 'Rahoitusarvopaperit', 0],
+  ['1700', 'Prepayments and accrued income', 0],
+  ['1800', 'Financial securities', 0],
   ['1900', 'Pankkitili', 0],
   ['1910', 'Kassa', 0],
   // Oma pääoma (Equity)
-  ['2000', 'Osake-, osuus- tai muu vastaava pääoma', 2],
-  ['2010', 'Ylikurssirahasto', 2],
+  ['2000', 'Share capital', 2],
+  ['2010', 'Share premium reserve', 2],
   ['2020', 'Arvonkorotusrahasto', 2],
-  ['2050', 'Muut rahastot', 2],
-  ['2100', 'SVOP-rahasto', 2],
-  ['2250', 'Edellisten tilikausien voitto (tappio)', 5],
-  ['2370', 'Tilikauden voitto (tappio)', 6],
-  // Vastattavaa / Vieras pääoma (Liabilities)
+  ['2050', 'Other reserves', 2],
+  ['2100', 'SVOP reserve', 2],
+  ['2250', "Prior periods' profit (loss)", 5],
+  ['2370', "Current period's profit (loss)", 6],
+  // Liabilities / Vieras pääoma (Liabilities)
   ['2400', 'Pääomalainat', 1],
   ['2460', 'Lainat rahoituslaitoksilta', 1],
   ['2580', 'Saadut ennakot', 1],
@@ -226,16 +226,16 @@ const DEFAULT_ACCOUNTS: AccountSeed[] = [
   ['3020', 'Myynti 14 %', 3],
   ['3030', 'Myynti 10 %', 3],
   ['3040', 'Myynti 0 %', 3],
-  ['3500', 'Liiketoiminnan muut tuotot', 3],
+  ['3500', 'Other operating income', 3],
   // Menot (Expenses)
   ['4000', 'Ostot', 4],
   ['4010', 'Ostot 25,5 %', 4],
   ['4020', 'Ostot 14 %', 4],
   ['4030', 'Ostot 10 %', 4],
   ['4040', 'Ostot 0 %', 4],
-  ['4200', 'Varastojen muutos', 4],
-  ['5000', 'Ulkopuoliset palvelut', 4],
-  ['6000', 'Palkat ja palkkiot', 4],
+  ['4200', 'Change in inventories', 4],
+  ['5000', 'External services', 4],
+  ['6000', 'Wages and salaries', 4],
   ['6100', 'Eläkekulut', 4],
   ['6140', 'Muut henkilösivukulut', 4],
   ['6300', 'Poistot', 4],
@@ -248,11 +248,11 @@ const DEFAULT_ACCOUNTS: AccountSeed[] = [
   ['7600', 'Tietoliikennekulut', 4],
   ['7680', 'Pankki- ja rahoituskulut', 4],
   ['7700', 'Muut liikekulut', 4],
-  ['8000', 'Rahoitustuotot', 3],
-  ['8500', 'Rahoituskulut', 4],
-  ['9000', 'Satunnaiset tuotot', 3],
-  ['9100', 'Satunnaiset kulut', 4],
-  ['9500', 'Tuloverot', 4],
+  ['8000', 'Financial income', 3],
+  ['8500', 'Financial expenses', 4],
+  ['9000', 'Extraordinary income', 3],
+  ['9100', 'Extraordinary expenses', 4],
+  ['9500', 'Income taxes', 4],
 ];
 
 function seedAccounts(db: Database.Database): void {
@@ -271,27 +271,27 @@ type HeadingSeed = [string, string, number];
 
 const DEFAULT_COA_HEADINGS: HeadingSeed[] = [
   ['1000', 'VASTAAVAA', 0],
-  ['1000', 'Pysyvät vastaavat', 1],
-  ['1000', 'Aineettomat hyödykkeet', 2],
-  ['1100', 'Aineelliset hyödykkeet', 2],
-  ['1300', 'Sijoitukset', 2],
+  ['1000', 'Non-current assets', 1],
+  ['1000', 'Intangible assets', 2],
+  ['1100', 'Tangible assets', 2],
+  ['1300', 'Investments', 2],
   ['1500', 'Vaihtuvat vastaavat', 1],
-  ['1500', 'Saamiset', 2],
-  ['1800', 'Rahoitusarvopaperit', 2],
-  ['1900', 'Rahat ja pankkisaamiset', 2],
+  ['1500', 'Receivables', 2],
+  ['1800', 'Financial securities', 2],
+  ['1900', 'Cash and bank balances', 2],
   ['2000', 'VASTATTAVAA', 0],
   ['2000', 'Oma pääoma', 1],
   ['2400', 'Vieras pääoma', 1],
-  ['2400', 'Pitkäaikainen vieras pääoma', 2],
-  ['2580', 'Lyhytaikainen vieras pääoma', 2],
-  ['3000', 'TULOSLASKELMA', 0],
-  ['3000', 'Liikevaihto', 1],
-  ['3500', 'Liiketoiminnan muut tuotot', 1],
-  ['4000', 'Materiaalit ja palvelut', 1],
+  ['2400', 'Non-current liabilities', 2],
+  ['2580', 'Current liabilities', 2],
+  ['3000', 'INCOME STATEMENT', 0],
+  ['3000', 'Revenue', 1],
+  ['3500', 'Other operating income', 1],
+  ['4000', 'Materials and services', 1],
   ['6000', 'Henkilöstökulut', 1],
-  ['6300', 'Poistot ja arvonalentumiset', 1],
-  ['7000', 'Liiketoiminnan muut kulut', 1],
-  ['8000', 'Rahoitustuotot ja -kulut', 1],
+  ['6300', 'Depreciation and impairments', 1],
+  ['7000', 'Other operating expenses', 1],
+  ['8000', 'Financial income ja -kulut', 1],
   ['9000', 'Satunnaiset erät', 1],
   ['9500', 'Tilinpäätössiirrot ja verot', 1],
 ];
@@ -308,74 +308,74 @@ function seedCOAHeadings(db: Database.Database): void {
   tx(DEFAULT_COA_HEADINGS);
 }
 
-const INCOME_STATEMENT_STRUCTURE = `HP;TULOSLASKELMA
-SP0;3000;3050;Liikevaihto
-SP0;3500;3999;Liiketoiminnan muut tuotot
+const INCOME_STATEMENT_STRUCTURE = `HP;INCOME STATEMENT
+SP0;3000;3050;Revenue
+SP0;3500;3999;Other operating income
 -
-SP0;4000;4050;Materiaalit ja palvelut
-SP0;4200;4200;Varastojen muutos
-SP0;5000;5999;Ulkopuoliset palvelut
+SP0;4000;4050;Materials and services
+SP0;4200;4200;Change in inventories
+SP0;5000;5999;External services
 -
-SP0;6000;6099;Palkat ja palkkiot
-SP0;6100;6299;Henkilösivukulut
-SP0;6300;6399;Poistot ja arvonalentumiset
-SP0;7000;7999;Liiketoiminnan muut kulut
+SP0;6000;6099;Wages and salaries
+SP0;6100;6299;Personnel expenses
+SP0;6300;6399;Depreciation and impairments
+SP0;7000;7999;Other operating expenses
 -
-SB0;3000;7999;LIIKEVOITTO (-TAPPIO)
+SB0;3000;7999;OPERATING PROFIT (LOSS)
 -
-SP0;8000;8499;Rahoitustuotot
-SP0;8500;8999;Rahoituskulut
+SP0;8000;8499;Financial income
+SP0;8500;8999;Financial expenses
 -
-SB0;3000;8999;VOITTO (TAPPIO) ENNEN SATUNNAISIA ERIÄ
+SB0;3000;8999;PROFIT (LOSS) BEFORE EXTRAORDINARY ITEMS
 -
-SP0;9000;9099;Satunnaiset tuotot
-SP0;9100;9199;Satunnaiset kulut
-SP0;9500;9999;Tuloverot
+SP0;9000;9099;Extraordinary income
+SP0;9100;9199;Extraordinary expenses
+SP0;9500;9999;Income taxes
 -
-SB0;3000;9999;TILIKAUDEN VOITTO (TAPPIO)`;
+SB0;3000;9999;CURRENT PERIOD'S PROFIT (LOSS)`;
 
-const BALANCE_SHEET_STRUCTURE = `HP;TASE
-HB;Vastaavaa
-HP1;PYSYVÄT VASTAAVAT
-HP2;Aineettomat hyödykkeet
-SP0;1000;1099;Aineettomat hyödykkeet
-HP2;Aineelliset hyödykkeet
-SP0;1100;1299;Aineelliset hyödykkeet
-HP2;Sijoitukset
-SP0;1300;1499;Sijoitukset
-SB1;1000;1499;Pysyvät vastaavat yhteensä
+const BALANCE_SHEET_STRUCTURE = `HP;BALANCE SHEET
+HB;Assets
+HP1;NON-CURRENT ASSETS
+HP2;Intangible assets
+SP0;1000;1099;Intangible assets
+HP2;Tangible assets
+SP0;1100;1299;Tangible assets
+HP2;Investments
+SP0;1300;1499;Investments
+SB1;1000;1499;Total non-current assets
 -
-HP1;VAIHTUVAT VASTAAVAT
-HP2;Saamiset
-SP0;1500;1699;Saamiset
-HP2;Siirtosaamiset
-SP0;1700;1799;Siirtosaamiset
-HP2;Rahoitusarvopaperit
-SP0;1800;1899;Rahoitusarvopaperit
-HP2;Rahat ja pankkisaamiset
-SP0;1900;1999;Rahat ja pankkisaamiset
-SB1;1500;1999;Vaihtuvat vastaavat yhteensä
+HP1;CURRENT ASSETS
+HP2;Receivables
+SP0;1500;1699;Receivables
+HP2;Prepayments and accrued income
+SP0;1700;1799;Prepayments and accrued income
+HP2;Financial securities
+SP0;1800;1899;Financial securities
+HP2;Cash and bank balances
+SP0;1900;1999;Cash and bank balances
+SB1;1500;1999;Total current assets
 -
-SB0;1000;1999;Vastaavaa yhteensä
+SB0;1000;1999;Total assets
 -
-HB;Vastattavaa
-HP1;OMA PÄÄOMA
-SP0;2000;2099;Osake-, osuus- tai muu vastaava pääoma
-SP0;2010;2049;Ylikurssirahasto
-SP0;2050;2099;Muut rahastot
-SP0;2100;2199;SVOP-rahasto
-SP0;2250;2369;Edellisten tilikausien voitto (tappio)
-SP0;2370;2399;Tilikauden voitto (tappio)
-SB1;2000;2399;Oma pääoma yhteensä
+HB;Liabilities
+HP1;EQUITY
+SP0;2000;2099;Share capital
+SP0;2010;2049;Share premium reserve
+SP0;2050;2099;Other reserves
+SP0;2100;2199;SVOP reserve
+SP0;2250;2369;Prior periods' profit (loss)
+SP0;2370;2399;Current period's profit (loss)
+SB1;2000;2399;Total equity
 -
-HP1;VIERAS PÄÄOMA
-HP2;Pitkäaikainen vieras pääoma
-SP0;2400;2579;Pitkäaikainen vieras pääoma
-HP2;Lyhytaikainen vieras pääoma
-SP0;2580;2999;Lyhytaikainen vieras pääoma
-SB1;2400;2999;Vieras pääoma yhteensä
+HP1;LIABILITIES
+HP2;Non-current liabilities
+SP0;2400;2579;Non-current liabilities
+HP2;Current liabilities
+SP0;2580;2999;Current liabilities
+SB1;2400;2999;Total liabilities
 -
-SB0;2000;2999;Vastattavaa yhteensä`;
+SB0;2000;2999;Total liabilities`;
 
 function seedReportStructures(db: Database.Database): void {
   const stmt = db.prepare(

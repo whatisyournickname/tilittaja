@@ -9,4 +9,4 @@ export const POST = jsonActionRoute(async (
 ) => {
   const documentId = await requireRouteId(params, 'tositteen tunniste');
   return duplicateDocumentAction(documentId);
-}, 'Tositteen kopiointi epäonnistui');
+}, 'Failed to copy document');

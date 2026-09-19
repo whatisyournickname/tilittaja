@@ -8,4 +8,4 @@ import {
 export const POST = jsonActionRoute(async (request: NextRequest) => {
   const body = await readOptionalRequestJson(request);
   return createVatSettlementAction(body);
-}, 'ALV-ilmoituksen muodostus epäonnistui.');
+}, 'Failed to generate VAT return.');

@@ -151,14 +151,14 @@ export async function prepareStateExport(
   const files = listDataSourceFiles(sourceRoot);
   const dbPath = resolveDbPath(source);
   if (!dbPath) {
-    throw new ApiRouteError('Tietolähteen SQLite-kantaa ei löytynyt.', 404);
+    throw new ApiRouteError('Datasource SQLite database not found.', 404);
   }
 
   const sqliteFile = files.find(
     (file) => path.resolve(file.absolutePath) === path.resolve(dbPath),
   );
   if (!sqliteFile) {
-    throw new ApiRouteError('SQLite-kantaa ei löytynyt vientiä varten.', 404);
+    throw new ApiRouteError('SQLite database not found for export.', 404);
   }
 
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tilittaja-export-'));

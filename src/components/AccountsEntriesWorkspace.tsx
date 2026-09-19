@@ -213,10 +213,10 @@ export default function AccountsEntriesWorkspace({
     <div className="w-full max-w-[1400px] p-5">
       <div className="mb-6">
         <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-          Kirjanpito
+          Accounting
         </p>
         <h1 className="text-xl font-semibold tracking-tight text-text-primary">
-          Tilit ja viennit
+          Accounts & entries
         </h1>
         <p className="mt-1 text-sm text-text-secondary">{periodLabel}</p>
       </div>
@@ -227,7 +227,7 @@ export default function AccountsEntriesWorkspace({
             <div className="mb-3">
               <div>
                 <h2 className="text-sm font-semibold text-text-primary">
-                  Tilit
+                  Accounts
                 </h2>
               </div>
             </div>
@@ -235,7 +235,7 @@ export default function AccountsEntriesWorkspace({
             <SearchInput
               value={accountSearch}
               onChange={setAccountSearch}
-              placeholder="Hae tilinumeroa, nimeä tai tyyppiä..."
+              placeholder="Search account number, name, or type..."
             />
           </div>
 
@@ -258,7 +258,7 @@ export default function AccountsEntriesWorkspace({
                         onChange={() => toggleAccountSelection(account.id)}
                         onClick={(event) => event.stopPropagation()}
                         className="h-4 w-4 rounded border-border-medium bg-surface-0/60 text-accent"
-                        aria-label={`Valitse tili ${account.number} ${account.name}`}
+                        aria-label={`Select account ${account.number} ${account.name}`}
                       />
                     </label>
                     <button
@@ -285,7 +285,7 @@ export default function AccountsEntriesWorkspace({
                             {formatCurrency(account.balance)}
                           </div>
                           <div className="mt-0.5 text-[11px] text-text-muted">
-                            {account.entryCount} vientiä
+                            {account.entryCount} entries
                           </div>
                         </div>
                       </div>
@@ -296,7 +296,7 @@ export default function AccountsEntriesWorkspace({
 
               {filteredAccounts.length === 0 && (
                 <div className="px-3 py-10 text-center text-xs text-text-muted">
-                  Ei tilejä valituilla suodattimilla
+                  No accounts matching filters
                 </div>
               )}
             </div>
@@ -308,18 +308,18 @@ export default function AccountsEntriesWorkspace({
             <div className="mb-3 flex flex-col gap-2">
               <div>
                 <h2 className="text-sm font-semibold text-text-primary">
-                  Viennit
+                  Entries
                 </h2>
               </div>
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className="rounded-full border border-border-subtle bg-surface-1/60 px-2 py-0.5 text-[11px] text-text-secondary">
-                  Debet{' '}
+                  Debit{' '}
                   <span className="font-mono text-text-primary">
                     {formatCurrency(selectedDebitTotal)}
                   </span>
                 </span>
                 <span className="rounded-full border border-border-subtle bg-surface-1/60 px-2 py-0.5 text-[11px] text-text-secondary">
-                  Kredit{' '}
+                  Credit{' '}
                   <span className="font-mono text-text-primary">
                     {formatCurrency(selectedCreditTotal)}
                   </span>
@@ -331,17 +331,17 @@ export default function AccountsEntriesWorkspace({
                       : 'border-amber-400/20 bg-amber-500/10 text-amber-300'
                   }`}
                 >
-                  Erotus{' '}
+                  Difference{' '}
                   <span className="font-mono">
                     {formatCurrency(selectedDifference)}
                   </span>
                 </span>
                 <span className="rounded-full border border-border-subtle bg-surface-1/60 px-2 py-0.5 text-[11px] text-text-muted">
-                  {selectedEntryCount} vientiä
+                  {selectedEntryCount} entries
                 </span>
                 {selectedAccounts.length > 0 && (
                   <span className="rounded-full border border-border-subtle bg-surface-1/60 px-2 py-0.5 text-[11px] text-text-muted">
-                    {selectedAccounts.length} tiliä
+                    {selectedAccounts.length} accounts
                   </span>
                 )}
               </div>
@@ -351,12 +351,12 @@ export default function AccountsEntriesWorkspace({
               <SearchInput
                 value={entrySearch}
                 onChange={setEntrySearch}
-                placeholder="Hae tositenumerolla, kuvauksella, tilillä tai summalla..."
+                placeholder="Search by document number, description, account, or amount..."
               />
 
               <label className="relative block">
                 <span className="mb-1 block text-[10px] font-medium uppercase tracking-[0.15em] text-text-muted">
-                  Alkaen
+                  Starting
                 </span>
                 <input
                   type="date"
@@ -369,7 +369,7 @@ export default function AccountsEntriesWorkspace({
 
               <label className="relative block">
                 <span className="mb-1 block text-[10px] font-medium uppercase tracking-[0.15em] text-text-muted">
-                  Päättyen
+                  Ending
                 </span>
                 <input
                   type="date"
@@ -387,41 +387,41 @@ export default function AccountsEntriesWorkspace({
               <thead className="sticky top-0 z-10 bg-surface-1/90 backdrop-blur-sm">
                 <tr className="border-b border-border-subtle/70 bg-surface-1/60">
                   <SortableHeader
-                    label="Tosite"
+                    label="Document"
                     sortKey="document_number"
                     current={sort}
                     onSort={handleSort}
                     className="w-20"
                   />
                   <SortableHeader
-                    label="Päivä"
+                    label="Date"
                     sortKey="document_date"
                     current={sort}
                     onSort={handleSort}
                     className="w-24"
                   />
                   <SortableHeader
-                    label="Rivi"
+                    label="Row"
                     sortKey="row_number"
                     current={sort}
                     onSort={handleSort}
                     className="w-14"
                   />
                   <SortableHeader
-                    label="Tili"
+                    label="Account"
                     sortKey="account"
                     current={sort}
                     onSort={handleSort}
                     className="w-48"
                   />
                   <SortableHeader
-                    label="Kuvaus"
+                    label="Description"
                     sortKey="description"
                     current={sort}
                     onSort={handleSort}
                   />
                   <SortableHeader
-                    label="Debet"
+                    label="Debit"
                     sortKey="debit"
                     current={sort}
                     onSort={handleSort}
@@ -429,7 +429,7 @@ export default function AccountsEntriesWorkspace({
                     className="w-24"
                   />
                   <SortableHeader
-                    label="Kredit"
+                    label="Credit"
                     sortKey="credit"
                     current={sort}
                     onSort={handleSort}
@@ -461,7 +461,7 @@ export default function AccountsEntriesWorkspace({
                     </td>
                     <td className="max-w-0 px-3 py-1.5 text-xs text-text-primary">
                       <div className="truncate">
-                        {entry.description || 'Ei kuvausta'}
+                        {entry.description || 'No description'}
                       </div>
                     </td>
                     <td className="px-3 py-1.5 text-right text-xs font-mono tabular-nums text-text-primary">
@@ -480,8 +480,8 @@ export default function AccountsEntriesWorkspace({
                       className="px-3 py-12 text-center text-xs text-text-muted"
                     >
                       {selectedAccountIds.length === 0
-                        ? 'Valitse vähintään yksi tili vasemmalta.'
-                        : 'Ei vientejä valituilla suodattimilla.'}
+                        ? 'Select at least one account on the left.'
+                        : 'No entries matching filters.'}
                     </td>
                   </tr>
                 )}

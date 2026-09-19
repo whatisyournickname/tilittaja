@@ -9,7 +9,7 @@ export const POST = jsonActionRoute(async (
 ) => {
   const periodId = await requireRouteId(params);
   return setPeriodLockAction(periodId, true);
-}, 'Tilikauden lukitus epäonnistui');
+}, 'Failed to lock period');
 
 export const DELETE = jsonActionRoute(async (
   _request: NextRequest,
@@ -17,4 +17,4 @@ export const DELETE = jsonActionRoute(async (
 ) => {
   const periodId = await requireRouteId(params);
   return setPeriodLockAction(periodId, false);
-}, 'Tilikauden lukituksen avaus epäonnistui');
+}, 'Failed to unlock period');

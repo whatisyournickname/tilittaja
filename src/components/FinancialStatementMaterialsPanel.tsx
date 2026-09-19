@@ -62,7 +62,7 @@ function IconButton({
   );
 }
 
-export default function TilinpaatosMaterialsPanel({
+export default function FinancialStatementMaterialsPanel({
   periodId,
   materialItems,
 }: Props) {
@@ -70,16 +70,16 @@ export default function TilinpaatosMaterialsPanel({
 
   const primaryItems: PdfActionItem[] = [
     {
-      id: 'yhtiokokous',
-      title: 'Yhtiökokous',
-      downloadUrl: `/api/reports/yhtiokokous/pdf?period=${periodId}`,
-      previewUrl: `/api/reports/yhtiokokous/pdf?period=${periodId}&preview=1`,
+      id: 'annualMeeting',
+      title: 'Annual meeting',
+      downloadUrl: `/api/reports/annual-meeting/pdf?period=${periodId}`,
+      previewUrl: `/api/reports/annual-meeting/pdf?period=${periodId}&preview=1`,
     },
     {
-      id: 'tilinpaatos',
-      title: 'Tilinpäätös',
-      downloadUrl: `/api/reports/tilinpaatos/pdf?period=${periodId}`,
-      previewUrl: `/api/reports/tilinpaatos/pdf?period=${periodId}&preview=1`,
+      id: 'financialStatement',
+      title: 'Financial statement',
+      downloadUrl: `/api/reports/financial-statement/pdf?period=${periodId}`,
+      previewUrl: `/api/reports/financial-statement/pdf?period=${periodId}&preview=1`,
     },
   ];
 
@@ -95,7 +95,7 @@ export default function TilinpaatosMaterialsPanel({
       <div className="space-y-5">
         <div>
           <h3 className="text-xs font-medium uppercase tracking-wider text-text-muted mb-2">
-            Pääasiakirjat
+            Primary documents
           </h3>
           <div className="rounded-lg border border-border-subtle overflow-hidden table-divide-60">
             {primaryItems.map((item) => (
@@ -110,13 +110,13 @@ export default function TilinpaatosMaterialsPanel({
                 <div className="flex items-center gap-0.5">
                   <IconButton
                     onClick={() => openPreview(item)}
-                    title="Esikatsele"
+                    title="Preview"
                   >
                     <Eye className="h-4 w-4" />
                   </IconButton>
                   <IconButton
                     href={item.downloadUrl}
-                    title="Lataa PDF"
+                    title="Download PDF"
                     variant="accent"
                   >
                     <Download className="h-4 w-4" />
@@ -129,14 +129,14 @@ export default function TilinpaatosMaterialsPanel({
 
         <div>
           <h3 className="text-xs font-medium uppercase tracking-wider text-text-muted mb-2">
-            Aineistot
+            Attachments
           </h3>
           <div className="rounded-lg border border-border-subtle overflow-hidden table-divide-60">
             {materialItems.length > 0 && (
               <div className="flex items-center gap-3 px-4 py-2.5 bg-surface-1/30 hover:bg-surface-2/40 transition-colors">
                 <Archive className="h-4 w-4 text-accent/70 shrink-0" />
                 <span className="text-sm font-medium text-text-primary flex-1">
-                  Liitteet
+                  Appendices
                   <span className="ml-1.5 text-xs text-text-muted font-normal">
                     ({materialItems.length})
                   </span>
@@ -144,7 +144,7 @@ export default function TilinpaatosMaterialsPanel({
                 <div className="flex items-center gap-0.5">
                   <IconButton
                     href={`/api/reports/materials/zip?period=${periodId}`}
-                    title="Lataa liitteet ZIPinä"
+                    title="Download attachments as ZIP"
                     variant="accent"
                   >
                     <Download className="h-4 w-4" />
@@ -155,12 +155,12 @@ export default function TilinpaatosMaterialsPanel({
             <div className="flex items-center gap-3 px-4 py-2.5 bg-surface-1/30 hover:bg-surface-2/40 transition-colors">
               <FileText className="h-4 w-4 text-accent/70 shrink-0" />
               <span className="text-sm font-medium text-text-primary flex-1">
-                Tositteet
+                Documents
               </span>
               <div className="flex items-center gap-0.5">
                 <IconButton
                   href={`/api/reports/receipts-archive/zip?period=${periodId}`}
-                  title="Lataa tositteet ZIPinä"
+                  title="Download documents as ZIP"
                   variant="accent"
                 >
                   <Download className="h-4 w-4" />
@@ -170,12 +170,12 @@ export default function TilinpaatosMaterialsPanel({
             <div className="flex items-center gap-3 px-4 py-2.5 bg-surface-1/30 hover:bg-surface-2/40 transition-colors">
               <Landmark className="h-4 w-4 text-accent/70 shrink-0" />
               <span className="text-sm font-medium text-text-primary flex-1">
-                Tiliotteet
+                Bank statements
               </span>
               <div className="flex items-center gap-0.5">
                 <IconButton
                   href={`/api/reports/bank-statements-archive/zip?period=${periodId}`}
-                  title="Lataa tiliotteet ZIPinä"
+                  title="Download bank statements as ZIP"
                   variant="accent"
                 >
                   <Download className="h-4 w-4" />
@@ -191,7 +191,7 @@ export default function TilinpaatosMaterialsPanel({
             className="inline-flex items-center gap-2 rounded-lg bg-accent px-3.5 py-2 text-sm font-medium text-white transition hover:bg-amber-700"
           >
             <Archive className="h-4 w-4" />
-            Lataa kaikki
+            Download all
           </a>
         </div>
       </div>
@@ -212,14 +212,14 @@ export default function TilinpaatosMaterialsPanel({
                       {preview.title}
                     </div>
                     <div className="mt-1 text-xs text-text-secondary">
-                      PDF-esikatselu
+                      PDF preview
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => setPreview(null)}
                     className="text-text-secondary transition hover:text-text-primary"
-                    aria-label="Sulje materiaalin esikatselu"
+                    aria-label="Close preview"
                   >
                     <X className="h-5 w-5" />
                   </button>

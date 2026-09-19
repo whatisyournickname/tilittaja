@@ -30,7 +30,7 @@ export default function RecurringRentPanel({
 
   async function handleCreate() {
     if (periodLocked) {
-      setError('Tilikausi on lukittu. Avaa kausi ennen vuokratositteiden luontia.');
+      setError('Period is locked. Avaa kausi ennen vuokratositteiden luontia.');
       return;
     }
 
@@ -46,7 +46,7 @@ export default function RecurringRentPanel({
       setError(
         creationError instanceof Error
           ? creationError.message
-          : 'Kuukausivuokrien tositteiden luonti epäonnistui.',
+          : 'Monthly rent document creation failed.',
       );
     } finally {
       setIsCreating(false);
@@ -65,9 +65,9 @@ export default function RecurringRentPanel({
               Kopioi tammikuun vuokrasopimustositteet koko vuodelle
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70">
-              Työkalu etsii {plan.sourceMonthLabel} tilioteriveihin liitetyt
+              Tool finds entries linked to {plan.sourceMonthLabel} bank statement rows
               vuokrasopimus-tositteet, kopioi niiden viennit jokaiselle puuttuvalle
-              kuukaudelle ja käyttää samaa PDF-liitettä kuin lähdetositteessa.
+              for month and uses same PDF attachment as source document.
             </p>
           </div>
 
@@ -100,13 +100,13 @@ export default function RecurringRentPanel({
             </div>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                Lähdetositteet
+                Source documents
               </p>
               <h2 className="mt-2 text-xl font-semibold text-text-primary">
                 Tunnistetut aktiiviset vuokrat
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">
-                Jokainen rivi perustuu tammikuun pankkitapahtumaan, joka on jo
+                Jokainen row perustuu tammikuun pankkitapahtumaan, joka on jo
                 liitetty vuokrasopimus-tositteeseen.
               </p>
             </div>
@@ -125,7 +125,7 @@ export default function RecurringRentPanel({
                         {template.name}
                       </div>
                       <div className="mt-1 text-xs text-text-secondary">
-                        Lähdetosite #{template.sourceDocumentNumber} ·{' '}
+                        Source document #{template.sourceDocumentNumber} ·{' '}
                         {formatDate(template.sourceDocumentDate)}
                       </div>
                       <div className="mt-2 text-xs text-text-secondary">
@@ -163,7 +163,7 @@ export default function RecurringRentPanel({
                       ))
                     ) : (
                       <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs text-emerald-300">
-                        Kaikki kuukaudet löytyvät jo
+                        All months already exist
                       </span>
                     )}
                   </div>
@@ -171,8 +171,8 @@ export default function RecurringRentPanel({
               ))
             ) : (
               <div className="rounded-2xl border border-border-subtle bg-surface-0/35 px-4 py-3 text-sm text-text-secondary">
-                {plan.sourceMonthLabel} ei löytynyt vuokrasopimus-tositteita,
-                joihin olisi liitetty saapuva vuokrarivi.
+                {plan.sourceMonthLabel} rent agreement documents not found,
+                with incoming rent rows attached.
               </div>
             )}
 
@@ -205,30 +205,30 @@ export default function RecurringRentPanel({
             </div>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                Mitä tapahtuu
+                What happens
               </p>
               <h2 className="mt-2 text-xl font-semibold text-text-primary">
-                Luontisäännöt
+                Creation rules
               </h2>
             </div>
           </div>
 
           <div className="mt-6 space-y-3 text-sm leading-6 text-text-secondary">
             <p>
-              Lähteenä käytetään valitun kauden tammikuun saapuvia tilioterivejä,
+              Uses January incoming bank statement rows of selected period as source,
               jotka on jo liitetty `vuokrasopimus`-nimiseen tositteeseen.
             </p>
             <p>
               Uusi kuukausitosite saa samat viennit, saman kategorian, saman nimen
-              ja saman PDF-linkin kuin lähdetosite.
+              and same PDF link as source document.
             </p>
             <p>
-              Jos samalle vuokralle löytyy jo tosite joltakin kuukaudelta, sitä ei
+              If document already exists for this rent from some month, not
               luoda uudelleen.
             </p>
             <p>
-              Jos vuokrasopimuksen PDF-polusta löytyy päättymispäivä, kopioita ei
-              tehdä sen jälkeen.
+              If end date found in rent agreement PDF path, copies not
+              be made after that.
             </p>
           </div>
 

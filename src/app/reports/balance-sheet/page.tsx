@@ -47,7 +47,7 @@ export default async function BalanceSheetPage({
     }),
   );
   if (!structure) {
-    return <div className="p-5 text-rose-400">Taserakennetta ei löydy</div>;
+    return <div className="p-5 text-rose-400">Balance sheet structure not found</div>;
   }
 
   const allEntries: { account_id: number; debit: boolean; amount: number }[] =

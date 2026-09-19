@@ -47,7 +47,7 @@ describe('ReceiptAttachmentPanel', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: /Liitä tosite/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Attach document/i }));
 
     const input = container.querySelector(
       'input[type="file"]',
@@ -83,27 +83,27 @@ describe('ReceiptAttachmentPanel', () => {
       />,
     );
 
-    expect(screen.getByTitle('Tosite 7 PDF')).toBeInTheDocument();
+    expect(screen.getByTitle('Document 7 PDF')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /Avaa suurempana/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Open larger/i }));
 
     expect(
       await screen.findByRole('dialog', {
-        name: /Tositteen 7 PDF-esikatselu/i,
+        name: /Document 7 PDF preview/i,
       }),
     ).toBeInTheDocument();
-    expect(screen.getByTitle('Tosite 7 PDF (laajennettu)')).toBeInTheDocument();
+    expect(screen.getByTitle('Document 7 PDF (expanded)')).toBeInTheDocument();
 
     fireEvent.click(
-      screen.getByRole('button', { name: /Sulje PDF-esikatselu/i }),
+      screen.getByRole('button', { name: /Close PDF preview/i }),
     );
 
     await waitFor(() => {
       expect(
-        screen.queryByTitle('Tosite 7 PDF (laajennettu)'),
+        screen.queryByTitle('Document 7 PDF (expanded)'),
       ).not.toBeInTheDocument();
     });
 
-    expect(screen.getByTitle('Tosite 7 PDF')).toBeInTheDocument();
+    expect(screen.getByTitle('Document 7 PDF')).toBeInTheDocument();
   });
 });

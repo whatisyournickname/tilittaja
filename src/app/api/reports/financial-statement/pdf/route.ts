@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { withDb, jsonError } from '@/lib/api-helpers';
-import { buildTilinpaatosPackage } from '@/lib/tilinpaatos';
+import { buildFinancialStatementPackage } from '@/lib/financial-statement';
 import { sanitizeForFilename } from '@/lib/accounting';
-import { buildTilinpaatosPdf } from '@/lib/pdf/tilinpaatos-pdf';
+import { buildFinancialStatementPdf } from '@/lib/pdf/financial-statement-pdf';
 import { pdfResponse } from '@/lib/pdf/pdf-response';
 
 export const runtime = 'nodejs';
@@ -10,7 +10,7 @@ export const runtime = 'nodejs';
 export const GET = withDb(async (request: NextRequest) => {
   const period = request.nextUrl.searchParams.get('period');
   const preview = request.nextUrl.searchParams.get('preview') === '1';
-  const packageData = buildTilinpaatosPackage(
+  const packageData = buildFinancialStatementPackage(
     period ? Number(period) : undefined,
   );
 
@@ -21,11 +21,11 @@ export const GET = withDb(async (request: NextRequest) => {
     );
   }
 
-  const buffer = await buildTilinpaatosPdf(packageData);
+  const buffer = await buildFinancialStatementPdf(packageData);
 
   const companySlug = sanitizeForFilename(packageData.companyName);
   const periodSlug = `${packageData.periodStart.replaceAll('.', '')}-${packageData.periodEnd.replaceAll('.', '')}`;
-  return pdfResponse(buffer, `tilinpaatos-${companySlug}-${periodSlug}.pdf`, {
+  return pdfResponse(buffer, `financialStatement-${companySlug}-${periodSlug}.pdf`, {
     inline: preview,
   });
 }, 'Tilinpäätös-PDF:n muodostus epäonnistui');

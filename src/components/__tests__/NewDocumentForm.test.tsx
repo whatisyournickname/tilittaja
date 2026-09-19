@@ -54,7 +54,7 @@ describe('NewDocumentForm', () => {
       screen.getByDisplayValue(new Date().toISOString().split('T')[0]),
     ).toBeInTheDocument();
 
-    const selectButtons = screen.getAllByText('Valitse tili');
+    const selectButtons = screen.getAllByText('Select account');
     expect(selectButtons).toHaveLength(2);
   });
 
@@ -63,7 +63,7 @@ describe('NewDocumentForm', () => {
       <NewDocumentForm periodId={1} periodLocked={true} accounts={accounts} />,
     );
 
-    expect(screen.getByText(/lukittu/)).toBeInTheDocument();
+    expect(screen.getByText(/locked/)).toBeInTheDocument();
   });
 
   it('adds a new row', () => {
@@ -71,9 +71,9 @@ describe('NewDocumentForm', () => {
       <NewDocumentForm periodId={1} periodLocked={false} accounts={accounts} />,
     );
 
-    fireEvent.click(screen.getByText('Lisää rivi'));
+    fireEvent.click(screen.getByText('Add row'));
 
-    const selectButtons = screen.getAllByText('Valitse tili');
+    const selectButtons = screen.getAllByText('Select account');
     expect(selectButtons).toHaveLength(3);
   });
 
@@ -82,7 +82,7 @@ describe('NewDocumentForm', () => {
       <NewDocumentForm periodId={1} periodLocked={false} accounts={accounts} />,
     );
 
-    expect(screen.getByText('Tosite on tasapainossa')).toBeInTheDocument();
+    expect(screen.getByText('Document is balanced')).toBeInTheDocument();
   });
 
   it('disables save when period is locked', () => {
@@ -90,7 +90,7 @@ describe('NewDocumentForm', () => {
       <NewDocumentForm periodId={1} periodLocked={true} accounts={accounts} />,
     );
 
-    const saveButton = screen.getByRole('button', { name: /Tallenna/ });
+    const saveButton = screen.getByRole('button', { name: /Save/ });
     expect(saveButton).toBeDisabled();
   });
 });

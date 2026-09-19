@@ -41,7 +41,7 @@ vi.mock('@/lib/db/metadata-receipts', () => ({
   getDocumentReceiptLinks: dbMocks.getDocumentReceiptLinks,
 }));
 
-import { buildReadinessSummary } from '@/lib/tilinpaatos';
+import { buildReadinessSummary } from '@/lib/financial-statement';
 
 function baseMocks() {
   dbMocks.getPeriods.mockReturnValue([
@@ -136,24 +136,24 @@ describe('buildReadinessSummary - extended', () => {
 
   it('reports all-green documents section when everything is balanced and has receipts', () => {
     const summary = buildReadinessSummary(1);
-    const docSection = summary.sections.find((s) => s.title === 'Tositteet');
+    const docSection = summary.sections.find((s) => s.title === 'Documents');
 
     expect(docSection).toBeDefined();
     expect(docSection!.allOk).toBe(true);
     expect(
-      docSection!.items.find((i) => i.label === 'Tositteiden lukumäärä')!.ok,
+      docSection!.items.find((i) => i.label === 'Number of documents')!.ok,
     ).toBe(true);
     expect(
-      docSection!.items.find((i) => i.label === 'Tositteiden lukumäärä')!.count,
+      docSection!.items.find((i) => i.label === 'Number of documents')!.count,
     ).toBe(2);
     expect(
-      docSection!.items.find((i) => i.label === 'Täsmäämättömät tositteet')!.ok,
+      docSection!.items.find((i) => i.label === 'Unbalanced documents')!.ok,
     ).toBe(true);
     expect(
-      docSection!.items.find((i) => i.label === 'Tyhjät tositteet')!.ok,
+      docSection!.items.find((i) => i.label === 'Empty documents')!.ok,
     ).toBe(true);
     expect(
-      docSection!.items.find((i) => i.label === 'Tositteiden kuitit')!.ok,
+      docSection!.items.find((i) => i.label === 'Document receipts')!.ok,
     ).toBe(true);
   });
 
@@ -164,9 +164,9 @@ describe('buildReadinessSummary - extended', () => {
     ]);
 
     const summary = buildReadinessSummary(1);
-    const docSection = summary.sections.find((s) => s.title === 'Tositteet')!;
+    const docSection = summary.sections.find((s) => s.title === 'Documents')!;
     const unbalanced = docSection.items.find(
-      (i) => i.label === 'Täsmäämättömät tositteet',
+      (i) => i.label === 'Unbalanced documents',
     )!;
 
     expect(unbalanced.ok).toBe(false);
@@ -182,8 +182,8 @@ describe('buildReadinessSummary - extended', () => {
     ]);
 
     const summary = buildReadinessSummary(1);
-    const docSection = summary.sections.find((s) => s.title === 'Tositteet')!;
-    const empty = docSection.items.find((i) => i.label === 'Tyhjät tositteet')!;
+    const docSection = summary.sections.find((s) => s.title === 'Documents')!;
+    const empty = docSection.items.find((i) => i.label === 'Empty documents')!;
 
     expect(empty.ok).toBe(false);
     expect(empty.count).toBe(1);
@@ -195,9 +195,9 @@ describe('buildReadinessSummary - extended', () => {
     );
 
     const summary = buildReadinessSummary(1);
-    const docSection = summary.sections.find((s) => s.title === 'Tositteet')!;
+    const docSection = summary.sections.find((s) => s.title === 'Documents')!;
     const receipts = docSection.items.find(
-      (i) => i.label === 'Tositteiden kuitit',
+      (i) => i.label === 'Document receipts',
     )!;
 
     expect(receipts.ok).toBe(false);
@@ -207,19 +207,19 @@ describe('buildReadinessSummary - extended', () => {
 
   it('reports bank statement section with all linked entries', () => {
     const summary = buildReadinessSummary(1);
-    const bsSection = summary.sections.find((s) => s.title === 'Tiliotteet')!;
+    const bsSection = summary.sections.find((s) => s.title === 'Bank statements')!;
 
     expect(bsSection.allOk).toBe(true);
     expect(
-      bsSection.items.find((i) => i.label === 'Tiliotteet tilikaudella')!.ok,
+      bsSection.items.find((i) => i.label === 'Bank statements in period')!.ok,
     ).toBe(true);
     expect(
       bsSection.items.find(
-        (i) => i.label === 'Linkittämättömät tilitapahtumat',
+        (i) => i.label === 'Unlinked bank transactions',
       )!.ok,
     ).toBe(true);
     expect(
-      bsSection.items.find((i) => i.label === 'Käsitellyt tilitapahtumat')!.ok,
+      bsSection.items.find((i) => i.label === 'Processed bank transactions')!.ok,
     ).toBe(true);
   });
 
@@ -229,9 +229,9 @@ describe('buildReadinessSummary - extended', () => {
     ]);
 
     const summary = buildReadinessSummary(1);
-    const bsSection = summary.sections.find((s) => s.title === 'Tiliotteet')!;
+    const bsSection = summary.sections.find((s) => s.title === 'Bank statements')!;
     const unlinked = bsSection.items.find(
-      (i) => i.label === 'Linkittämättömät tilitapahtumat',
+      (i) => i.label === 'Unlinked bank transactions',
     )!;
 
     expect(unlinked.ok).toBe(false);
@@ -242,25 +242,25 @@ describe('buildReadinessSummary - extended', () => {
     dbMocks.getBankStatements.mockReturnValue([]);
 
     const summary = buildReadinessSummary(1);
-    const bsSection = summary.sections.find((s) => s.title === 'Tiliotteet')!;
+    const bsSection = summary.sections.find((s) => s.title === 'Bank statements')!;
 
     expect(
-      bsSection.items.find((i) => i.label === 'Tiliotteet tilikaudella')!.ok,
+      bsSection.items.find((i) => i.label === 'Bank statements in period')!.ok,
     ).toBe(false);
     expect(
-      bsSection.items.find((i) => i.label === 'Käsitellyt tilitapahtumat')!.ok,
+      bsSection.items.find((i) => i.label === 'Processed bank transactions')!.ok,
     ).toBe(false);
   });
 
   it('reports no VAT activity when no VAT-coded accounts exist', () => {
     const summary = buildReadinessSummary(1);
-    const vatSection = summary.sections.find((s) => s.title === 'ALV')!;
+    const vatSection = summary.sections.find((s) => s.title === 'VAT')!;
 
     expect(vatSection.allOk).toBe(true);
     expect(
-      vatSection.items.find((i) => i.label === 'ALV-netto tilikaudella')!
+      vatSection.items.find((i) => i.label === 'VAT net for period')!
         .details,
-    ).toContain('Ei ALV-liikennettä');
+    ).toContain('No VAT activity');
   });
 
   it('canLock is true when all documents are balanced', () => {

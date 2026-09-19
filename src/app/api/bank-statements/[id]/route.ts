@@ -12,10 +12,10 @@ export const DELETE = withDb(
     const deleted = deleteBankStatement(statementId);
 
     if (!deleted) {
-      return jsonError('Tiliotetta ei löydy', 404);
+      return jsonError('Bank statement not found', 404);
     }
 
     return NextResponse.json({ ok: true });
   },
-  'Tiliotteen poisto epäonnistui',
+  'Failed to delete bank statement',
 );

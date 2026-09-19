@@ -95,7 +95,7 @@ describe('document receipt route', () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({
-      error: 'Lähetä PDF multipart-lomakkeena',
+      error: 'Send PDF as multipart form',
     });
   });
 

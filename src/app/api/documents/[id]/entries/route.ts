@@ -14,4 +14,4 @@ export const PATCH = jsonActionRoute(async (
   const documentId = await requireRouteId(params, 'tositteen tunniste');
   const body = await readOptionalRequestJson(request);
   return saveDocumentEntriesAction(documentId, body);
-}, 'Vientien summien päivitys epäonnistui');
+}, 'Failed to update entry amounts');

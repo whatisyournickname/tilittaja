@@ -19,14 +19,14 @@ export default function GlobalError({
               Sovellus kaatui odottamatta
             </h2>
             <p className="mt-3 text-sm leading-6 text-text-secondary">
-              {error.message || 'Yritä ladata sivu uudelleen.'}
+              {error.message || 'Try reloading the page.'}
             </p>
             <button
               type="button"
               onClick={reset}
               className="mt-5 rounded-xl bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-light hover:text-surface-0"
             >
-              Yritä uudelleen
+              Try again
             </button>
           </div>
         </div>

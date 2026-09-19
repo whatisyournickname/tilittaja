@@ -16,7 +16,7 @@ const { buildMaterialPdf, isMaterialKind } = vi.hoisted(() => ({
   isMaterialKind: vi.fn(),
 }));
 
-vi.mock('@/lib/tilinpaatos-materials', () => ({
+vi.mock('@/lib/financial-statement-materials', () => ({
   buildMaterialPdf,
   isMaterialKind,
 }));
@@ -57,17 +57,17 @@ describe('GET /api/reports/materials/pdf', () => {
     isMaterialKind.mockReturnValue(true);
 
     const buffer = Buffer.from('pdf-content');
-    const filename = 'paakirja.pdf';
+    const filename = 'general-ledger.pdf';
     buildMaterialPdf.mockResolvedValue({ buffer, filename });
     pdfResponseMock.mockReturnValue(new Response('ok'));
 
     const request = new NextRequest(
-      'http://localhost/api/reports/materials/pdf?kind=paakirja',
+      'http://localhost/api/reports/materials/pdf?kind=general-ledger',
     );
     const response = await GET(request);
 
     expect(response).toBeDefined();
-    expect(buildMaterialPdf).toHaveBeenCalledWith('paakirja', undefined);
+    expect(buildMaterialPdf).toHaveBeenCalledWith('general-ledger', undefined);
     expect(pdfResponseMock).toHaveBeenCalledWith(buffer, filename, {
       inline: false,
     });
@@ -77,15 +77,15 @@ describe('GET /api/reports/materials/pdf', () => {
     isMaterialKind.mockReturnValue(true);
 
     const buffer = Buffer.from('pdf-content');
-    const filename = 'paakirja.pdf';
+    const filename = 'general-ledger.pdf';
     buildMaterialPdf.mockResolvedValue({ buffer, filename });
     pdfResponseMock.mockReturnValue(new Response('ok'));
 
     const request = new NextRequest(
-      'http://localhost/api/reports/materials/pdf?kind=paakirja&period=2',
+      'http://localhost/api/reports/materials/pdf?kind=general-ledger&period=2',
     );
     await GET(request);
 
-    expect(buildMaterialPdf).toHaveBeenCalledWith('paakirja', 2);
+    expect(buildMaterialPdf).toHaveBeenCalledWith('general-ledger', 2);
   });
 });

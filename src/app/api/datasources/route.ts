@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
   const dbPath = resolveDbPath(slug);
   if (!dbPath) {
     return NextResponse.json(
-      { error: 'Virheellinen tietolähde' },
+      { error: 'Invalid datasource' },
       { status: 400 },
     );
   }

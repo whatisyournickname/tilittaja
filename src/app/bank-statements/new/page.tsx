@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Lisää tiliote – Tilittaja' };
+export const metadata: Metadata = { title: 'Add bank statement – Tilittaja' };
 
 export default async function NewBankStatementPage() {
   const { accounts } = await runWithResolvedDb(() => ({

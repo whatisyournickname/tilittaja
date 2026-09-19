@@ -198,7 +198,7 @@ function parseIsoDate(dateString: string, fieldLabel: string): number {
   const timestamp = Date.parse(`${dateString}T00:00:00.000Z`);
   if (Number.isNaN(timestamp)) {
     throw new ApiRouteError(
-      `GPT palautti virheellisen päivämäärän kenttään ${fieldLabel}`,
+      `GPT returned an invalid date for field ${fieldLabel}`,
       502,
     );
   }
@@ -215,7 +215,7 @@ function inferOpeningBalanceAccountType(
 ): AccountType {
   const number = Number.parseInt(accountNumber, 10);
   if (!Number.isInteger(number)) {
-    throw new ApiRouteError(`Virheellinen tilinumero avaustuonnissa: ${accountNumber}`);
+    throw new ApiRouteError(`Invalid account number in opening balance import: ${accountNumber}`);
   }
   if (accountNumber === '2250') return 5;
   if (accountNumber === '2370') return 6;
@@ -225,7 +225,7 @@ function inferOpeningBalanceAccountType(
   if (number >= 2370 && number <= 2399) return 6;
   if (number >= 2400 && number <= 2999) return 1;
   throw new ApiRouteError(
-    `Tilikauden avauksen tuonnissa sallitaan vain taseen tilit 1000-2999, saatu ${accountNumber}`,
+    `Opening balance import only allows balance sheet accounts 1000-2999, got ${accountNumber}`,
   );
 }
 
@@ -281,7 +281,7 @@ function loadPdfParse(): {
   };
   const PDFParse = pdfParseModule.PDFParse;
   if (!PDFParse) {
-    throw new ApiRouteError('PDF-parserin lataus epäonnistui', 500);
+    throw new ApiRouteError('Failed to load PDF parser', 500);
   }
 
   const bundledPdfParseMainPath = requireFromNode.resolve('pdf-parse');
@@ -320,7 +320,7 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
   const text = (result.text ?? '').replace(/\u0000/g, ' ').trim();
   if (!text) {
     throw new ApiRouteError(
-      'PDF:stä ei saatu luettua tekstiä tilikauden avausta varten',
+      'No text could be read from the PDF for the opening balance',
       400,
     );
   }
@@ -363,7 +363,7 @@ function extractResponseText(payload: unknown): string {
     if (combined) return combined;
   }
 
-  throw new ApiRouteError('GPT ei palauttanut jäsennettävää avaussaldodata', 502);
+  throw new ApiRouteError('GPT did not return parseable opening balance data', 502);
 }
 
 function parseAiPayload(jsonText: string): AiOpeningBalance {
@@ -371,7 +371,7 @@ function parseAiPayload(jsonText: string): AiOpeningBalance {
   try {
     parsedJson = JSON.parse(jsonText);
   } catch {
-    throw new ApiRouteError('GPT palautti virheellistä JSON-dataa', 502);
+    throw new ApiRouteError('GPT returned invalid JSON data', 502);
   }
 
   return aiOpeningBalanceSchema.parse(parsedJson);
@@ -388,7 +388,7 @@ export function normalizeImportedOpeningBalance(
 
     const normalizedAccount: ImportedOpeningBalanceAccount = {
       number,
-      name: normalizeOptionalText(account.name) ?? `Tili ${number}`,
+      name: normalizeOptionalText(account.name) ?? `Account ${number}`,
       balance: roundCents(account.balance),
     };
 
@@ -402,14 +402,14 @@ export function normalizeImportedOpeningBalance(
 
     if (Math.abs(existing.balance - normalizedAccount.balance) >= 0.01) {
       throw new ApiRouteError(
-        `GPT palautti samalle tilille ${number} ristiriitaisia saldoja (${existing.balance} vs ${normalizedAccount.balance})`,
+        `GPT returned conflicting balances for account ${number} (${existing.balance} vs ${normalizedAccount.balance})`,
         502,
       );
     }
 
     if (
-      existing.name.startsWith('Tili ') &&
-      !normalizedAccount.name.startsWith('Tili ')
+      existing.name.startsWith('Account ') &&
+      !normalizedAccount.name.startsWith('Account ')
     ) {
       accountsByNumber.set(number, normalizedAccount);
     }
@@ -421,7 +421,7 @@ export function normalizeImportedOpeningBalance(
 
   if (accounts.length === 0) {
     throw new ApiRouteError(
-      'GPT ei löytänyt tilinpäätösmateriaaleista yhtään tuotavaa tasetiliä',
+      'GPT did not find any valid balance sheet accounts from the financial statement materials',
       502,
     );
   }
@@ -447,7 +447,7 @@ async function requestOpeningBalanceJson(
   const env = getEnv();
   if (!env.OPENAI_API_KEY) {
     throw new ApiRouteError(
-      'OPENAI_API_KEY puuttuu palvelimen ympäristömuuttujista',
+      'OPENAI_API_KEY is missing from server environment variables',
       500,
     );
   }
@@ -497,7 +497,7 @@ async function requestOpeningBalanceJson(
 
   const payload = await readJsonResponse(
     response,
-    'OpenAI API palautti virheellistä JSON-dataa',
+    'OpenAI API returned invalid JSON data',
   );
   if (!response.ok) {
     const apiMessage =
@@ -509,9 +509,9 @@ async function requestOpeningBalanceJson(
       'message' in payload.error &&
       typeof payload.error.message === 'string'
         ? payload.error.message
-        : 'OpenAI API -kutsu epäonnistui';
+        : 'OpenAI API request failed';
 
-    throw new ApiRouteError(`GPT-parsinta epäonnistui: ${apiMessage}`, 502);
+    throw new ApiRouteError(`GPT parsing failed: ${apiMessage}`, 502);
   }
 
   return extractResponseText(payload);
@@ -521,10 +521,10 @@ async function extractImportedOpeningBalanceFromPdfs(
   files: ImportedOpeningBalanceFile[],
 ): Promise<ImportedOpeningBalance> {
   if (files.length === 0) {
-    throw new ApiRouteError('Lähetä vähintään yksi PDF-tiedosto', 400);
+    throw new ApiRouteError('Send at least one PDF file', 400);
   }
   if (files.length > MAX_IMPORTED_FILES) {
-    throw new ApiRouteError('Voit lähettää korkeintaan 10 PDF-tiedostoa', 400);
+    throw new ApiRouteError('You can send at most 10 PDF files', 400);
   }
 
   const extractedFiles: Array<{ fileName: string; extractedText: string }> = [];
@@ -532,7 +532,7 @@ async function extractImportedOpeningBalanceFromPdfs(
 
   for (const file of files) {
     if (!file.buffer.length) {
-      throw new ApiRouteError(`Lähetetty tiedosto on tyhjä: ${file.fileName}`, 400);
+      throw new ApiRouteError(`Uploaded file is empty: ${file.fileName}`, 400);
     }
 
     const extractedText = await extractPdfText(file.buffer);
@@ -540,7 +540,7 @@ async function extractImportedOpeningBalanceFromPdfs(
 
     if (totalTextChars > MAX_TOTAL_PDF_TEXT_CHARS) {
       throw new ApiRouteError(
-        'PDF-aineisto on liian laaja kerralla tuotavaksi. Lähetä vähemmän tai lyhyempiä tiedostoja.',
+        'PDF material is too large to import at once. Send fewer or shorter files.',
         400,
       );
     }
@@ -614,7 +614,7 @@ export function buildOpeningBalancePlan(
       accountType !== 6
     ) {
       throw new ApiRouteError(
-        `Tili ${importedAccount.number} ei ole tasetili nykyisessä tilikartassa`,
+        `Account ${importedAccount.number} is not a balance sheet account in the current chart of accounts`,
         400,
       );
     }
@@ -677,12 +677,12 @@ export function buildOpeningBalancePlan(
   creditTotal = roundCents(creditTotal);
 
   if (entries.length === 0) {
-    throw new ApiRouteError('PDF-aineistosta ei syntynyt yhtään avausvientiä', 400);
+    throw new ApiRouteError('No opening entries were generated from the PDF material', 400);
   }
 
   if (Math.abs(debitTotal - creditTotal) >= 0.01) {
     throw new ApiRouteError(
-      `Avaussaldot eivät täsmää: debet ${debitTotal.toFixed(2)} euroa, kredit ${creditTotal.toFixed(2)} euroa`,
+      `Opening balances do not match: debit ${debitTotal.toFixed(2)} euros, credit ${creditTotal.toFixed(2)} euros`,
       400,
     );
   }
@@ -718,14 +718,14 @@ async function buildMergedOpeningBalanceReceiptPdf(
       copiedPages.forEach((page) => merged.addPage(page));
     } catch {
       throw new ApiRouteError(
-        `PDF-tiedoston ${file.fileName} yhdistäminen epäonnistui`,
+        `Failed to merge PDF file ${file.fileName}`,
         400,
       );
     }
   }
 
   if (merged.getPageCount() === 0) {
-    throw new ApiRouteError('Avausmateriaaleista ei löytynyt yhtään PDF-sivua', 400);
+    throw new ApiRouteError('No PDF pages were found in the opening materials', 400);
   }
 
   return Buffer.from(await merged.save());
@@ -765,7 +765,7 @@ function resolveOpeningBalanceReceiptPath(
   ).get(documentId);
 
   if (!label) {
-    throw new ApiRouteError('Avaustositteen koodia ei voitu muodostaa', 500);
+    throw new ApiRouteError('Could not generate code for opening document', 500);
   }
 
   return buildUploadedReceiptPath(label.code, periodStartDate, periodEndDate);
@@ -858,17 +858,17 @@ export async function applyImportedOpeningBalance(params: {
 }): Promise<ImportedOpeningBalanceApplyResult> {
   const period = requireResource(
     getPeriod(params.periodId),
-    'Tilikautta ei löytynyt',
+    'Period not found',
   );
 
   if (period.locked) {
-    throw new ApiRouteError('Tilikausi on lukittu, joten avausta ei voi tuoda', 400);
+    throw new ApiRouteError('Period is locked, so the opening balance cannot be imported', 400);
   }
 
   const existingOpeningDocumentId = getExistingOpeningDocumentId(period.id);
   if (existingOpeningDocumentId) {
     throw new ApiRouteError(
-      `Tilikaudelle on jo olemassa avaus-tosite (#${existingOpeningDocumentId}). Poista se ennen uutta tuontia.`,
+      `There is already an opening document for the period (#${existingOpeningDocumentId}). Delete it before re-importing.`,
       409,
     );
   }
@@ -876,7 +876,7 @@ export async function applyImportedOpeningBalance(params: {
   const imported = await extractImportedOpeningBalanceFromPdfs(params.files);
   if (imported.previousPeriodEnd >= period.start_date) {
     throw new ApiRouteError(
-      'Tilinpäätösmateriaalin päättymispäivä ei ole ennen valitun tilikauden alkua',
+      'The end date of the financial statement material must be before the start of the selected period',
       400,
     );
   }
@@ -915,7 +915,7 @@ export async function applyImportedOpeningBalance(params: {
         const accountId = accountIdByNumber.get(entry.accountNumber);
         if (!accountId) {
           throw new ApiRouteError(
-            `Tilin ${entry.accountNumber} luonti epäonnistui avaustuonnissa`,
+            `Failed to create account ${entry.accountNumber} during opening balance import`,
             500,
           );
         }

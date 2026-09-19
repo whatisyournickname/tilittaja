@@ -3,8 +3,8 @@ import PageLoadingState from '@/components/PageLoadingState';
 export default function Loading() {
   return (
     <PageLoadingState
-      eyebrow="Arvonlisävero"
-      title="Ladataan ALV-näkymää"
+      eyebrow="VAT"
+      title="Loading VAT view"
       description="Lasketaan ALV-raportti, tilitys ja aiemmat ilmoitukset."
     />
   );

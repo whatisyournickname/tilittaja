@@ -22,7 +22,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Pääkirja – Tilittaja' };
+export const metadata: Metadata = { title: 'General ledger – Tilittaja' };
 
 export default async function GeneralLedgerPage({
   searchParams,
@@ -165,7 +165,7 @@ export default async function GeneralLedgerPage({
             Raportit
           </p>
           <h1 className="text-xl font-semibold text-text-primary tracking-tight">
-            Pääkirja
+            General ledger
           </h1>
           <p className="text-sm text-text-secondary mt-1">
             {periodLabel(period.start_date, period.end_date)}

@@ -23,11 +23,11 @@ import {
 import { ReportRow } from '@/lib/types';
 
 export type MaterialKind =
-  | 'paakirja'
-  | 'paivakirja'
-  | 'tase-erittely'
-  | 'tase-laaja'
-  | 'tulos-laaja';
+  | 'general-ledger'
+  | 'journal'
+  | 'balance-sheet-detailed'
+  | 'balance-sheet-broad'
+  | 'income-statement-broad';
 
 export const MATERIALS: Record<
   MaterialKind,
@@ -36,32 +36,32 @@ export const MATERIALS: Record<
     filenamePrefix: string;
   }
 > = {
-  paakirja: {
-    title: 'Pääkirja',
-    filenamePrefix: 'paakirja',
+  'general-ledger': {
+    title: 'General ledger',
+    filenamePrefix: 'general-ledger',
   },
-  paivakirja: {
-    title: 'Päiväkirja',
-    filenamePrefix: 'paivakirja',
+  journal: {
+    title: 'Journal',
+    filenamePrefix: 'journal',
   },
-  'tase-erittely': {
-    title: 'Tase-erittely',
-    filenamePrefix: 'tase-erittely',
+  'balance-sheet-detailed': {
+    title: 'Balance sheet details',
+    filenamePrefix: 'balance-sheet-detailed',
   },
-  'tase-laaja': {
-    title: 'Tase (laaja)',
-    filenamePrefix: 'tase-laaja',
+  'balance-sheet-broad': {
+    title: 'Balance sheet (detailed)',
+    filenamePrefix: 'balance-sheet-broad',
   },
-  'tulos-laaja': {
-    title: 'Tuloslaskelma (laaja)',
-    filenamePrefix: 'tulos-laaja',
+  'income-statement-broad': {
+    title: 'Income statement (detailed)',
+    filenamePrefix: 'income-statement-broad',
   },
 };
 
 const LEFT = 50;
 const RIGHT = 545;
 const BOTTOM = 770;
-const PAKIRJA_COL = {
+const GENERAL_LEDGER_COL = {
   dateX: LEFT,
   dateW: 58,
   voucherX: LEFT + 62,
@@ -76,7 +76,7 @@ const PAKIRJA_COL = {
   balanceW: 66,
 } as const;
 
-const PAIVAKIRJA_COL = {
+const JOURNAL_COL = {
   accountNumberX: LEFT,
   accountNumberW: 44,
   accountNameX: LEFT + 48,
@@ -137,7 +137,7 @@ function ensureFits(
   redraw();
 }
 
-function drawPaakirja(
+function drawGeneralLedger(
   doc: InstanceType<typeof PDFDocument>,
   companyName: string,
   periodText: string,
@@ -148,7 +148,7 @@ function drawPaakirja(
   const accountTypeById = new Map(
     accounts.map((account) => [account.id, account.type]),
   );
-  addHeader(doc, 'Pääkirja', companyName, periodText);
+  addHeader(doc, 'General ledger', companyName, periodText);
 
   const grouped = new Map<number, typeof entries>();
   for (const entry of entries) {
@@ -176,37 +176,37 @@ function drawPaakirja(
       doc.moveDown(0.2);
       doc.font('Helvetica-Bold').fontSize(8);
       const headerY = doc.y;
-      doc.text('Pvm', PAKIRJA_COL.dateX, headerY, {
-        width: PAKIRJA_COL.dateW,
+      doc.text('Date', GENERAL_LEDGER_COL.dateX, headerY, {
+        width: GENERAL_LEDGER_COL.dateW,
         lineBreak: false,
       });
-      doc.text('Tosite', PAKIRJA_COL.voucherX, headerY, {
-        width: PAKIRJA_COL.voucherW,
+      doc.text('Document', GENERAL_LEDGER_COL.voucherX, headerY, {
+        width: GENERAL_LEDGER_COL.voucherW,
         lineBreak: false,
       });
-      doc.text('Selite', PAKIRJA_COL.descX, headerY, {
-        width: PAKIRJA_COL.descW,
+      doc.text('Description', GENERAL_LEDGER_COL.descX, headerY, {
+        width: GENERAL_LEDGER_COL.descW,
         lineBreak: false,
       });
-      doc.text('Debet', PAKIRJA_COL.debitX, headerY, {
-        width: PAKIRJA_COL.debitW,
+      doc.text('Debit', GENERAL_LEDGER_COL.debitX, headerY, {
+        width: GENERAL_LEDGER_COL.debitW,
         align: 'right',
         lineBreak: false,
       });
-      doc.text('Kredit', PAKIRJA_COL.creditX, headerY, {
-        width: PAKIRJA_COL.creditW,
+      doc.text('Credit', GENERAL_LEDGER_COL.creditX, headerY, {
+        width: GENERAL_LEDGER_COL.creditW,
         align: 'right',
         lineBreak: false,
       });
-      doc.text('Saldo', PAKIRJA_COL.balanceX, headerY, {
-        width: PAKIRJA_COL.balanceW,
+      doc.text('Balance', GENERAL_LEDGER_COL.balanceX, headerY, {
+        width: GENERAL_LEDGER_COL.balanceW,
         align: 'right',
         lineBreak: false,
       });
       doc.y = headerY + 12;
     };
     const redrawCurrentAccountPage = () => {
-      addHeader(doc, 'Pääkirja (jatkuu)', companyName, periodText);
+      addHeader(doc, 'General ledger (continued)', companyName, periodText);
       drawAccountHeader();
     };
 
@@ -222,45 +222,45 @@ function drawPaakirja(
       runningBalance += entry.amount * sign;
       const y = doc.y;
       doc.font('Helvetica').fontSize(8);
-      doc.text(formatDate(entry.document_date), PAKIRJA_COL.dateX, y, {
-        width: PAKIRJA_COL.dateW,
+      doc.text(formatDate(entry.document_date), GENERAL_LEDGER_COL.dateX, y, {
+        width: GENERAL_LEDGER_COL.dateW,
         lineBreak: false,
       });
-      doc.text(String(entry.document_number), PAKIRJA_COL.voucherX, y, {
-        width: PAKIRJA_COL.voucherW,
+      doc.text(String(entry.document_number), GENERAL_LEDGER_COL.voucherX, y, {
+        width: GENERAL_LEDGER_COL.voucherW,
         lineBreak: false,
       });
       doc.text(
         truncateText(entry.description || '', 46),
-        PAKIRJA_COL.descX,
+        GENERAL_LEDGER_COL.descX,
         y,
         {
-          width: PAKIRJA_COL.descW,
+          width: GENERAL_LEDGER_COL.descW,
           lineBreak: false,
         },
       );
       doc.text(
         Boolean(entry.debit) ? formatNumber(entry.amount) : '',
-        PAKIRJA_COL.debitX,
+        GENERAL_LEDGER_COL.debitX,
         y,
         {
-          width: PAKIRJA_COL.debitW,
+          width: GENERAL_LEDGER_COL.debitW,
           align: 'right',
           lineBreak: false,
         },
       );
       doc.text(
         Boolean(entry.debit) ? '' : formatNumber(entry.amount),
-        PAKIRJA_COL.creditX,
+        GENERAL_LEDGER_COL.creditX,
         y,
         {
-          width: PAKIRJA_COL.creditW,
+          width: GENERAL_LEDGER_COL.creditW,
           align: 'right',
           lineBreak: false,
         },
       );
-      doc.text(formatNumber(runningBalance), PAKIRJA_COL.balanceX, y, {
-        width: PAKIRJA_COL.balanceW,
+      doc.text(formatNumber(runningBalance), GENERAL_LEDGER_COL.balanceX, y, {
+        width: GENERAL_LEDGER_COL.balanceW,
         align: 'right',
         lineBreak: false,
       });
@@ -270,7 +270,7 @@ function drawPaakirja(
   }
 }
 
-function drawPaivakirja(
+function drawJournal(
   doc: InstanceType<typeof PDFDocument>,
   companyName: string,
   periodText: string,
@@ -280,7 +280,7 @@ function drawPaivakirja(
   const accounts = getAccounts();
   const accountById = new Map(accounts.map((account) => [account.id, account]));
 
-  addHeader(doc, 'Päiväkirja', companyName, periodText);
+  addHeader(doc, 'Journal', companyName, periodText);
   const grouped = new Map<number, typeof entries>();
   for (const entry of entries) {
     if (!grouped.has(entry.document_number))
@@ -298,7 +298,7 @@ function drawPaivakirja(
         .font('Helvetica-Bold')
         .fontSize(9)
         .text(
-          `Tosite ${documentNumber} | ${formatDate(first.document_date)}`,
+          `Document ${documentNumber} | ${formatDate(first.document_date)}`,
           LEFT,
           doc.y,
           {
@@ -308,25 +308,25 @@ function drawPaivakirja(
       doc.moveDown(0.15);
       const headerY = doc.y;
       doc.font('Helvetica-Bold').fontSize(8);
-      doc.text('Tili', PAIVAKIRJA_COL.accountNumberX, headerY, {
-        width: PAIVAKIRJA_COL.accountNumberW,
+      doc.text('Account', JOURNAL_COL.accountNumberX, headerY, {
+        width: JOURNAL_COL.accountNumberW,
         lineBreak: false,
       });
-      doc.text('Tilin nimi', PAIVAKIRJA_COL.accountNameX, headerY, {
-        width: PAIVAKIRJA_COL.accountNameW,
+      doc.text('Account name', JOURNAL_COL.accountNameX, headerY, {
+        width: JOURNAL_COL.accountNameW,
         lineBreak: false,
       });
-      doc.text('Selite', PAIVAKIRJA_COL.descX, headerY, {
-        width: PAIVAKIRJA_COL.descW,
+      doc.text('Description', JOURNAL_COL.descX, headerY, {
+        width: JOURNAL_COL.descW,
         lineBreak: false,
       });
-      doc.text('Debet', PAIVAKIRJA_COL.debitX, headerY, {
-        width: PAIVAKIRJA_COL.debitW,
+      doc.text('Debit', JOURNAL_COL.debitX, headerY, {
+        width: JOURNAL_COL.debitW,
         align: 'right',
         lineBreak: false,
       });
-      doc.text('Kredit', PAIVAKIRJA_COL.creditX, headerY, {
-        width: PAIVAKIRJA_COL.creditW,
+      doc.text('Credit', JOURNAL_COL.creditX, headerY, {
+        width: JOURNAL_COL.creditW,
         align: 'right',
         lineBreak: false,
       });
@@ -334,12 +334,12 @@ function drawPaivakirja(
     };
 
     const redrawCurrentDocumentPage = () => {
-      addHeader(doc, 'Päiväkirja (jatkuu)', companyName, periodText);
+      addHeader(doc, 'Journal (continued)', companyName, periodText);
       drawDocumentHeader();
     };
 
     ensureFits(doc, 30, () =>
-      addHeader(doc, 'Päiväkirja (jatkuu)', companyName, periodText),
+      addHeader(doc, 'Journal (continued)', companyName, periodText),
     );
     drawDocumentHeader();
 
@@ -350,44 +350,44 @@ function drawPaivakirja(
       const account = accountById.get(entry.account_id);
       const y = doc.y;
       doc.font('Helvetica').fontSize(8);
-      doc.text(account?.number || '', PAIVAKIRJA_COL.accountNumberX, y, {
-        width: PAIVAKIRJA_COL.accountNumberW,
+      doc.text(account?.number || '', JOURNAL_COL.accountNumberX, y, {
+        width: JOURNAL_COL.accountNumberW,
         lineBreak: false,
       });
       doc.text(
         truncateText(account?.name || '', 30),
-        PAIVAKIRJA_COL.accountNameX,
+        JOURNAL_COL.accountNameX,
         y,
         {
-          width: PAIVAKIRJA_COL.accountNameW,
+          width: JOURNAL_COL.accountNameW,
           lineBreak: false,
         },
       );
       doc.text(
         truncateText(entry.description || '', 34),
-        PAIVAKIRJA_COL.descX,
+        JOURNAL_COL.descX,
         y,
         {
-          width: PAIVAKIRJA_COL.descW,
+          width: JOURNAL_COL.descW,
           lineBreak: false,
         },
       );
       doc.text(
         Boolean(entry.debit) ? formatNumber(entry.amount) : '',
-        PAIVAKIRJA_COL.debitX,
+        JOURNAL_COL.debitX,
         y,
         {
-          width: PAIVAKIRJA_COL.debitW,
+          width: JOURNAL_COL.debitW,
           align: 'right',
           lineBreak: false,
         },
       );
       doc.text(
         Boolean(entry.debit) ? '' : formatNumber(entry.amount),
-        PAIVAKIRJA_COL.creditX,
+        JOURNAL_COL.creditX,
         y,
         {
-          width: PAIVAKIRJA_COL.creditW,
+          width: JOURNAL_COL.creditW,
           align: 'right',
           lineBreak: false,
         },
@@ -400,18 +400,18 @@ function drawPaivakirja(
     ensureFits(doc, 14, redrawCurrentDocumentPage);
     doc.font('Helvetica-Bold').fontSize(8);
     const totalY = doc.y;
-    doc.text('Yhteensä', PAIVAKIRJA_COL.descX, totalY, {
-      width: PAIVAKIRJA_COL.debitX - PAIVAKIRJA_COL.descX - 4,
+    doc.text('Total', JOURNAL_COL.descX, totalY, {
+      width: JOURNAL_COL.debitX - JOURNAL_COL.descX - 4,
       align: 'right',
       lineBreak: false,
     });
-    doc.text(formatNumber(debitTotal), PAIVAKIRJA_COL.debitX, totalY, {
-      width: PAIVAKIRJA_COL.debitW,
+    doc.text(formatNumber(debitTotal), JOURNAL_COL.debitX, totalY, {
+      width: JOURNAL_COL.debitW,
       align: 'right',
       lineBreak: false,
     });
-    doc.text(formatNumber(creditTotal), PAIVAKIRJA_COL.creditX, totalY, {
-      width: PAIVAKIRJA_COL.creditW,
+    doc.text(formatNumber(creditTotal), JOURNAL_COL.creditX, totalY, {
+      width: JOURNAL_COL.creditW,
       align: 'right',
       lineBreak: false,
     });
@@ -445,8 +445,8 @@ function drawStructuredStatement(
   addHeader(doc, title, companyName, periodText);
   doc.font('Helvetica-Bold').fontSize(8);
   const tableHeaderY = doc.y;
-  doc.text('Erä', LEFT, tableHeaderY, { width: 360, lineBreak: false });
-  doc.text('Summa', LEFT + 364, tableHeaderY, {
+  doc.text('Item', LEFT, tableHeaderY, { width: 360, lineBreak: false });
+  doc.text('Amount', LEFT + 364, tableHeaderY, {
     width: 130,
     align: 'right',
     lineBreak: false,
@@ -464,7 +464,7 @@ function drawStructuredStatement(
       const details = getDetailRows(row, accounts, balances);
       if (!details.length) continue;
       ensureFits(doc, 12, () =>
-        addHeader(doc, `${title} (jatkuu)`, companyName, periodText),
+        addHeader(doc, `${title} (continued)`, companyName, periodText),
       );
       doc
         .font('Helvetica-Bold')
@@ -475,7 +475,7 @@ function drawStructuredStatement(
       doc.moveDown(0.1);
       for (const detail of details) {
         ensureFits(doc, 12, () =>
-          addHeader(doc, `${title} (jatkuu)`, companyName, periodText),
+          addHeader(doc, `${title} (continued)`, companyName, periodText),
         );
         const y = doc.y;
         doc.text(
@@ -499,7 +499,7 @@ function drawStructuredStatement(
 
     if (detailOnly) continue;
     ensureFits(doc, 12, () =>
-      addHeader(doc, `${title} (jatkuu)`, companyName, periodText),
+      addHeader(doc, `${title} (continued)`, companyName, periodText),
     );
     const y = doc.y;
     const style = row.style === 'B' ? 'Helvetica-Bold' : 'Helvetica';
@@ -534,7 +534,7 @@ export async function buildMaterialPdf(
     (periodId ? periods.find((period) => period.id === periodId) : undefined) ||
     periods.find((period) => period.id === settings.current_period_id) ||
     periods[0];
-  if (!selectedPeriod) throw new Error('Tilikautta ei löytynyt.');
+  if (!selectedPeriod) throw new Error('No period found.');
 
   const material = MATERIALS[kind];
   const periodText = periodLabel(
@@ -550,14 +550,14 @@ export async function buildMaterialPdf(
     doc.on('end', () => resolve(Buffer.concat(chunks)));
   });
 
-  if (kind === 'paakirja') {
-    drawPaakirja(doc, companyName, periodText, selectedPeriod.id);
-  } else if (kind === 'paivakirja') {
-    drawPaivakirja(doc, companyName, periodText, selectedPeriod.id);
-  } else if (kind === 'tulos-laaja') {
+  if (kind === 'general-ledger') {
+    drawGeneralLedger(doc, companyName, periodText, selectedPeriod.id);
+  } else if (kind === 'journal') {
+    drawJournal(doc, companyName, periodText, selectedPeriod.id);
+  } else if (kind === 'income-statement-broad') {
     const structure = getReportStructure('income-statement-detailed');
     if (!structure)
-      throw new Error('Tuloslaskelman laajaa rakennetta ei löytynyt.');
+      throw new Error('Detailed income statement structure not found.');
     const accounts = getAccounts();
     const balances = calculateBalances(
       getEntriesForPeriod(selectedPeriod.id),
@@ -572,14 +572,14 @@ export async function buildMaterialPdf(
       doc,
       companyName,
       periodText,
-      'Tuloslaskelma (laaja)',
+      'Income statement (detailed)',
       rows,
       accounts,
       balances,
     );
   } else {
     const structure = getReportStructure('balance-sheet-detailed');
-    if (!structure) throw new Error('Taseen laajaa rakennetta ei löytynyt.');
+    if (!structure) throw new Error('Detailed balance sheet structure not found.');
     const { balances, accounts } = getBalanceSheetBalances(
       selectedPeriod.end_date,
     );
@@ -588,12 +588,12 @@ export async function buildMaterialPdf(
       accounts,
       balances,
     );
-    if (kind === 'tase-erittely') {
+    if (kind === 'balance-sheet-detailed') {
       drawStructuredStatement(
         doc,
         companyName,
         periodText,
-        'Tase-erittely',
+        'Balance sheet details',
         rows,
         accounts,
         balances,
@@ -604,7 +604,7 @@ export async function buildMaterialPdf(
         doc,
         companyName,
         periodText,
-        'Tase (laaja)',
+        'Balance sheet (detailed)',
         rows,
         accounts,
         balances,

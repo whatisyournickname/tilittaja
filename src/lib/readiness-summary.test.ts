@@ -41,7 +41,7 @@ vi.mock('@/lib/db/metadata-receipts', () => ({
   getDocumentReceiptLinks: dbMocks.getDocumentReceiptLinks,
 }));
 
-import { buildReadinessSummary } from '@/lib/tilinpaatos';
+import { buildReadinessSummary } from '@/lib/financial-statement';
 
 describe('buildReadinessSummary', () => {
   beforeEach(() => {
@@ -132,18 +132,18 @@ describe('buildReadinessSummary', () => {
 
     const summary = buildReadinessSummary(1);
     const vatSection = summary.sections.find(
-      (section) => section.title === 'ALV',
+      (section) => section.title === 'VAT',
     );
     const settlementItem = vatSection?.items.find(
-      (item) => item.label === 'ALV-tilien tilitys',
+      (item) => item.label === 'VAT account settlement',
     );
     const vatDocumentItem = vatSection?.items.find(
-      (item) => item.label === 'ALV-ilmoitusten tositteet',
+      (item) => item.label === 'VAT return documents',
     );
 
     expect(vatSection).toBeDefined();
     expect(settlementItem?.ok).toBe(false);
-    expect(settlementItem?.details).toContain('Maksettavaa');
+    expect(settlementItem?.details).toContain('Payable');
     expect(settlementItem?.details).toContain('2939');
     expect(vatDocumentItem?.ok).toBe(false);
   });
@@ -230,26 +230,26 @@ describe('buildReadinessSummary', () => {
 
     const summary = buildReadinessSummary(1);
     const vatSection = summary.sections.find(
-      (section) => section.title === 'ALV',
+      (section) => section.title === 'VAT',
     );
 
     expect(vatSection?.allOk).toBe(true);
     expect(
-      vatSection?.items.find((item) => item.label === 'ALV-tilien tilitys')?.ok,
+      vatSection?.items.find((item) => item.label === 'VAT account settlement')?.ok,
     ).toBe(true);
     expect(
       vatSection?.items.find(
-        (item) => item.label === 'ALV-ilmoitusten tositteet',
+        (item) => item.label === 'VAT return documents',
       )?.ok,
     ).toBe(true);
     expect(
       vatSection?.items.find(
-        (item) => item.label === 'ALV-ilmoitusten tositteet',
+        (item) => item.label === 'VAT return documents',
       )?.count,
     ).toBe(1);
     expect(
       vatSection?.items.find(
-        (item) => item.label === 'ALV-ilmoitusten tositteet',
+        (item) => item.label === 'VAT return documents',
       )?.total,
     ).toBe(1);
   });

@@ -41,7 +41,7 @@ export async function setDatasourceAction(input: unknown) {
   const dbPath = resolveDbPath(parsed.slug);
 
   if (!dbPath) {
-    throw new Error('Virheellinen tietolähde');
+    throw new Error('Invalid datasource');
   }
 
   await setDatasourceCookie(parsed.slug);
@@ -53,13 +53,13 @@ export async function importStateTransferAction(
   file: File,
 ): Promise<StateTransferImportSuccess> {
   if (!(file instanceof File)) {
-    throw new Error('Valitse ZIP-paketti.');
+    throw new Error('Select a ZIP package.');
   }
 
   const source = await requireCurrentDataSource();
   const dbPath = resolveDbPath(source);
   if (!dbPath) {
-    throw new Error('Aktiivisen tietolähteen SQLite-kantaa ei löytynyt');
+    throw new Error('Active datasource SQLite database not found');
   }
 
   closeDbConnection(dbPath);

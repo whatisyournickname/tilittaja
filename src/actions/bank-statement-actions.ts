@@ -73,7 +73,7 @@ export async function updateBankStatementEntryDocumentAction(
     requireUnlockedBankStatementEntryPeriod(parsed.entryId);
 
     if (parsed.documentId !== null) {
-      requireResource(getDocument(parsed.documentId), 'Tositetta ei löytynyt');
+      requireResource(getDocument(parsed.documentId), 'Document not found');
       requireUnlockedDocumentPeriodById(parsed.documentId);
     }
 
@@ -83,7 +83,7 @@ export async function updateBankStatementEntryDocumentAction(
 
     revalidateApp();
     return { ok: true };
-  }, 'Päivitys epäonnistui.');
+  }, 'Update failed.');
 }
 
 export async function createBankStatementDocumentsAction(input: unknown) {
@@ -92,7 +92,7 @@ export async function createBankStatementDocumentsAction(input: unknown) {
   return runDbAction(() => {
     const statement = requireResource(
       getBankStatement(parsed.statementId),
-      'Tiliotetta ei löydy',
+      'Bank statement not found',
     );
 
     const settings = getSettings();
@@ -105,7 +105,7 @@ export async function createBankStatementDocumentsAction(input: unknown) {
           .map((entry) => entry.id);
 
     if (idsToProcess.length === 0) {
-      throw new ApiRouteError('Ei käsiteltäviä rivejä');
+      throw new ApiRouteError('No rows to process');
     }
 
     const result = createDocumentsFromBankStatementEntries(
@@ -116,7 +116,7 @@ export async function createBankStatementDocumentsAction(input: unknown) {
 
     revalidateApp();
     return result;
-  }, 'Tositteiden luonti epäonnistui.');
+  }, 'Failed to create documents.');
 }
 
 export async function suggestBankStatementDocumentLinksAction(input: unknown) {
@@ -125,7 +125,7 @@ export async function suggestBankStatementDocumentLinksAction(input: unknown) {
   return runDbAction(async () => {
     const statement = requireResource(
       getBankStatement(parsed.statementId),
-      'Tiliotetta ei löydy',
+      'Bank statement not found',
     );
     const settings = getSettings();
     const statementEntries = getBankStatementEntries(parsed.statementId).filter(
@@ -188,7 +188,7 @@ export async function suggestBankStatementDocumentLinksAction(input: unknown) {
     );
     const currentPeriod = requireResource(
       getPeriod(settings.current_period_id),
-      'Tilikautta ei löydy',
+      'Period not found',
     );
     const previousLinkExamples = getBankStatements({
       periodStart: currentPeriod.start_date,
@@ -268,7 +268,7 @@ export async function suggestBankStatementDocumentLinksAction(input: unknown) {
             : null,
       })),
     };
-  }, 'AI-ehdotusten haku epäonnistui.');
+  }, 'Failed to fetch AI suggestions.');
 }
 
 export async function applyBankStatementDocumentSuggestionsAction(input: unknown) {
@@ -277,7 +277,7 @@ export async function applyBankStatementDocumentSuggestionsAction(input: unknown
   return runDbAction(() => {
     const statement = requireResource(
       getBankStatement(parsed.statementId),
-      'Tiliotetta ei löydy',
+      'Bank statement not found',
     );
     const statementEntryIds = new Set(
       getBankStatementEntries(parsed.statementId).map((entry) => entry.id),
@@ -290,7 +290,7 @@ export async function applyBankStatementDocumentSuggestionsAction(input: unknown
       }
 
       requireUnlockedBankStatementEntryPeriod(link.entryId);
-      requireResource(getDocument(link.documentId), 'Tositetta ei löytynyt');
+      requireResource(getDocument(link.documentId), 'Document not found');
       requireUnlockedDocumentPeriodById(link.documentId);
       updateBankStatementEntry(link.entryId, {
         document_id: link.documentId,
@@ -299,7 +299,7 @@ export async function applyBankStatementDocumentSuggestionsAction(input: unknown
 
     revalidateApp();
     return { linked: parsed.links.length };
-  }, 'AI-ehdotusten hyväksyntä epäonnistui.');
+  }, 'Failed to accept AI suggestions.');
 }
 
 export async function deleteBankStatementAction(statementId: number) {
@@ -308,12 +308,12 @@ export async function deleteBankStatementAction(statementId: number) {
     const deleted = deleteBankStatement(statementId);
 
     if (!deleted) {
-      throw new ApiRouteError('Tiliotetta ei löydy', 404);
+      throw new ApiRouteError('Bank statement not found', 404);
     }
 
     revalidateApp();
     return { ok: true };
-  }, 'Tiliotteen poisto epäonnistui.');
+  }, 'Failed to delete bank statement.');
 }
 
 export async function createBankStatementManualAction(input: unknown) {
@@ -322,7 +322,7 @@ export async function createBankStatementManualAction(input: unknown) {
   return runDbAction(() => {
     const account = requireResource(
       getAccount(parsed.accountId),
-      'Pankkitiliä ei löydy',
+      'Bank account not found',
     );
 
     const statement = createBankStatement({
@@ -355,5 +355,5 @@ export async function createBankStatementManualAction(input: unknown) {
 
     revalidateApp();
     return { id: statement.id };
-  }, 'Tiliotteen luonti epäonnistui.');
+  }, 'Failed to create bank statement.');
 }

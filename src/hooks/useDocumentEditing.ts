@@ -107,7 +107,7 @@ export function useDocumentEditing({
     if (nextDate == null) {
       setDateErrors((prev) => ({
         ...prev,
-        [doc.id]: 'Anna kelvollinen päivämäärä.',
+        [doc.id]: 'Enter a valid date.',
       }));
       return;
     }
@@ -170,7 +170,7 @@ export function useDocumentEditing({
       const message =
         error instanceof Error
           ? error.message
-          : 'Tositteen tallennus epäonnistui.';
+          : 'Document save failed.';
       setDateErrors((prev) => ({ ...prev, [doc.id]: message }));
       setMetadataErrors((prev) => ({ ...prev, [doc.id]: message }));
     } finally {
@@ -189,7 +189,7 @@ export function useDocumentEditing({
       const payload = await duplicateDocumentAction(doc.id);
 
       if (!payload?.document) {
-        throw new Error('Tositteen kopiointi epäonnistui.');
+        throw new Error('Document copy failed.');
       }
 
       const duplicatedDocument = normalizeDocumentSummary(payload.document);
@@ -224,7 +224,7 @@ export function useDocumentEditing({
         [doc.id]:
           error instanceof Error
             ? error.message
-            : 'Tositteen kopiointi epäonnistui.',
+            : 'Document copy failed.',
       }));
     } finally {
       setDuplicatingDocumentId((current) =>
@@ -291,7 +291,7 @@ export function useDocumentEditing({
     if (visibleEntries.length < 2) {
       setAmountErrors((prev) => ({
         ...prev,
-        [doc.id]: 'Tositteelle pitää jäädä vähintään kaksi vientiriviä.',
+        [doc.id]: 'Document must have at least two entry rows remaining.',
       }));
       return;
     }
@@ -327,7 +327,7 @@ export function useDocumentEditing({
     if (draftDebitTotal !== draftCreditTotal) {
       setAmountErrors((prev) => ({
         ...prev,
-        [doc.id]: 'Debet- ja kredit-summien pitää täsmätä ennen tallennusta.',
+        [doc.id]: 'Debit and credit amounts must match before saving.',
       }));
       return;
     }
@@ -409,7 +409,7 @@ export function useDocumentEditing({
         [doc.id]:
           error instanceof Error
             ? error.message
-            : 'Summien tallennus epäonnistui.',
+            : 'Amounts save failed.',
       }));
     } finally {
       setSavingAmountsDocumentId((current) =>

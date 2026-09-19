@@ -21,7 +21,7 @@ export function jsonActionError(
   businessStatus = 400,
 ): NextResponse {
   if (error instanceof z.ZodError) {
-    const message = error.issues[0]?.message || 'Virheellinen syöte';
+    const message = error.issues[0]?.message || 'Invalid input';
     return jsonError(message, 400);
   }
 
@@ -165,7 +165,7 @@ export function withDb<TArgs extends unknown[]>(
         return jsonError(error.message, error.status);
       }
       if (error instanceof z.ZodError) {
-        const message = error.issues[0]?.message || 'Virheellinen syöte';
+        const message = error.issues[0]?.message || 'Invalid input';
         return jsonError(message, 400);
       }
       console.error(errorMessage, error);

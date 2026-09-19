@@ -53,10 +53,10 @@ export default function AccountPickerModal({
   confirmDisabled = false,
   isSaving = false,
   error = '',
-  contextTitle = 'Vaikutus riviin',
+  contextTitle = 'Vaikutus rowin',
   contextItems = [],
   description,
-  emptyResultsText = 'Hakuehdolla ei löytynyt tilejä.',
+  emptyResultsText = 'No accounts found matching your search.',
   emptyPreviewText = 'Valitse listasta tili esikatseltavaksi.',
 }: Props) {
   const { containerRef, handleKeyDown } = useModalA11y(onClose);
@@ -103,7 +103,7 @@ export default function AccountPickerModal({
             <SearchInput
               value={searchValue}
               onChange={onSearchChange}
-              placeholder="Hae tiliä numerolla, nimellä tai tyypillä..."
+              placeholder="Search account by number, name, or type..."
               className="mb-3"
             />
 
@@ -137,7 +137,7 @@ export default function AccountPickerModal({
                           </div>
                           {isCurrent ? (
                             <span className="shrink-0 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] text-emerald-300">
-                              Nykyinen
+                              Current
                             </span>
                           ) : null}
                         </div>
@@ -154,7 +154,7 @@ export default function AccountPickerModal({
 
             <div className="mt-3 flex items-center justify-between gap-3">
               <div className="text-xs text-text-muted">
-                {filteredAccounts.length} / {totalAccountCount} tiliä
+                {filteredAccounts.length} / {totalAccountCount} accounts
               </div>
               <button
                 type="button"
@@ -189,7 +189,7 @@ export default function AccountPickerModal({
                     </div>
                     {selectedPreviewAccount.id === currentAccountId ? (
                       <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-xs text-emerald-300">
-                        Nykyinen tili
+                        Current account
                       </span>
                     ) : null}
                   </div>
@@ -218,10 +218,10 @@ export default function AccountPickerModal({
                     {description != null ? (
                       <div className="mt-3 rounded-lg border border-border-subtle bg-surface-0/40 p-3">
                         <div className="text-[11px] text-text-muted">
-                          Kuvaus
+                          Description
                         </div>
                         <div className="mt-1 text-sm text-text-secondary">
-                          {description || 'Ei kuvausta'}
+                          {description || 'No description'}
                         </div>
                       </div>
                     ) : null}

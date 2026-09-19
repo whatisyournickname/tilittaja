@@ -3,9 +3,9 @@ import PageLoadingState from '@/components/PageLoadingState';
 export default function Loading() {
   return (
     <PageLoadingState
-      eyebrow="Tiliotteet"
-      title="Ladataan tiliotteita"
-      description="Haetaan tiliotteet, käsittelytila ja linkitykset."
+      eyebrow="Bank statements"
+      title="Loading bank statements"
+      description="Fetching bank statements, processing state, and links."
     />
   );
 }

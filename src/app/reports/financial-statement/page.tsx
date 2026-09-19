@@ -7,13 +7,13 @@ import {
 } from '@/lib/db';
 import {
   buildReadinessSummary,
-  buildTilinpaatosPackage,
+  buildFinancialStatementPackage,
   getBalanceSheetSummary,
   getIncomeStatementSummary,
-  signatureDateAsFi,
-} from '@/lib/tilinpaatos';
-import TilinpaatosMaterialsPanel from '@/components/TilinpaatosMaterialsPanel';
-import TilinpaatosMetadataEditor from '@/components/TilinpaatosMetadataEditor';
+  formatSignatureDate,
+} from '@/lib/financial-statement';
+import FinancialStatementMaterialsPanel from '@/components/FinancialStatementMaterialsPanel';
+import FinancialStatementMetadataEditor from '@/components/FinancialStatementMetadataEditor';
 import ReadinessSummaryPanel from '@/components/ReadinessSummaryPanel';
 import { CollapsibleStatementCard } from '@/components/StatementTable';
 import CollapsibleSection from '@/components/CollapsibleSection';
@@ -22,14 +22,14 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Tilinpäätös – Tilittaja' };
+export const metadata: Metadata = { title: 'Financial statement – Tilittaja' };
 
 const MATERIAL_BUTTONS = [
-  { label: 'Lataa pääkirja PDF', kind: 'paakirja' },
-  { label: 'Lataa päiväkirja PDF', kind: 'paivakirja' },
-  { label: 'Lataa tase-erittely PDF', kind: 'tase-erittely' },
-  { label: 'Lataa tase (laaja) PDF', kind: 'tase-laaja' },
-  { label: 'Lataa tuloslaskelma (laaja) PDF', kind: 'tulos-laaja' },
+  { label: 'Download general ledger PDF', kind: 'general-ledger' },
+  { label: 'Download journal PDF', kind: 'journal' },
+  { label: 'Download detailed balance sheet PDF', kind: 'balance-sheet-detailed' },
+  { label: 'Download balance sheet (broad) PDF', kind: 'balance-sheet-broad' },
+  { label: 'Download income statement (broad) PDF', kind: 'income-statement-broad' },
 ];
 
 export default async function TilinpaatosPage({
@@ -43,13 +43,13 @@ export default async function TilinpaatosPage({
     periods: getPeriods(),
   }));
   const periodId = resolvePeriodId(params, periods, settings.current_period_id);
-  const { tilinpaatos, period } = await runWithResolvedDb(() => ({
-    tilinpaatos: buildTilinpaatosPackage(periodId),
+  const { financialStatement, period } = await runWithResolvedDb(() => ({
+    financialStatement: buildFinancialStatementPackage(periodId),
     period: getPeriod(periodId),
   }));
-  const balanceSheetSummary = getBalanceSheetSummary(tilinpaatos.balanceSheetRows);
+  const balanceSheetSummary = getBalanceSheetSummary(financialStatement.balanceSheetRows);
   const incomeStatementSummary = getIncomeStatementSummary(
-    tilinpaatos.incomeStatementRows,
+    financialStatement.incomeStatementRows,
   );
   const source = await requireCurrentDataSource();
   const readiness = await runWithResolvedDb(() =>
@@ -60,14 +60,14 @@ export default async function TilinpaatosPage({
     <div className="p-5 space-y-4">
       <div>
         <p className="text-[11px] uppercase tracking-[0.2em] text-text-muted font-semibold mb-1">
-          Raportit
+          Reports
         </p>
         <h1 className="text-xl font-semibold text-text-primary tracking-tight">
-          Tilinpäätös
+          Financial statements
         </h1>
         <p className="text-sm text-text-secondary mt-1">
-          {tilinpaatos.companyName} ({tilinpaatos.businessId}) -{' '}
-          {tilinpaatos.periodLabel}
+          {financialStatement.companyName} ({financialStatement.businessId}) -{' '}
+          {financialStatement.periodLabel}
         </p>
       </div>
 
@@ -79,35 +79,35 @@ export default async function TilinpaatosPage({
             periodLocked={period?.locked ?? false}
           />
           <CollapsibleStatementCard
-            title="Tase"
-            rows={tilinpaatos.balanceSheetRows}
-            comparisonLabel={tilinpaatos.comparisonPeriodLabel}
+            title="Balance sheet"
+            rows={financialStatement.balanceSheetRows}
+            comparisonLabel={financialStatement.comparisonPeriodLabel}
             summary={balanceSheetSummary}
           />
           <CollapsibleStatementCard
-            title="Tuloslaskelma"
-            rows={tilinpaatos.incomeStatementRows}
-            comparisonLabel={tilinpaatos.comparisonPeriodLabel}
+            title="Income statement"
+            rows={financialStatement.incomeStatementRows}
+            comparisonLabel={financialStatement.comparisonPeriodLabel}
             summary={incomeStatementSummary}
           />
           <CollapsibleSection
-            title="Tilinpäätöksen tekstit"
-            summary={`${tilinpaatos.metadata.place || 'Paikka puuttuu'} | ${
-              signatureDateAsFi(tilinpaatos.metadata) || 'Päiväys puuttuu'
+            title="Financial statement texts"
+            summary={`${financialStatement.metadata.place || 'Place missing'} | ${
+              formatSignatureDate(financialStatement.metadata) || 'Date missing'
             }`}
           >
-            <TilinpaatosMetadataEditor initialMetadata={tilinpaatos.metadata} />
+            <FinancialStatementMetadataEditor initialMetadata={financialStatement.metadata} />
           </CollapsibleSection>
           <CollapsibleSection
-            title="Yhtiökokous"
-            summary={`${tilinpaatos.metadata.meetingDate || 'Kokouspäivä puuttuu'} | ${
-              tilinpaatos.metadata.attendees.trim()
-                ? 'Läsnäolot annettu'
-                : 'Läsnäolot puuttuvat'
+            title="Annual meeting"
+            summary={`${financialStatement.metadata.meetingDate || 'Meeting date missing'} | ${
+              financialStatement.metadata.attendees.trim()
+                ? 'Attendees provided'
+                : 'Attendees missing'
             }`}
           >
-            <TilinpaatosMetadataEditor
-              initialMetadata={tilinpaatos.metadata}
+            <FinancialStatementMetadataEditor
+              initialMetadata={financialStatement.metadata}
               section="meeting"
             />
           </CollapsibleSection>
@@ -116,9 +116,9 @@ export default async function TilinpaatosPage({
         <div className="space-y-4">
           <div className="bg-surface-2/50 border border-border-subtle rounded-xl p-6">
             <h2 className="text-lg font-semibold text-text-primary mb-4">
-              Materiaalit
+              Materials
             </h2>
-            <TilinpaatosMaterialsPanel
+            <FinancialStatementMaterialsPanel
               key={periodId}
               periodId={periodId}
               materialItems={MATERIAL_BUTTONS}

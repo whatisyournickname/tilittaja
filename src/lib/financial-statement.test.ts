@@ -111,14 +111,14 @@ vi.mock('@/lib/accounting', async (importOriginal) => {
 });
 
 import {
-  buildTilinpaatosPackage,
-  getTilinpaatosMetadataDefaults,
+  buildFinancialStatementPackage,
+  getFinancialStatementMetadataDefaults,
   formatAmount,
   metadataToProperties,
-  signatureDateAsFi,
-} from '@/lib/tilinpaatos';
+  formatSignatureDate,
+} from '@/lib/financial-statement';
 
-describe('tilinpaatos', () => {
+describe('financialStatement', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     getSettings.mockReturnValue({
@@ -169,7 +169,7 @@ describe('tilinpaatos', () => {
   });
 
   it('builds package with required compliance and equity figures', () => {
-    const result = buildTilinpaatosPackage(2);
+    const result = buildFinancialStatementPackage(2);
     expect(result.companyName).toBe('Testi Oy');
     expect(result.metadata.signerName).toBe('Kai Testi');
     expect(result.metadata.dischargeTarget).toBe('board-and-ceo');
@@ -202,7 +202,7 @@ describe('tilinpaatos', () => {
     expect(mapped['tilinpaatos.boardProposal']).toBe('E');
     expect(mapped['tilinpaatos.dischargeTarget']).toBe('ceo');
     expect(
-      signatureDateAsFi({
+      formatSignatureDate({
         place: 'Oulussa',
         signatureDate: '2025-03-31',
         preparedBy: 'A',
@@ -222,7 +222,7 @@ describe('tilinpaatos', () => {
   });
 
   it('returns metadata defaults based on the current period', () => {
-    const defaults = getTilinpaatosMetadataDefaults();
+    const defaults = getFinancialStatementMetadataDefaults();
 
     expect(defaults.preparedBy).toBe('Testi Oy');
     expect(defaults.signatureDate).toBe('2024-12-31');
@@ -240,7 +240,7 @@ describe('tilinpaatos', () => {
       },
     ]);
 
-    const result = buildTilinpaatosPackage(2);
+    const result = buildFinancialStatementPackage(2);
 
     expect(result.comparisonPeriodLabel).toBeNull();
     expect(result.equity.comparison).toBeUndefined();
@@ -257,18 +257,18 @@ describe('tilinpaatos', () => {
 
   it('uses defaults when persisted metadata is blank or invalid', () => {
     getSettingProperties.mockReturnValue({
-      'tilinpaatos.place': '',
-      'tilinpaatos.signerName': '',
-      'tilinpaatos.dischargeTarget': 'invalid-value',
-      'tilinpaatos.microDeclaration': '',
+      'financialStatement.place': '',
+      'financialStatement.signerName': '',
+      'financialStatement.dischargeTarget': 'invalid-value',
+      'financialStatement.microDeclaration': '',
     });
 
-    const result = buildTilinpaatosPackage(2);
+    const result = buildFinancialStatementPackage(2);
 
-    expect(result.metadata.place).toBe('Kolarissa');
+    expect(result.metadata.place).toBe('Kolari');
     expect(result.metadata.signerName).toBe('');
     expect(result.metadata.dischargeTarget).toBe('board-and-ceo');
-    expect(result.metadata.microDeclaration).toContain('mikroyritys');
+    expect(result.metadata.microDeclaration).toContain('micro-enterprise');
     expect(result.compliance.hardErrors).toBeGreaterThan(0);
   });
 });

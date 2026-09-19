@@ -1,28 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { TilinpaatosMetadata } from '@/lib/tilinpaatos';
-import { updateTilinpaatosMetadataAction } from '@/actions/app-actions';
+import { FinancialStatementMetadata } from '@/lib/financial-statement';
+import { updateFinancialStatementMetadataAction } from '@/actions/app-actions';
 
 interface Props {
-  initialMetadata: TilinpaatosMetadata;
+  initialMetadata: FinancialStatementMetadata;
   section?: 'general' | 'meeting';
 }
 
 const fieldClass =
   'w-full bg-surface-0/60 border border-border-subtle text-text-primary rounded-lg px-3 py-2 text-sm outline-none transition focus:border-accent/40 focus:ring-1 focus:ring-accent/20';
 
-export default function TilinpaatosMetadataEditor({
+export default function FinancialStatementMetadataEditor({
   initialMetadata,
   section = 'general',
 }: Props) {
-  const [form, setForm] = useState<TilinpaatosMetadata>(initialMetadata);
+  const [form, setForm] = useState<FinancialStatementMetadata>(initialMetadata);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const isMeetingSection = section === 'meeting';
 
-  const setField = (key: keyof TilinpaatosMetadata, value: string) => {
+  const setField = (key: keyof FinancialStatementMetadata, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -31,10 +31,10 @@ export default function TilinpaatosMetadataEditor({
     setError(null);
     setMessage(null);
     try {
-      await updateTilinpaatosMetadataAction(form);
-      setMessage('Tallennettu.');
+      await updateFinancialStatementMetadataAction(form);
+      setMessage('Saved.');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Tuntematon virhe');
+      setError(e instanceof Error ? e.message : 'Unknown error');
     } finally {
       setSaving(false);
     }
@@ -50,7 +50,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-meetingDate"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Kokouspäivä (vvvv-kk-pp)
+                Meeting date (yyyy-mm-dd)
               </label>
               <input
                 id="tp-meetingDate"
@@ -66,7 +66,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-dischargeTarget"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Vastuuvapaus myönnetään
+                Liability discharge granted to
               </label>
               <select
                 id="tp-dischargeTarget"
@@ -77,10 +77,10 @@ export default function TilinpaatosMetadataEditor({
                 className={fieldClass}
               >
                 <option value="board-and-ceo">
-                  Hallitukselle ja toimitusjohtajalle
+                  The board and chief executive officer
                 </option>
-                <option value="board">Hallitukselle</option>
-                <option value="ceo">Toimitusjohtajalle</option>
+                <option value="board">The board</option>
+                <option value="ceo">The chief executive officer</option>
               </select>
             </div>
           </div>
@@ -89,8 +89,7 @@ export default function TilinpaatosMetadataEditor({
               htmlFor="tp-attendees"
               className="block text-sm text-text-secondary mb-1"
             >
-              Läsnä (esim. &quot;Matti Meikäläinen omistaen yhtiön koko
-              osakekannan.&quot;)
+              Attendees (e.g. &quot;Matti Meikäläinen owning the entire share capital of the company.&quot;)
             </label>
             <textarea
               id="tp-attendees"
@@ -109,7 +108,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-place"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Paikka
+                Place
               </label>
               <input
                 id="tp-place"
@@ -123,7 +122,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-signatureDate"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Päiväys (vvvv-kk-pp)
+                Date (yyyy-mm-dd)
               </label>
               <input
                 id="tp-signatureDate"
@@ -139,7 +138,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-preparedBy"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Laatija
+                Prepared by
               </label>
               <input
                 id="tp-preparedBy"
@@ -153,7 +152,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-signerName"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Allekirjoittaja
+                Signatory
               </label>
               <input
                 id="tp-signerName"
@@ -167,7 +166,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-signerTitle"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Allekirjoittajan rooli
+                Signatory role
               </label>
               <input
                 id="tp-signerTitle"
@@ -183,7 +182,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-personnelCount"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Henkilöstön määrä
+                Number of employees
               </label>
               <input
                 id="tp-personnelCount"
@@ -202,7 +201,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-microDeclaration"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Mikroyrityslausuma
+                Micro enterprise declaration
               </label>
               <textarea
                 id="tp-microDeclaration"
@@ -219,7 +218,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-boardProposal"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Hallituksen ehdotus
+                Board proposal
               </label>
               <textarea
                 id="tp-boardProposal"
@@ -236,7 +235,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-parentCompany"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Konsernin emoyhtiö
+                Parent company of group
               </label>
               <input
                 id="tp-parentCompany"
@@ -252,7 +251,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-shareInfo"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Osaketiedot
+                Share information
               </label>
               <textarea
                 id="tp-shareInfo"
@@ -267,7 +266,7 @@ export default function TilinpaatosMetadataEditor({
                 htmlFor="tp-archiveNote"
                 className="block text-sm text-text-secondary mb-1"
               >
-                Arkistointimuistio
+                Archive note
               </label>
               <textarea
                 id="tp-archiveNote"
@@ -290,10 +289,10 @@ export default function TilinpaatosMetadataEditor({
           className="bg-accent hover:bg-amber-700 disabled:bg-surface-3 disabled:text-text-muted text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
         >
           {saving
-            ? 'Tallennetaan...'
+            ? 'Saving...'
             : isMeetingSection
-              ? 'Tallenna yhtiökokous'
-              : 'Tallenna tekstit'}
+              ? 'Save annual meeting'
+              : 'Save texts'}
         </button>
         {message && <span className="text-emerald-400 text-sm">{message}</span>}
         {error && <span className="text-rose-400 text-sm">{error}</span>}

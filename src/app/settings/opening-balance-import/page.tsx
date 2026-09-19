@@ -30,7 +30,7 @@ export default async function OpeningBalanceImportPage({
     return (
       <div className="p-5">
         <div className="mx-auto max-w-5xl rounded-2xl border border-border-subtle bg-surface-2/60 p-6 text-sm text-text-secondary">
-          Tilikausia ei löytynyt.
+          No fiscal years found.
         </div>
       </div>
     );
@@ -42,13 +42,13 @@ export default async function OpeningBalanceImportPage({
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-              Järjestelmä
+              System
             </p>
             <h1 className="text-xl font-semibold tracking-tight text-text-primary">
               Tilikauden avaus
             </h1>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary">
-              Luo valitun tilikauden alkusaldot aiemman tilinpäätösaineiston
+              Create opening balances for selected fiscal year from prior financial statement materials
               PDF-tiedostoista.
             </p>
           </div>

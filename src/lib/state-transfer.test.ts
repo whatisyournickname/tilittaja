@@ -133,7 +133,7 @@ describe('readImportedStateArchive', () => {
     resolveDbPath.mockReturnValue(null);
 
     await expect(prepareStateExport('manolos')).rejects.toMatchObject({
-      message: 'Tietolähteen SQLite-kantaa ei löytynyt.',
+      message: 'Datasource SQLite database not found.',
     });
   });
 

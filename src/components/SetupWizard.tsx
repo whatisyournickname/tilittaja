@@ -45,7 +45,7 @@ export default function SetupWizard() {
       });
       window.location.href = '/';
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Tuntematon virhe');
+      setError(err instanceof Error ? err.message : 'Unknown error');
       setLoading(false);
     }
   }
@@ -62,7 +62,7 @@ export default function SetupWizard() {
       });
       window.location.href = '/';
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Tuntematon virhe');
+      setError(err instanceof Error ? err.message : 'Unknown error');
       setLoading(false);
     }
   }
@@ -77,7 +77,7 @@ export default function SetupWizard() {
       await setupImportArchiveAction(zipFile);
       window.location.href = '/';
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Tuntematon virhe');
+      setError(err instanceof Error ? err.message : 'Unknown error');
       setLoading(false);
     }
   }
@@ -95,7 +95,7 @@ export default function SetupWizard() {
             Tilittaja
           </h1>
           <p className="mt-2 text-sm text-text-secondary">
-            Tervetuloa! Aloita valitsemalla tietokanta.
+            Welcome! Start by choosing a database.
           </p>
         </div>
 
@@ -118,10 +118,10 @@ export default function SetupWizard() {
               </div>
               <div className="flex-1">
                 <div className="font-medium text-text-primary">
-                  Luo uusi tietokanta
+                  Create new database
                 </div>
                 <div className="mt-0.5 text-xs text-text-muted">
-                  Aloita tyhjästä kirjanpidosta valmiilla tilikartalla
+                  Start with empty bookkeeping using ready-made chart of accounts
                 </div>
               </div>
               <ArrowRight className="h-4 w-4 text-text-muted transition-colors group-hover:text-accent" />
@@ -137,10 +137,10 @@ export default function SetupWizard() {
               </div>
               <div className="flex-1">
                 <div className="font-medium text-text-primary">
-                  Tuo vientipaketti
+                  Import archive
                 </div>
                 <div className="mt-0.5 text-xs text-text-muted">
-                  Palauta kirjanpito aiemmin viedystä ZIP-paketista
+                  Restore bookkeeping from previously exported ZIP package
                 </div>
               </div>
               <ArrowRight className="h-4 w-4 text-text-muted transition-colors group-hover:text-accent" />
@@ -156,10 +156,10 @@ export default function SetupWizard() {
               </div>
               <div className="flex-1">
                 <div className="font-medium text-text-primary">
-                  Käytä olemassa olevaa tietokantaa
+                  Use existing database
                 </div>
                 <div className="mt-0.5 text-xs text-text-muted">
-                  Liitä SQLite-tiedosto tiedostopolulla
+                  Provide SQLite file path
                 </div>
               </div>
               <ArrowRight className="h-4 w-4 text-text-muted transition-colors group-hover:text-accent" />
@@ -170,7 +170,7 @@ export default function SetupWizard() {
         {mode === 'new' && (
           <form onSubmit={handleCreateNew} className="card-panel p-6">
             <h2 className="mb-5 text-base font-semibold text-text-primary">
-              Uusi kirjanpito
+              New bookkeeping
             </h2>
 
             <div className="space-y-4">
@@ -179,7 +179,7 @@ export default function SetupWizard() {
                   htmlFor="companyName"
                   className="mb-1.5 block text-xs font-medium text-text-secondary"
                 >
-                  Yrityksen nimi
+                  Company name
                 </label>
                 <input
                   id="companyName"
@@ -198,8 +198,8 @@ export default function SetupWizard() {
                   htmlFor="businessId"
                   className="mb-1.5 block text-xs font-medium text-text-secondary"
                 >
-                  Y-tunnus
-                  <span className="ml-1 text-text-muted">(valinnainen)</span>
+                  Business ID
+                  <span className="ml-1 text-text-muted">(optional)</span>
                 </label>
                 <input
                   id="businessId"
@@ -216,7 +216,7 @@ export default function SetupWizard() {
                   htmlFor="periodYear"
                   className="mb-1.5 block text-xs font-medium text-text-secondary"
                 >
-                  Ensimmäinen tilikausi
+                  First fiscal year
                 </label>
                 <input
                   id="periodYear"
@@ -229,7 +229,7 @@ export default function SetupWizard() {
                   required
                 />
                 <p className="mt-1 text-[11px] text-text-muted">
-                  Tilikausi 1.1.–31.12.{periodYear}
+                  Period 1 Jan–31 Dec {periodYear}
                 </p>
               </div>
             </div>
@@ -240,7 +240,7 @@ export default function SetupWizard() {
                 onClick={goBack}
                 className="text-xs font-medium text-text-muted transition-colors hover:text-text-secondary"
               >
-                Takaisin
+                Back
               </button>
               <button
                 type="submit"
@@ -250,7 +250,7 @@ export default function SetupWizard() {
                 {loading ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 ) : null}
-                Luo tietokanta
+                Create database
               </button>
             </div>
           </form>
@@ -259,13 +259,13 @@ export default function SetupWizard() {
         {mode === 'import' && (
           <form onSubmit={handleImportZip} className="card-panel p-6">
             <h2 className="mb-5 text-base font-semibold text-text-primary">
-              Tuo vientipaketti
+              Import archive
             </h2>
 
             <div className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">
-                  ZIP-tiedosto
+                  ZIP file
                 </label>
                 <input
                   ref={fileInputRef}
@@ -285,11 +285,11 @@ export default function SetupWizard() {
                       zipFile ? 'text-text-primary' : 'text-text-muted'
                     }
                   >
-                    {zipFile ? zipFile.name : 'Valitse tiedosto…'}
+                    {zipFile ? zipFile.name : 'Select file…'}
                   </span>
                 </button>
                 <p className="mt-1 text-[11px] text-text-muted">
-                  Asetukset → Vienti ja tuonti → Vie -toiminnolla luotu paketti
+                  Package created with Settings → Export & import → Export
                 </p>
               </div>
             </div>
@@ -300,7 +300,7 @@ export default function SetupWizard() {
                 onClick={goBack}
                 className="text-xs font-medium text-text-muted transition-colors hover:text-text-secondary"
               >
-                Takaisin
+                Back
               </button>
               <button
                 type="submit"
@@ -310,7 +310,7 @@ export default function SetupWizard() {
                 {loading ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 ) : null}
-                Palauta
+                Restore
               </button>
             </div>
           </form>
@@ -319,7 +319,7 @@ export default function SetupWizard() {
         {mode === 'external' && (
           <form onSubmit={handleLinkExternal} className="card-panel p-6">
             <h2 className="mb-5 text-base font-semibold text-text-primary">
-              Olemassa oleva tietokanta
+              Existing database
             </h2>
 
             <div className="space-y-4">
@@ -328,20 +328,20 @@ export default function SetupWizard() {
                   htmlFor="filePath"
                   className="mb-1.5 block text-xs font-medium text-text-secondary"
                 >
-                  Tiedostopolku
+                  File path
                 </label>
                 <input
                   id="filePath"
                   type="text"
                   value={filePath}
                   onChange={(e) => setFilePath(e.target.value)}
-                  placeholder="/polku/tiedostoon/kirjanpito.sqlite"
+                  placeholder="/path/to/bookkeeping.sqlite"
                   className="input-field font-mono"
                   required
                   autoFocus
                 />
                 <p className="mt-1 text-[11px] text-text-muted">
-                  Tiedosto kopioidaan sovelluksen data-kansioon
+                  The file is copied to the app data folder
                 </p>
               </div>
 
@@ -350,8 +350,8 @@ export default function SetupWizard() {
                   htmlFor="externalName"
                   className="mb-1.5 block text-xs font-medium text-text-secondary"
                 >
-                  Nimi
-                  <span className="ml-1 text-text-muted">(valinnainen)</span>
+                  Name
+                  <span className="ml-1 text-text-muted">(optional)</span>
                 </label>
                 <input
                   id="externalName"
@@ -370,7 +370,7 @@ export default function SetupWizard() {
                 onClick={goBack}
                 className="text-xs font-medium text-text-muted transition-colors hover:text-text-secondary"
               >
-                Takaisin
+                Back
               </button>
               <button
                 type="submit"
@@ -380,7 +380,7 @@ export default function SetupWizard() {
                 {loading ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 ) : null}
-                Tuo tietokanta
+                Import database
               </button>
             </div>
           </form>

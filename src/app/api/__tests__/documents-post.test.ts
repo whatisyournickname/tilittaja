@@ -109,7 +109,7 @@ describe('POST /api/documents', () => {
 
   it('returns 500 when database throws', async () => {
     createDocumentAction.mockRejectedValue(
-      new Error('Tositteen luonti epäonnistui'),
+      new Error('Failed to create document'),
     );
 
     const res = await POST(

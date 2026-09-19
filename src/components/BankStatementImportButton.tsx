@@ -117,7 +117,7 @@ function BankStatementImportModal({
     setResults([]);
     setError(
       pdfFiles.length === 0
-        ? 'Valituista tiedostoista ei löytynyt PDF:iä.'
+        ? 'No PDFs found in selected files.'
         : '',
     );
   };
@@ -129,12 +129,12 @@ function BankStatementImportModal({
 
   const handleImport = async () => {
     if (selectedFiles.length === 0) {
-      setError('Valitse tuotavat PDF-tiedostot tai kansio.');
+      setError('Select PDFs or folder to import.');
       return;
     }
 
     if (selectedAccountId == null) {
-      setError('Valitse pankkitili.');
+      setError('Select a bank account.');
       return;
     }
 
@@ -163,7 +163,7 @@ function BankStatementImportModal({
 
           if (!response.ok || !payload?.id) {
             throw new Error(
-              payload?.error || 'Tiliotteen PDF-tuonti epäonnistui.',
+              payload?.error || 'Bank statement PDF import failed.',
             );
           }
 
@@ -183,7 +183,7 @@ function BankStatementImportModal({
             error:
               importError instanceof Error
                 ? importError.message
-                : 'Tiliotteen PDF-tuonti epäonnistui.',
+                : 'Bank statement PDF import failed.',
           });
         }
 
@@ -206,14 +206,14 @@ function BankStatementImportModal({
 
       if (failedImports.length > 0) {
         setError(
-          `${failedImports.length} / ${selectedFiles.length} tiliotteen tuonti epäonnistui.`,
+          `${failedImports.length} / ${selectedFiles.length} bank statement imports failed.`,
         );
       }
     } catch (importError) {
       setError(
         importError instanceof Error
           ? importError.message
-          : 'Tiliotteen PDF-tuonti epäonnistui.',
+          : 'Bank statement PDF import failed.',
       );
       setIsImporting(false);
     }
@@ -231,18 +231,18 @@ function BankStatementImportModal({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Tuo tiliote PDF:stä"
+        aria-label="Import bank statement from PDF"
         className="mx-auto flex h-full max-w-2xl flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface-0"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4 border-b border-border-subtle px-4 py-3">
           <div>
             <div className="text-sm font-medium text-text-primary">
-              Tuo tiliote PDF:stä
+              Import bank statement from PDF
             </div>
             <div className="mt-1 text-xs text-text-secondary">
-              PDF lähetetään GPT 5.4 miniin low reasoning -asetuksella ja
-              luodaan automaattisesti tiliotteeksi.
+              PDF is sent to GPT 5.4 mini with low reasoning and
+              automatically converted into a bank statement.
             </div>
           </div>
           <button
@@ -250,7 +250,7 @@ function BankStatementImportModal({
             onClick={onClose}
             disabled={isImporting}
             className="text-text-secondary hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="Sulje tiliotteen tuonti"
+            aria-label="Close bank statement import"
           >
             <X className="h-5 w-5" />
           </button>
@@ -259,7 +259,7 @@ function BankStatementImportModal({
         <div className="flex-1 space-y-6 overflow-y-auto p-6">
           <div className="rounded-xl border border-border-subtle bg-surface-2/40 p-4">
             <div className="mb-2 text-sm font-medium text-text-primary">
-              Kohdepankkitili
+              Target bank account
             </div>
             <select
               value={selectedAccountId ?? ''}
@@ -270,7 +270,7 @@ function BankStatementImportModal({
               disabled={isImporting || bankAccounts.length === 0}
             >
               {bankAccounts.length === 0 ? (
-                <option value="">Ei pankkitilejä</option>
+                <option value="">No bank accounts</option>
               ) : null}
               {bankAccounts.map((account) => (
                 <option key={account.id} value={account.id}>
@@ -279,22 +279,22 @@ function BankStatementImportModal({
               ))}
             </select>
             <p className="mt-2 text-xs text-text-muted">
-              Valitse kirjanpidon pankkitili, jolle tuotu tiliote tallennetaan.
+              Select the bookkeeping bank account to import the statement to.
             </p>
           </div>
 
           <div className="rounded-xl border border-dashed border-border-subtle bg-surface-2/20 p-5">
             <div className="mb-3 block text-sm font-medium text-text-primary">
-              PDF-tiedostot
+              PDF files
             </div>
             <div className="grid gap-3 md:grid-cols-2">
               <label className="rounded-lg border border-border-subtle bg-surface-0/50 px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-surface-0/80">
                 <div className="mb-2 flex items-center gap-2 font-medium text-text-primary">
                   <Upload className="h-4 w-4 text-accent-light" />
-                  Valitse PDF:t
+                  Select PDFs
                 </div>
                 <div className="text-xs text-text-muted">
-                  Voit valita yhden tai useamman PDF:n samalla kertaa.
+                  You can select one or more PDFs at once.
                 </div>
                 <input
                   type="file"
@@ -309,10 +309,10 @@ function BankStatementImportModal({
               <label className="rounded-lg border border-border-subtle bg-surface-0/50 px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-surface-0/80">
                 <div className="mb-2 flex items-center gap-2 font-medium text-text-primary">
                   <FolderOpen className="h-4 w-4 text-accent-light" />
-                  Valitse kansio
+                  Select folder
                 </div>
                 <div className="text-xs text-text-muted">
-                  Kaikki kansion PDF:t lisätään jonoon tuotavaksi.
+                  All PDFs in folder will be queued for import.
                 </div>
                 <input
                   type="file"
@@ -329,7 +329,7 @@ function BankStatementImportModal({
               {selectedFiles.length > 0 ? (
                 <div className="space-y-3">
                   <div className="text-sm text-text-primary">
-                    {selectedFiles.length} PDF-tiedostoa valittu tuotavaksi
+                    {selectedFiles.length} PDF file(s) selected for import
                   </div>
                   <div className="max-h-48 space-y-2 overflow-y-auto pr-1">
                     {selectedFiles.map((selectedFile) => (
@@ -353,7 +353,7 @@ function BankStatementImportModal({
                           onClick={() => removeSelectedFile(selectedFile.key)}
                           disabled={isImporting}
                           className="rounded p-1 text-text-muted transition-colors hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
-                          aria-label={`Poista tiedosto ${selectedFile.label}`}
+                          aria-label={`Remove file ${selectedFile.label}`}
                         >
                           <X className="h-4 w-4" />
                         </button>
@@ -363,7 +363,7 @@ function BankStatementImportModal({
                 </div>
               ) : (
                 <div className="text-sm text-text-muted">
-                  Valitse pankin PDF-tiliotteet tai koko kansio tuotavaksi.
+                  Select bank statement PDFs or a folder to import.
                 </div>
               )}
             </div>
@@ -371,19 +371,18 @@ function BankStatementImportModal({
 
           {selectedAccount ? (
             <div className="rounded-xl border border-border-subtle bg-surface-2/30 p-4 text-sm text-text-secondary">
-              Tiliote luodaan tilille{' '}
+              A statement will be created for account{' '}
               <span className="font-medium text-text-primary">
                 {selectedAccount.number} {selectedAccount.name}
               </span>
-              . Yksi tiedosto avataan tuonnin jälkeen suoraan, useamman
-              tiedoston tuonnissa lista vain päivittyy.
+              . After import, one file opens directly, multiple files just refresh the list.
             </div>
           ) : null}
 
           {isImporting || progress.total > 0 ? (
             <div className="rounded-xl border border-border-subtle bg-surface-2/30 p-4">
               <div className="flex items-center justify-between gap-3 text-sm">
-                <span className="text-text-primary">Tuonnin eteneminen</span>
+                <span className="text-text-primary">Import progress</span>
                 <span className="text-text-secondary">
                   {progress.completed} / {progress.total}
                 </span>
@@ -406,12 +405,12 @@ function BankStatementImportModal({
             <div className="rounded-xl border border-border-subtle bg-surface-2/30 p-4">
               <div className="flex flex-wrap items-center gap-3 text-sm">
                 <span className="font-medium text-text-primary">
-                  Tuonnin tulokset
+                  Import results
                 </span>
                 <span className="text-emerald-300">
-                  {successCount} onnistui
+                  {successCount} succeeded
                 </span>
-                <span className="text-rose-300">{errorCount} epäonnistui</span>
+                <span className="text-rose-300">{errorCount} failed</span>
               </div>
               <div className="mt-3 max-h-60 space-y-2 overflow-y-auto pr-1">
                 {results.map((result) => (
@@ -431,10 +430,10 @@ function BankStatementImportModal({
                         </div>
                         {result.status === 'success' ? (
                           <div className="mt-1 text-xs text-text-secondary">
-                            Tiliote #{result.statementId} luotu ·{' '}
-                            {result.created ?? 0} riviä tuotu
+                            Statement #{result.statementId} created ·{' '}
+                            {result.created ?? 0} rows imported
                             {(result.skipped ?? 0) > 0
-                              ? ` · ${result.skipped} riviä ohitettu`
+                              ? ` · ${result.skipped} rows skipped`
                               : ''}
                           </div>
                         ) : (
@@ -464,7 +463,7 @@ function BankStatementImportModal({
             disabled={isImporting}
             className="rounded-lg border border-border-subtle px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Peruuta
+            Cancel
           </button>
           <button
             type="button"
@@ -481,7 +480,7 @@ function BankStatementImportModal({
             ) : (
               <Upload className="h-4 w-4" />
             )}
-            {isImporting ? 'Tuodaan...' : 'Tuo tiliotteet'}
+            {isImporting ? 'Importing...' : 'Import statements'}
           </button>
         </div>
       </div>
@@ -500,7 +499,7 @@ export default function BankStatementImportButton({ bankAccounts }: Props) {
         className="flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-amber-700"
       >
         <Plus className="h-3.5 w-3.5" />
-        Lisää tiliote
+        Add bank statement
       </button>
 
       {showModal ? (

@@ -93,7 +93,7 @@ export default function JournalFilter({
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Hae tositetta, tiliä tai selitettä..."
+          placeholder="Search document, account, or description..."
         />
 
         <div className="space-y-3">
@@ -129,18 +129,18 @@ export default function JournalFilter({
                     </div>
                     <p className="mt-1 text-sm text-text-primary">
                       {group.documentDescription ||
-                        `Tosite ${group.documentNumber}`}
+                        `Document ${group.documentNumber}`}
                     </p>
                     <p className="mt-1 text-xs text-text-muted">
-                      {group.rows.length} vienti
-                      {group.rows.length === 1 ? '' : 'ä'}
+                      {group.rows.length} row
+                      {group.rows.length === 1 ? '' : 's'}
                     </p>
                   </div>
 
                   <div className="flex gap-6 text-xs">
                     <div className="text-right">
                       <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
-                        Debet
+                        Debit
                       </div>
                       <div className="font-mono text-text-primary">
                         {formatCurrency(group.debitTotal)}
@@ -148,7 +148,7 @@ export default function JournalFilter({
                     </div>
                     <div className="text-right">
                       <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
-                        Kredit
+                        Credit
                       </div>
                       <div className="font-mono text-text-primary">
                         {formatCurrency(group.creditTotal)}
@@ -162,22 +162,22 @@ export default function JournalFilter({
                     <thead>
                       <tr className="border-b border-border-subtle/50">
                         <th className="w-14 px-3 py-2 text-left text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
-                          Rivi
+                          Row
                         </th>
                         <th className="w-20 px-3 py-2 text-left text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
-                          Tili
+                          Account
                         </th>
                         <th className="px-3 py-2 text-left text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
-                          Tilin nimi
+                          Account name
                         </th>
                         <th className="px-3 py-2 text-left text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
-                          Selite
+                          Description
                         </th>
                         <th className="w-24 px-3 py-2 text-right text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
-                          Debet
+                          Debit
                         </th>
                         <th className="w-24 px-3 py-2 text-right text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
-                          Kredit
+                          Credit
                         </th>
                       </tr>
                     </thead>
@@ -223,7 +223,7 @@ export default function JournalFilter({
 
           {filteredGroups.length === 0 ? (
             <div className="py-8 text-center text-sm text-text-muted">
-              {search ? 'Ei hakutuloksia' : 'Ei vientejä tällä tilikaudella'}
+              {search ? 'No search results' : 'No entries in this fiscal year'}
             </div>
           ) : null}
         </div>
@@ -239,16 +239,16 @@ export default function JournalFilter({
         <div className="rounded-xl border border-border-subtle bg-surface-1/50 p-4">
           <div className="mb-4">
             <h2 className="text-sm font-semibold text-text-primary">
-              Esikatselu
+              Preview
             </h2>
             {activeDocument ? (
               <p className="mt-1 text-xs text-text-secondary">
                 {activeDocument.documentCode} -{' '}
-                {activeDocument.documentDescription || 'Ei kuvausta'}
+                {activeDocument.documentDescription || 'No description'}
               </p>
             ) : (
               <p className="mt-1 text-xs text-text-muted">
-                Valitse vasemmalta tosite, niin liitetty PDF näkyy tässä.
+                Select a document on the left to see its attached PDF here.
               </p>
             )}
           </div>

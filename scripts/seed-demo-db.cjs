@@ -331,24 +331,24 @@ function seedRealisticDatabase(options = {}) {
     );
 
     const settingsProperties = serializeProperties({
-      'tilinpaatos.archiveNote':
+      'financialStatement.archiveNote':
         'Tilinpaatos sailytetaan vahintaan 10 vuotta tilikauden paattymisesta ja tositeaineisto vahintaan 6 vuotta.',
-      'tilinpaatos.attendees': `${signerName}, Juho Tunturinen`,
-      'tilinpaatos.boardProposal':
+      'financialStatement.attendees': `${signerName}, Juho Tunturinen`,
+      'financialStatement.boardProposal':
         'Hallitus esittaa, etta tilikauden voitto siirretaan edellisten tilikausien voittovaroihin, eika osinkoa jaeta.',
-      'tilinpaatos.dischargeTarget': 'board-and-ceo',
-      'tilinpaatos.meetingDate': `${currentYear + 1}-03-20`,
-      'tilinpaatos.microDeclaration':
-        'Yritys on kirjanpitolain mukainen mikroyritys ja tilinpaatos on laadittu PMA 4 luvun mikroyrityssaannosten mukaisesti.',
-      'tilinpaatos.parentCompany': '',
-      'tilinpaatos.personnelCount': '2',
-      'tilinpaatos.place': place,
-      'tilinpaatos.preparedBy': companyName,
-      'tilinpaatos.shareInfo':
+      'financialStatement.dischargeTarget': 'board-and-ceo',
+      'financialStatement.meetingDate': `${currentYear + 1}-03-20`,
+      'financialStatement.microDeclaration':
+        'Yritys on kirjanpitolain mukainen mikroyritys ja financialStatement on laadittu PMA 4 luvun mikroyrityssaannosten mukaisesti.',
+      'financialStatement.parentCompany': '',
+      'financialStatement.personnelCount': '2',
+      'financialStatement.place': place,
+      'financialStatement.preparedBy': companyName,
+      'financialStatement.shareInfo':
         'Yhtiossa on 100 osaketta, joilla kaikilla on yhtalaiset aanioikeudet ja oikeus osinkoon.',
-      'tilinpaatos.signatureDate': `${currentYear + 1}-03-15`,
-      'tilinpaatos.signerName': signerName,
-      'tilinpaatos.signerTitle': 'Toimitusjohtaja',
+      'financialStatement.signatureDate': `${currentYear + 1}-03-15`,
+      'financialStatement.signerName': signerName,
+      'financialStatement.signerTitle': 'Toimitusjohtaja',
     });
 
     db.prepare(

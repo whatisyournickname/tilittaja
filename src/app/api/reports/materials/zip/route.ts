@@ -7,19 +7,19 @@ import {
   buildMaterialPdf,
   isMaterialKind,
   MaterialKind,
-} from '@/lib/tilinpaatos-materials';
+} from '@/lib/financial-statement-materials';
 import { zipResponse } from '@/lib/zip-response';
 
 export const runtime = 'nodejs';
 
-const TILINPAATOS_FOLDER = 'tilinpäätös';
+const TILINPAATOS_FOLDER = 'financial-statement';
 
 const ALL_KINDS: MaterialKind[] = [
-  'paakirja',
-  'paivakirja',
-  'tase-erittely',
-  'tase-laaja',
-  'tulos-laaja',
+  'general-ledger',
+  'journal',
+  'balance-sheet-detailed',
+  'balance-sheet-broad',
+  'income-statement-broad',
 ];
 
 function parseKinds(searchParams: URLSearchParams): MaterialKind[] {
@@ -73,6 +73,6 @@ export const GET = withDb(async (request: NextRequest) => {
 
   return zipResponse(
     zip,
-    `tilinpaatos-materiaalit-${companySlug}-${periodSlug}.zip`,
+    `financialStatement-materiaalit-${companySlug}-${periodSlug}.zip`,
   );
 }, 'Materiaalien ZIP-vienti epäonnistui.');

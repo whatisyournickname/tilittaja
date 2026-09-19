@@ -129,7 +129,7 @@ describe('normalizeImportedDocument', () => {
         },
         accounts,
       ),
-    ).toThrow('debet ja kredit');
+    ).toThrow('debit and credit');
   });
 
   it('allows missing dates for later fallback handling', () => {
@@ -231,7 +231,7 @@ describe('normalizeImportedDocument', () => {
         },
         accounts,
       ),
-    ).toThrow('tarpeeksi käyttökelpoisia');
+    ).toThrow('enough usable entry rows');
   });
 });
 

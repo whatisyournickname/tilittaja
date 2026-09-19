@@ -40,9 +40,9 @@ describe('StateTransferPanel', () => {
     render(<StateTransferPanel sourceSlug="demo" sourceName="Demo Oy" />);
 
     expect(
-      screen.getByRole('button', { name: /Palauta exportista/i }),
+      screen.getByRole('button', { name: /Restore from export/i }),
     ).toBeDisabled();
-    expect(screen.getByText('Valittua tiedostoa ei ole.')).toBeInTheDocument();
+    expect(screen.getByText('No file selected.')).toBeInTheDocument();
   });
 
   it('does nothing when the user cancels confirmation', async () => {
@@ -57,7 +57,7 @@ describe('StateTransferPanel', () => {
     });
     fireEvent.change(input, { target: { files: [file] } });
     fireEvent.click(
-      screen.getByRole('button', { name: /Palauta exportista/i }),
+      screen.getByRole('button', { name: /Restore from export/i }),
     );
 
     expect(importStateTransferAction).not.toHaveBeenCalled();
@@ -84,15 +84,15 @@ describe('StateTransferPanel', () => {
     });
     fireEvent.change(input, { target: { files: [file] } });
     fireEvent.click(
-      screen.getByRole('button', { name: /Palauta exportista/i }),
+      screen.getByRole('button', { name: /Restore from export/i }),
     );
 
     await waitFor(() => {
       expect(importStateTransferAction).toHaveBeenCalledWith(file);
     });
-    expect(await screen.findByText(/Palautus onnistui/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Restore successful/i)).toBeInTheDocument();
     expect(mockRefresh).toHaveBeenCalled();
-    expect(screen.getByText('Valittua tiedostoa ei ole.')).toBeInTheDocument();
+    expect(screen.getByText('No file selected.')).toBeInTheDocument();
   });
 
   it('shows import failures', async () => {
@@ -107,7 +107,7 @@ describe('StateTransferPanel', () => {
     });
     fireEvent.change(input, { target: { files: [file] } });
     fireEvent.click(
-      screen.getByRole('button', { name: /Palauta exportista/i }),
+      screen.getByRole('button', { name: /Restore from export/i }),
     );
 
     expect(await screen.findByText('Virheellinen ZIP')).toBeInTheDocument();

@@ -46,17 +46,17 @@ describe('DeleteDocumentButton', () => {
   it('renders without crashing', () => {
     render(<DeleteDocumentButton documentId={1} documentCode="2024-001" />);
     expect(
-      screen.getByRole('button', { name: /Poista tosite/i }),
+      screen.getByRole('button', { name: /Delete document/i }),
     ).toBeDefined();
   });
 
   it('renders custom children when provided', () => {
     render(
       <DeleteDocumentButton documentId={1} documentCode="2024-001">
-        Poista tämä
+        Delete this
       </DeleteDocumentButton>,
     );
-    expect(screen.getByRole('button', { name: /Poista tämä/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Delete this/i })).toBeDefined();
   });
 
   it('calls the delete action and refreshes when user confirms deletion', async () => {
@@ -64,7 +64,7 @@ describe('DeleteDocumentButton', () => {
     deleteDocumentAction.mockResolvedValue({ ok: true });
 
     render(<DeleteDocumentButton documentId={42} documentCode="MU-42" />);
-    fireEvent.click(screen.getByRole('button', { name: /Poista tosite/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Delete document/i }));
 
     await waitFor(() => {
       expect(deleteDocumentAction).toHaveBeenCalledWith(42);

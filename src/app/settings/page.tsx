@@ -16,7 +16,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Asetukset – Tilittaja' };
+export const metadata: Metadata = { title: 'Settings – Tilittaja' };
 
 export default async function SettingsPage({
   searchParams,
@@ -50,13 +50,13 @@ export default async function SettingsPage({
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-              Järjestelmä
+              System
             </p>
             <h1 className="text-xl font-semibold tracking-tight text-text-primary">
-              Yrityksen asetukset
+              Company settings
             </h1>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary">
-              Hallitse yrityksen perustietoja ja tilikausia yhdesta paikasta.
+              Manage your company's basic information and periods from one place.
             </p>
           </div>
 
@@ -65,21 +65,21 @@ export default async function SettingsPage({
               href="/settings/opening-balance-import"
               className="inline-flex items-center gap-2 self-start rounded-xl border border-border-subtle bg-surface-0/60 px-4 py-2.5 text-sm font-medium text-text-primary transition hover:border-accent/30 hover:text-accent-light"
             >
-              Tilikauden avaus
+              Opening balance
               <ArrowUpRight className="h-4 w-4" />
             </Link>
             <Link
               href="/settings/export-import"
               className="inline-flex items-center gap-2 self-start rounded-xl border border-border-subtle bg-surface-0/60 px-4 py-2.5 text-sm font-medium text-text-primary transition hover:border-accent/30 hover:text-accent-light"
             >
-              Tuonti ja vienti
+              Export & import
               <ArrowUpRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/reports/tilinpaatos"
+              href="/reports/financial-statement"
               className="inline-flex items-center gap-2 self-start rounded-xl border border-accent/20 bg-accent/10 px-4 py-2.5 text-sm font-medium text-accent-light transition hover:border-accent/40 hover:bg-accent/15"
             >
-              Avaa tilinpaatos
+              Open financial statements
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
@@ -90,7 +90,7 @@ export default async function SettingsPage({
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                  Aktiivinen tilikausi
+                  Active period
                 </p>
                 <p className="mt-2 text-sm font-medium text-text-primary">
                   {activePeriod
@@ -98,14 +98,13 @@ export default async function SettingsPage({
                         activePeriod.start_date,
                         activePeriod.end_date,
                       )
-                    : 'Ei valittua tilikautta'}
+                    : 'No period selected'}
                 </p>
               </div>
               <CalendarRange className="mt-0.5 h-4 w-4 text-accent" />
             </div>
             <p className="mt-3 text-xs leading-5 text-text-secondary">
-              Sivupalkista valittu tilikausi maarittaa mita kautta talla sivulla
-              korostetaan.
+              The period selected from the sidebar determines which period is highlighted on this page.
             </p>
           </div>
 
@@ -113,10 +112,10 @@ export default async function SettingsPage({
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                  Tilikausien tila
+                  Period status
                 </p>
                 <p className="mt-2 text-sm font-medium text-text-primary">
-                  {openPeriods} avoinna, {lockedPeriods} lukittu
+                  {openPeriods} open, {lockedPeriods} locked
                 </p>
               </div>
               {lockedPeriods > 0 ? (
@@ -126,8 +125,7 @@ export default async function SettingsPage({
               )}
             </div>
             <p className="mt-3 text-xs leading-5 text-text-secondary">
-              Lukitse paattyneet tilikaudet, jotta niiden kirjaukset eivat muutu
-              vahingossa.
+              Lock closed periods to prevent accidental changes to their entries.
             </p>
           </div>
 
@@ -135,16 +133,16 @@ export default async function SettingsPage({
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                  Tietokanta
+                  Database
                 </p>
                 <p className="mt-2 text-sm font-medium text-text-primary">
-                  Versio {settings.version}
+                  Version {settings.version}
                 </p>
               </div>
               <Database className="mt-0.5 h-4 w-4 text-text-secondary" />
             </div>
             <p className="mt-3 text-xs leading-5 text-text-secondary">
-              Tekninen versiotieto. Tata ei tarvitse yleensa muuttaa.
+              Technical version info. You usually don't need to change this.
             </p>
           </div>
         </div>
@@ -161,19 +159,18 @@ export default async function SettingsPage({
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                  Tilikaudet
+                  Periods
                 </p>
                 <h2 className="mt-2 text-lg font-semibold text-text-primary">
-                  Tilikausien hallinta
+                  Manage periods
                 </h2>
                 <p className="mt-1 text-sm leading-6 text-text-secondary">
-                  Sivupalkista valittu tilikausi on korostettu. Voit lukita tai
-                  avata kausia suoraan listasta.
+                  The period selected from the sidebar is highlighted. You can lock or unlock periods directly from the list.
                 </p>
               </div>
               <div className="rounded-xl border border-border-subtle bg-surface-0/50 px-3 py-2 text-right">
                 <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">
-                  Kaudet
+                  Periods
                 </div>
                 <div className="mt-1 text-lg font-semibold text-text-primary">
                   {periods.length}
@@ -202,23 +199,23 @@ export default async function SettingsPage({
                           </p>
                           {isCurrent ? (
                             <span className="rounded-full border border-accent/30 bg-accent/15 px-2 py-0.5 text-[11px] font-medium text-accent-light">
-                              Aktiivinen
+                              Active
                             </span>
                           ) : null}
                           {period.locked ? (
                             <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-300">
-                              Lukittu
+                              Locked
                             </span>
                           ) : (
                             <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-300">
-                              Avoin
+                              Open
                             </span>
                           )}
                         </div>
                         <p className="mt-2 text-xs leading-5 text-text-secondary">
                           {period.locked
-                            ? 'Kausi on suojattu muutoksilta.'
-                            : 'Kausi on avoinna kirjauksille ja korjauksille.'}
+                            ? 'This period is protected from changes.'
+                            : 'This period is open for entries and corrections.'}
                         </p>
                       </div>
 
@@ -239,21 +236,20 @@ export default async function SettingsPage({
           <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-border-subtle bg-surface-0/35 p-5 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                Avaustyokalut
+                Opening tools
               </p>
               <h2 className="mt-2 text-lg font-semibold text-text-primary">
-                Tilikauden avaus PDF-aineistosta
+                Opening balance from financial statement PDF
               </h2>
               <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary">
-                Tuo aiemman tilinpaatoksen PDF-materiaalit ja muodosta valitun
-                kauden alkusaldot automaattisesti avaus-tositteeksi.
+                Import previous period's financial statement PDF materials and automatically form opening balances for the selected period as an opening document.
               </p>
             </div>
             <Link
               href="/settings/opening-balance-import"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-border-subtle bg-surface-0/60 px-4 py-2.5 text-sm font-medium text-text-primary transition hover:border-accent/30 hover:text-accent-light"
             >
-              Avaa tyokalu
+              Open tool
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
@@ -261,22 +257,20 @@ export default async function SettingsPage({
           <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-border-subtle bg-surface-0/35 p-5 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                Vuokrat
+                Recurring rent
               </p>
               <h2 className="mt-2 text-lg font-semibold text-text-primary">
-                Kuukausivuokrien tositekopiot
+                Monthly rent document copies
               </h2>
               <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary">
-                Luo tammikuun vuokrasopimus-tositteista puuttuvat kuukausikopiot
-                koko kaudelle, jotta AI-linkitys loytaa valmiit tositteet
-                tiliotteelta.
+                Generate missing monthly copies from the January rent contract document for the whole period, so AI linking finds prepared documents from the bank statement.
               </p>
             </div>
             <Link
               href="/settings/recurring-rent"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-border-subtle bg-surface-0/60 px-4 py-2.5 text-sm font-medium text-text-primary transition hover:border-accent/30 hover:text-accent-light"
             >
-              Avaa vuokratyokalu
+              Open rent tool
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
@@ -284,21 +278,20 @@ export default async function SettingsPage({
           <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-border-subtle bg-surface-0/35 p-5 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                Varmuuskopiointi
+                Backup
               </p>
               <h2 className="mt-2 text-lg font-semibold text-text-primary">
-                Tuonti ja vienti
+                Export & import
               </h2>
               <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary">
-                Vie koko aktiivinen tietolahde palautettavana ZIP-pakettina tai
-                palauta aiempi export takaisin samalle tietolahteelle.
+                Export the entire active data source as a restorable ZIP package, or restore a previous export back to the same data source.
               </p>
             </div>
             <Link
               href="/settings/export-import"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-border-subtle bg-surface-0/60 px-4 py-2.5 text-sm font-medium text-text-primary transition hover:border-accent/30 hover:text-accent-light"
             >
-              Avaa vienti ja palautus
+              Open export & restore
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
@@ -310,20 +303,19 @@ export default async function SettingsPage({
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-text-primary">
-                  Tilinpaatos ja yhtiokokous
+                  Financial statements & annual meeting
                 </h2>
                 <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary">
-                  Mikroyrityslausuma, hallituksen ehdotus, allekirjoitukset ja
-                  kokoustiedot muokataan tilinpaatosraportilla.
+                  Micro enterprise declaration, board proposal, signatures, and meeting details are edited on the financial statements report.
                 </p>
               </div>
             </div>
 
             <Link
-              href="/reports/tilinpaatos"
+              href="/reports/financial-statement"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-border-subtle bg-surface-0/60 px-4 py-2.5 text-sm font-medium text-text-primary transition hover:border-accent/30 hover:text-accent-light"
             >
-              Siirry muokkaamaan
+              Go to edit
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>

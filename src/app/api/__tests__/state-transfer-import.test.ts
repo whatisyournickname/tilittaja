@@ -93,7 +93,7 @@ describe('POST /api/state-transfer/import', () => {
 
     expect(response.status).toBe(404);
     await expect(response.json()).resolves.toEqual({
-      error: 'Aktiivisen tietolähteen SQLite-kantaa ei löytynyt',
+      error: 'Active datasource SQLite database not found',
     });
     expect(closeDbConnection).not.toHaveBeenCalled();
   });

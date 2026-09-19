@@ -12,19 +12,19 @@ import {
 import { periodFilenamePart, sanitizeForFilename } from '@/lib/accounting';
 import { resolveBankStatementPdfAbsolutePath } from '@/lib/receipt-pdfs';
 import { collectReceiptsForPeriod } from '@/lib/receipt-resolution';
-import { buildMaterialPdf, MaterialKind } from '@/lib/tilinpaatos-materials';
+import { buildMaterialPdf, MaterialKind } from '@/lib/financial-statement-materials';
 import { zipResponse } from '@/lib/zip-response';
 
 export const runtime = 'nodejs';
 
-const TILINPAATOS_FOLDER = 'tilinpäätös';
+const TILINPAATOS_FOLDER = 'financial-statement';
 
 const ALL_MATERIAL_KINDS: MaterialKind[] = [
-  'paakirja',
-  'paivakirja',
-  'tase-erittely',
-  'tase-laaja',
-  'tulos-laaja',
+  'general-ledger',
+  'journal',
+  'balance-sheet-detailed',
+  'balance-sheet-broad',
+  'income-statement-broad',
 ];
 
 function periodsOverlap(
@@ -57,7 +57,7 @@ async function fetchPdfFromRoute(
 export const GET = withDb(async (request: NextRequest) => {
   const source = resolveRequestDataSource(request);
   if (!source) {
-    return jsonError('Aktiivista tietolähdettä ei löytynyt.', 400);
+    return jsonError('Active datasource not found.', 400);
   }
   const periodParam = request.nextUrl.searchParams.get('period') || '';
   const periodId = periodParam ? Number(periodParam) : undefined;
@@ -77,29 +77,29 @@ export const GET = withDb(async (request: NextRequest) => {
   const origin = request.nextUrl.origin;
   const cookieHeader = request.headers.get('cookie') ?? '';
 
-  const [yhtiokokous, tilinpaatos] = await Promise.all([
+  const [annualMeeting, financialStatement] = await Promise.all([
     fetchPdfFromRoute(
       origin,
-      `/api/reports/yhtiokokous/pdf?period=${selectedPeriod.id}`,
+      `/api/reports/annual-meeting/pdf?period=${selectedPeriod.id}`,
       cookieHeader,
     ),
     fetchPdfFromRoute(
       origin,
-      `/api/reports/tilinpaatos/pdf?period=${selectedPeriod.id}`,
+      `/api/reports/financial-statement/pdf?period=${selectedPeriod.id}`,
       cookieHeader,
     ),
   ]);
 
-  if (yhtiokokous) {
+  if (annualMeeting) {
     zip.file(
-      `${TILINPAATOS_FOLDER}/${yhtiokokous.filename}`,
-      yhtiokokous.buffer,
+      `${TILINPAATOS_FOLDER}/${annualMeeting.filename}`,
+      annualMeeting.buffer,
     );
   }
-  if (tilinpaatos) {
+  if (financialStatement) {
     zip.file(
-      `${TILINPAATOS_FOLDER}/${tilinpaatos.filename}`,
-      tilinpaatos.buffer,
+      `${TILINPAATOS_FOLDER}/${financialStatement.filename}`,
+      financialStatement.buffer,
     );
   }
 
@@ -177,7 +177,7 @@ export const GET = withDb(async (request: NextRequest) => {
 
   return zipResponse(
     zip,
-    `tilinpaatos-arkisto-${companySlug}-${periodSlug}.zip`,
+    `financialStatement-arkisto-${companySlug}-${periodSlug}.zip`,
     { noCache: true },
   );
 }, 'Arkiston ZIP-vienti epäonnistui.');

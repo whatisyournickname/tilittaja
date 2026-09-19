@@ -11,22 +11,22 @@ import {
   companyInfoSchema,
   periodLockSchema,
   recurringRentGenerateSchema,
-  tilinpaatosMetadataSchema,
+  financialStatementMetadataSchema,
 } from '@/lib/validation';
 import { requireResource } from '@/lib/api-helpers';
 import {
-  getTilinpaatosMetadataDefaults,
+  getFinancialStatementMetadataDefaults,
   metadataToProperties,
   normalizeDischargeTarget,
-  type TilinpaatosMetadata,
-} from '@/lib/tilinpaatos';
+  type FinancialStatementMetadata,
+} from '@/lib/financial-statement';
 import { requireUnlockedExistingPeriod } from '@/lib/period-locks';
 import { createRecurringRentDocuments } from '@/lib/recurring-rent';
 
 function normalizeMetadata(
-  input: Partial<TilinpaatosMetadata>,
-  defaults: TilinpaatosMetadata,
-): TilinpaatosMetadata {
+  input: Partial<FinancialStatementMetadata>,
+  defaults: FinancialStatementMetadata,
+): FinancialStatementMetadata {
   return {
     place: (input.place ?? defaults.place).trim(),
     signatureDate: (input.signatureDate ?? defaults.signatureDate).trim(),
@@ -56,16 +56,16 @@ export async function updateCompanyInfoAction(input: unknown) {
     updateCompanyInfo(parsed.name, parsed.businessId);
     revalidateApp(['/settings/recurring-rent']);
     return { ok: true };
-  }, 'Yrityksen tietojen tallennus epäonnistui.');
+  }, 'Failed to save company info.');
 }
 
-export async function updateTilinpaatosMetadataAction(
-  input: Partial<TilinpaatosMetadata>,
+export async function updateFinancialStatementMetadataAction(
+  input: Partial<FinancialStatementMetadata>,
 ) {
-  const parsed = tilinpaatosMetadataSchema.parse(input);
+  const parsed = financialStatementMetadataSchema.parse(input);
 
   return runDbAction(() => {
-    const defaults = getTilinpaatosMetadataDefaults();
+    const defaults = getFinancialStatementMetadataDefaults();
     const metadata = normalizeMetadata(parsed, defaults);
     updateSettingProperties(metadataToProperties(metadata));
     revalidateApp(['/settings/recurring-rent']);
@@ -81,7 +81,7 @@ export async function setPeriodLockAction(periodId: number, locked: boolean) {
     setPeriodLocked(parsed.periodId, parsed.locked);
     revalidateApp(['/settings/recurring-rent']);
     return { ok: true, locked: parsed.locked };
-  }, 'Tilikauden lukituksen tallennus epäonnistui.');
+  }, 'Failed to save period lock.');
 }
 
 export async function generateRecurringRentDocumentsAction(input: unknown) {
@@ -92,5 +92,5 @@ export async function generateRecurringRentDocumentsAction(input: unknown) {
     const result = createRecurringRentDocuments(parsed.periodId);
     revalidateApp(['/settings/recurring-rent']);
     return result;
-  }, 'Kuukausivuokrien tositteiden luonti epäonnistui.');
+  }, 'Failed to create recurring rent documents.');
 }

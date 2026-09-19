@@ -194,7 +194,7 @@ export const setupExternalDatabaseSchema = z.object({
   name: z.string().trim().optional(),
 });
 
-export const tilinpaatosMetadataSchema = z.object({
+export const financialStatementMetadataSchema = z.object({
   place: z.string().trim().optional(),
   signatureDate: z.string().trim().optional(),
   preparedBy: z.string().trim().optional(),

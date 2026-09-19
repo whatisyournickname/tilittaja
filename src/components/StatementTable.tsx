@@ -1,14 +1,14 @@
 import {
   formatAmount,
   type StatementSummary,
-  type TilinpaatosRow,
-} from '@/lib/tilinpaatos';
+  type FinancialStatementRow,
+} from '@/lib/financial-statement';
 
 function StatementTable({
   rows,
   comparisonLabel,
 }: {
-  rows: TilinpaatosRow[];
+  rows: FinancialStatementRow[];
   comparisonLabel: string | null;
 }) {
   return (
@@ -17,10 +17,10 @@ function StatementTable({
         <thead>
           <tr className="border-b border-border-subtle">
             <th className="text-left px-6 py-2 text-xs uppercase tracking-wide text-text-secondary">
-              Erä
+              Item
             </th>
             <th className="text-right px-6 py-2 text-xs uppercase tracking-wide text-text-secondary">
-              Nykyinen kausi
+              Current kausi
             </th>
             <th className="text-right px-6 py-2 text-xs uppercase tracking-wide text-text-secondary">
               {comparisonLabel || 'Vertailukausi'}
@@ -77,7 +77,7 @@ export function CollapsibleStatementCard({
   summary,
 }: {
   title: string;
-  rows: TilinpaatosRow[];
+  rows: FinancialStatementRow[];
   comparisonLabel: string | null;
   summary: StatementSummary;
 }) {

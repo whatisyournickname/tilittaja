@@ -58,9 +58,9 @@ function getConfidenceBadgeClasses(confidence: BankStatementAiLinkSuggestion['co
 }
 
 function getConfidenceLabel(confidence: BankStatementAiLinkSuggestion['confidence']) {
-  if (confidence === 'high') return 'Vahva';
-  if (confidence === 'medium') return 'Mahdollinen';
-  return 'Heikko';
+  if (confidence === 'high') return 'Strong';
+  if (confidence === 'medium') return 'Possible';
+  return 'Weak';
 }
 
 export default function BankStatementAiLinkModal({
@@ -98,7 +98,7 @@ export default function BankStatementAiLinkModal({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Yhdistä tositteisiin AI:n avulla"
+        aria-label="Link to documents with AI"
         className="mx-auto flex h-full max-w-6xl flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface-0"
         onClick={(event) => event.stopPropagation()}
       >
@@ -106,11 +106,11 @@ export default function BankStatementAiLinkModal({
           <div>
             <div className="flex items-center gap-2 text-sm font-medium text-text-primary">
               <Sparkles className="h-4 w-4 text-accent-light" />
-              Yhdistä tositteisiin (AI)
+              Link to documents (AI)
             </div>
             <div className="mt-1 text-xs text-text-secondary">
-              Tarkista ehdotukset ennen hyväksyntää. Vain valitut ehdotukset
-              linkitetään tilioteriveihin.
+              Review suggestions before accepting. Only selected suggestions will
+              be linked to bank statement rows.
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -125,7 +125,7 @@ export default function BankStatementAiLinkModal({
               ) : (
                 <RefreshCw className="h-3.5 w-3.5" />
               )}
-              Päivitä ehdotukset
+              Refresh suggestions
             </button>
             <button
               type="button"
@@ -152,7 +152,7 @@ export default function BankStatementAiLinkModal({
             </div>
           ) : suggestions.length === 0 ? (
             <div className="flex h-full min-h-72 items-center justify-center px-6 text-center text-sm text-text-muted">
-              Valituille riveille ei löytynyt AI-ehdotuksia.
+              No AI suggestions found for selected rows.
             </div>
           ) : (
             <div className="divide-y divide-border-subtle">
@@ -169,7 +169,7 @@ export default function BankStatementAiLinkModal({
                 </label>
                 <div className="text-xs text-text-muted">
                   {selectedCount} / {selectableSuggestionIds.length} valittu
-                  hyväksyttäväksi
+                  to accept
                 </div>
               </div>
 
@@ -193,7 +193,7 @@ export default function BankStatementAiLinkModal({
                         onChange={() => onToggleEntry(suggestion.entryId)}
                         disabled={suggestion.document == null}
                         className="mt-1 h-4 w-4 rounded border-border-subtle bg-surface-0/60 text-accent focus:ring-accent/20 disabled:cursor-not-allowed"
-                        aria-label={`Hyväksy AI-ehdotus riville ${entry.id}`}
+                        aria-label={`Accept AI suggestion for row ${entry.id}`}
                       />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2 text-xs text-text-secondary">
@@ -215,7 +215,7 @@ export default function BankStatementAiLinkModal({
                           </span>
                         </div>
                         <div className="mt-2 text-sm font-medium text-text-primary">
-                          {entry.counterparty || 'Nimetön tapahtuma'}
+                          {entry.counterparty || 'Unnamed transaction'}
                         </div>
                         {description ? (
                           <div className="mt-1 text-xs text-text-muted">
@@ -272,7 +272,7 @@ export default function BankStatementAiLinkModal({
                         </>
                       ) : (
                         <div className="text-sm text-text-muted">
-                          AI ei ehdottanut tälle riville sopivaa olemassa olevaa
+                          AI did not suggest a matching existing
                           tositetta.
                         </div>
                       )}
@@ -286,7 +286,7 @@ export default function BankStatementAiLinkModal({
 
         <div className="flex items-center justify-between gap-4 border-t border-border-subtle px-4 py-3">
           <div className="text-xs text-text-muted">
-            Hyväksy vain ne ehdotukset, jotka näyttävät oikeilta.
+            Accept only suggestions that look correct.
           </div>
           <button
             type="button"
@@ -299,7 +299,7 @@ export default function BankStatementAiLinkModal({
             ) : (
               <Sparkles className="h-4 w-4" />
             )}
-            Hyväksy valitut ehdotukset ({selectedCount})
+            Accept selected suggestions ({selectedCount})
           </button>
         </div>
       </div>

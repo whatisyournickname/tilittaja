@@ -177,7 +177,7 @@ export default function GeneralLedgerFilter({
           <SearchInput
             value={search}
             onChange={setSearch}
-            placeholder="Hae tiliä tai kuvausta..."
+            placeholder="Search account or description..."
             className="min-w-[280px] flex-1"
           />
 
@@ -246,21 +246,21 @@ export default function GeneralLedgerFilter({
                           className="w-14 py-1.5"
                         />
                         <SortableHeader
-                          label="Päivä"
+                          label="Date"
                           sortKey="document_date"
                           current={sort}
                           onSort={handleSort}
                           className="w-24 py-1.5"
                         />
                         <SortableHeader
-                          label="Kuvaus"
+                          label="Description"
                           sortKey="description"
                           current={sort}
                           onSort={handleSort}
                           className="py-1.5"
                         />
                         <SortableHeader
-                          label="Debet"
+                          label="Debit"
                           sortKey="debit"
                           current={sort}
                           onSort={handleSort}
@@ -268,7 +268,7 @@ export default function GeneralLedgerFilter({
                           className="w-20 py-1.5"
                         />
                         <SortableHeader
-                          label="Kredit"
+                          label="Credit"
                           sortKey="credit"
                           current={sort}
                           onSort={handleSort}
@@ -336,14 +336,14 @@ export default function GeneralLedgerFilter({
 
           {sortedGroups.length === 0 && (
             <div className="text-center py-8 text-text-muted text-sm">
-              {search ? 'Ei hakutuloksia' : 'Ei vientejä tällä tilikaudella'}
+              {search ? 'No search results' : 'No entries in this fiscal year'}
             </div>
           )}
         </div>
 
         {search && filtered.length !== groups.length && (
           <p className="text-xs text-text-muted">
-            {filtered.length} / {groups.length} tiliä
+            {filtered.length} / {groups.length} accounts
           </p>
         )}
       </div>
@@ -352,17 +352,16 @@ export default function GeneralLedgerFilter({
         <div className="rounded-xl border border-border-subtle bg-surface-1/50 p-4">
           <div className="mb-4">
             <h2 className="text-sm font-semibold text-text-primary">
-              Esikatselu
+              Preview
             </h2>
             {activeDocument ? (
               <p className="mt-1 text-xs text-text-secondary">
                 {activeDocument.documentCode} -{' '}
-                {activeDocument.documentDescription || 'Ei kuvausta'}
+                {activeDocument.documentDescription || 'No description'}
               </p>
             ) : (
               <p className="mt-1 text-xs text-text-muted">
-                Valitse vasemmalta kirjausrivi, niin liitetty tosite näkyy
-                tässä.
+                Select a booking row from the left to see the linked document here.
               </p>
             )}
           </div>

@@ -216,8 +216,8 @@ export default function NewDocumentForm({
 
       {periodLocked ? (
         <div className="mb-6 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-yellow-100">
-          Tilikausi on lukittu. Uusia tositteita ei voi luoda lukitulle
-          kaudelle.
+          Period is locked. No new documents can be created for a locked
+          period.
         </div>
       ) : null}
 
@@ -226,7 +226,7 @@ export default function NewDocumentForm({
           htmlFor="new-doc-date"
           className="mb-2 block text-sm font-medium text-text-secondary"
         >
-          Päivämäärä
+          Date
         </label>
           <input
             id="new-doc-date"
@@ -243,16 +243,16 @@ export default function NewDocumentForm({
           <thead>
             <tr className="border-b border-border-subtle">
               <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-                Tili
+                Account
               </th>
               <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-                Kuvaus
+                Description
               </th>
               <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-text-secondary">
-                Debet
+                Debit
               </th>
               <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-text-secondary">
-                Kredit
+                Credit
               </th>
               <th className="w-10" />
             </tr>
@@ -277,7 +277,7 @@ export default function NewDocumentForm({
                         </span>
                       </>
                     ) : (
-                      <span className="text-text-muted">Valitse tili</span>
+                      <span className="text-text-muted">Select account</span>
                     )}
                   </button>
                 </td>
@@ -288,7 +288,7 @@ export default function NewDocumentForm({
                     onChange={(event) =>
                       updateRow(index, 'description', event.target.value)
                     }
-                    placeholder="Kuvaus"
+                    placeholder="Description"
                     className="w-full rounded-md border border-border-subtle bg-surface-0/60 px-2.5 py-1.5 text-sm text-text-primary outline-none transition focus:border-accent/40 focus:ring-1 focus:ring-accent/20"
                     disabled={periodLocked}
                   />
@@ -325,7 +325,7 @@ export default function NewDocumentForm({
                     onClick={() => removeRow(index)}
                     className="rounded p-2 text-text-muted transition-colors hover:text-rose-400"
                     disabled={periodLocked || rows.length <= 2}
-                    aria-label="Poista rivi"
+                    aria-label="Delete row"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -343,7 +343,7 @@ export default function NewDocumentForm({
                   className="flex min-h-[32px] items-center gap-1 text-sm text-accent transition-colors hover:text-accent-light"
                 >
                   <Plus className="h-4 w-4" />
-                  Lisää rivi
+                  Add row
                 </button>
               </td>
               <td className="px-4 py-3 text-right font-mono text-sm font-semibold text-text-primary">
@@ -363,22 +363,22 @@ export default function NewDocumentForm({
           className={`text-sm ${isBalanced ? 'text-emerald-400' : 'text-rose-400'}`}
         >
           {isBalanced
-            ? 'Tosite on tasapainossa'
-            : `Erotus: ${formatNumber(Math.abs(totalDebit - totalCredit))}`}
+            ? 'Document is balanced'
+            : `Difference: ${formatNumber(Math.abs(totalDebit - totalCredit))}`}
         </div>
         <button
           type="submit"
           disabled={periodLocked || saving || !isBalanced}
           className="rounded-lg bg-accent px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-700 disabled:bg-surface-3 disabled:text-text-muted"
         >
-          {saving ? 'Tallennetaan...' : 'Tallenna'}
+          {saving ? 'Saving...' : 'Save'}
         </button>
       </div>
 
       {accountPickerRow && (
         <AccountPickerModal
-          title="Valitse tili"
-          subtitle={`Rivi ${picker.entryId != null ? picker.entryId + 1 : ''} · ${accountPickerRow.accountNumber ? `nykyinen tili ${accountPickerRow.accountNumber} ${accountPickerRow.accountName}` : 'tiliä ei ole vielä valittu'}`}
+          title="Select account"
+          subtitle={`Row ${picker.entryId != null ? picker.entryId + 1 : ''} · ${accountPickerRow.accountNumber ? `current account ${accountPickerRow.accountNumber} ${accountPickerRow.accountName}` : 'no account selected yet'}`}
           searchValue={accountSearch}
           onSearchChange={setAccountSearch}
           onClearSearch={() => setAccountSearch('')}
@@ -390,23 +390,23 @@ export default function NewDocumentForm({
           onSelectAccount={picker.setSelectedAccountId}
           onClose={closePicker}
           onConfirm={picker.confirm}
-          confirmLabel="Valitse tili"
+          confirmLabel="Select account"
           confirmDisabled={
             picker.selectedAccountId == null ||
             picker.selectedAccountId === accountPickerRow.accountId
           }
           contextItems={[
             {
-              label: 'Rivi',
+              label: 'Row',
               value: picker.entryId != null ? String(picker.entryId + 1) : '-',
             },
             {
-              label: 'Puoli',
+              label: 'Side',
               value: accountPickerRow.debit
-                ? 'Debet'
+                ? 'Debit'
                 : accountPickerRow.credit
-                  ? 'Kredit'
-                  : 'Ei valittu',
+                  ? 'Credit'
+                  : 'Not selected',
             },
           ]}
           description={accountPickerRow.description}

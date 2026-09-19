@@ -71,7 +71,7 @@ describe('POST /api/vat/settlement', () => {
 
   it('returns 500 when the action rejects with the fallback error', async () => {
     createVatSettlementAction.mockRejectedValue(
-      new Error('ALV-ilmoituksen muodostus epäonnistui.'),
+      new Error('Failed to generate VAT return.'),
     );
 
     const res = await POST(
@@ -79,7 +79,7 @@ describe('POST /api/vat/settlement', () => {
     );
     expect(res.status).toBe(500);
     await expect(res.json()).resolves.toEqual({
-      error: 'ALV-ilmoituksen muodostus epäonnistui.',
+      error: 'Failed to generate VAT return.',
     });
   });
 });

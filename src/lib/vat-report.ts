@@ -61,13 +61,13 @@ interface VatRowDefinition {
 const VAT_ROWS: VatRowDefinition[] = [
   {
     id: 'domestic-sales-base',
-    label: 'Kotimaan verollinen myynti',
+    label: 'Domestic taxable sales',
     vatCode: 4,
     kind: 'base',
   },
   {
     id: 'domestic-sales-tax',
-    label: 'Vero kotimaan myynnistä',
+    label: 'Tax on domestic sales',
     vatCode: 4,
     kind: 'tax',
     taxField: 'vat_account1_id',
@@ -75,13 +75,13 @@ const VAT_ROWS: VatRowDefinition[] = [
   },
   {
     id: 'domestic-purchases-base',
-    label: 'Kotimaan verolliset ostot',
+    label: 'Domestic taxable purchases',
     vatCode: 5,
     kind: 'base',
   },
   {
     id: 'domestic-purchases-deductible-tax',
-    label: 'Vähennettävä vero kotimaan ostoista',
+    label: 'Deductible tax on domestic purchases',
     vatCode: 5,
     kind: 'tax',
     taxField: 'vat_account1_id',
@@ -89,19 +89,19 @@ const VAT_ROWS: VatRowDefinition[] = [
   },
   {
     id: 'eu-sales-base',
-    label: 'Yhteisömyynti ja EU-palvelumyynti',
+    label: 'Intra-Community sales and EU service sales',
     vatCode: 8,
     kind: 'base',
   },
   {
     id: 'eu-purchases-base',
-    label: 'EU-ostot ja palveluostot',
+    label: 'Intra-Community purchases and EU service purchases',
     vatCode: 9,
     kind: 'base',
   },
   {
     id: 'eu-purchases-output-tax',
-    label: 'Suoritettava vero EU-ostoista',
+    label: 'Output tax on intra-Community purchases',
     vatCode: 9,
     kind: 'tax',
     taxField: 'vat_account2_id',
@@ -109,7 +109,7 @@ const VAT_ROWS: VatRowDefinition[] = [
   },
   {
     id: 'eu-purchases-deductible-tax',
-    label: 'Vähennettävä vero EU-ostoista',
+    label: 'Deductible tax on intra-Community purchases',
     vatCode: 9,
     kind: 'tax',
     taxField: 'vat_account1_id',
@@ -117,19 +117,19 @@ const VAT_ROWS: VatRowDefinition[] = [
   },
   {
     id: 'construction-sales-base',
-    label: 'Rakentamispalveluiden myynti (käännetty verovelvollisuus)',
+    label: 'Construction service sales (reverse charge)',
     vatCode: 10,
     kind: 'base',
   },
   {
     id: 'construction-purchases-base',
-    label: 'Rakentamispalveluiden ostot (käännetty verovelvollisuus)',
+    label: 'Construction service purchases (reverse charge)',
     vatCode: 11,
     kind: 'base',
   },
   {
     id: 'construction-purchases-output-tax',
-    label: 'Suoritettava vero rak.palveluostoista',
+    label: 'Output tax on construction service purchases',
     vatCode: 11,
     kind: 'tax',
     taxField: 'vat_account2_id',
@@ -137,7 +137,7 @@ const VAT_ROWS: VatRowDefinition[] = [
   },
   {
     id: 'construction-purchases-deductible-tax',
-    label: 'Vähennettävä vero rak.palveluostoista',
+    label: 'Deductible tax on construction service purchases',
     vatCode: 11,
     kind: 'tax',
     taxField: 'vat_account1_id',

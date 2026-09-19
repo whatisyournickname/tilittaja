@@ -46,7 +46,7 @@ export default async function IncomeStatementPage({
     }));
   if (!structure) {
     return (
-      <div className="p-5 text-rose-400">Tuloslaskelmarakennetta ei löydy</div>
+      <div className="p-5 text-rose-400">Income statement structure not found</div>
     );
   }
   const balances = calculateBalances(entries, accounts);

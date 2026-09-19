@@ -14,7 +14,7 @@ import { zipResponse } from '@/lib/zip-response';
 
 export const runtime = 'nodejs';
 
-const TILINPAATOS_FOLDER = 'tilinpäätös';
+const TILINPAATOS_FOLDER = 'financial-statement';
 const TOSITTEET_PREFIX = 'tositteet/';
 const TILIOTTEET_PREFIX = 'tiliotteet/';
 
@@ -30,7 +30,7 @@ function mapArchiveZipPath(relativePath: string): string | null {
 export const GET = withDb(async (request: NextRequest) => {
   const source = resolveRequestDataSource(request);
   if (!source) {
-    return jsonError('Aktiivista tietolähdettä ei löytynyt.', 400);
+    return jsonError('Active datasource not found.', 400);
   }
   const archiveRoot = path.resolve(
     /* turbopackIgnore: true */ process.cwd(),

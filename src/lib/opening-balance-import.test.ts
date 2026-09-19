@@ -159,6 +159,6 @@ describe('buildOpeningBalancePlan', () => {
         },
         [],
       ),
-    ).toThrow(/Avaussaldot eivät täsmää/);
+    ).toThrow(/Opening balances do not match/);
   });
 });

@@ -23,14 +23,14 @@ export default async function ExportImportPage() {
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-              Järjestelmä
+              System
             </p>
             <h1 className="text-xl font-semibold tracking-tight text-text-primary">
               Tuonti ja vienti
             </h1>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary">
-              Vie koko aktiivinen tietolähde palautettavana ZIP-pakettina tai
-              palauta aiemmin viety tila takaisin käyttöön.
+              Export active data source as restorable ZIP or
+              restore a previously exported state.
             </p>
           </div>
 

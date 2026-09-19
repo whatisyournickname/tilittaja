@@ -66,14 +66,14 @@ export default function DocumentPickerModal({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Liitä tapahtuma olemassa olevaan tositteeseen"
+        aria-label="Link transaction to existing document"
         className="mx-auto flex h-full max-w-7xl flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface-0"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4 border-b border-border-subtle px-4 py-3">
           <div>
             <div className="text-sm font-medium text-text-primary">
-              Liitä tapahtuma olemassa olevaan tositteeseen
+              Link transaction to existing document
             </div>
             <div className="mt-1 text-xs text-text-secondary">
               {formatDate(entry.entry_date)} · {entry.counterparty} ·{' '}
@@ -139,7 +139,7 @@ export default function DocumentPickerModal({
                             {document.receiptSource === 'manual'
                               ? 'Valittu kasin'
                               : document.receiptSource === 'automatic'
-                                ? 'Automaattinen PDF'
+                                ? 'Automatic PDF'
                                 : 'Ei PDF:aa'}
                           </span>
                         </div>
@@ -169,7 +169,7 @@ export default function DocumentPickerModal({
                 ) : (
                   <Link2 className="h-4 w-4" />
                 )}
-                Liitä valittu tosite
+                Link selected document
               </button>
             </div>
           </div>

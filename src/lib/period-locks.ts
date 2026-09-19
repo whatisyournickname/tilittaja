@@ -9,7 +9,7 @@ import { getBankStatement, getBankStatementEntry } from '@/lib/db/bank-statement
 import { ApiRouteError, requireResource } from '@/lib/api-helpers';
 
 export const LOCKED_PERIOD_ERROR_MESSAGE =
-  'Tilikausi on lukittu. Kausi on vain luku -tilassa.';
+  'Period is locked. The period is in read-only mode.';
 
 function requireUnlockedPeriod(
   period: Period | undefined,
@@ -29,7 +29,7 @@ export function resolvePeriodForDate(date: number): Period | undefined {
 }
 
 export function requireUnlockedExistingPeriod(periodId: number): Period {
-  return requireUnlockedPeriod(getPeriod(periodId), 'Tilikautta ei löytynyt');
+  return requireUnlockedPeriod(getPeriod(periodId), 'Period not found');
 }
 
 export function requireUnlockedTargetPeriod(
@@ -38,21 +38,21 @@ export function requireUnlockedTargetPeriod(
 ): Period {
   return requireUnlockedPeriod(
     resolvePeriodForDate(date) ?? getPeriod(periodId),
-    'Tilikautta ei löytynyt',
+    'Period not found',
   );
 }
 
 export function requireUnlockedDocumentPeriod(document: Document): Period {
   return requireUnlockedPeriod(
     getPeriod(document.period_id),
-    'Tositteen tilikautta ei löytynyt',
+    'Document period not found',
   );
 }
 
 export function requireUnlockedDocumentPeriodById(documentId: number): Period {
   const document = requireResource(
     getDocument(documentId),
-    'Tositetta ei löytynyt',
+    'Document not found',
   );
   return requireUnlockedDocumentPeriod(document);
 }
@@ -60,13 +60,13 @@ export function requireUnlockedDocumentPeriodById(documentId: number): Period {
 export function requireUnlockedEntryPeriod(entry: Entry): Period {
   const document = requireResource(
     getDocument(entry.document_id),
-    'Vientirivin tositetta ei löytynyt',
+    'Document for entry row not found',
   );
   return requireUnlockedDocumentPeriod(document);
 }
 
 export function requireUnlockedEntryPeriodById(entryId: number): Period {
-  const entry = requireResource(getEntry(entryId), 'Vientiriviä ei löytynyt');
+  const entry = requireResource(getEntry(entryId), 'Entry row not found');
   return requireUnlockedEntryPeriod(entry);
 }
 
@@ -75,11 +75,11 @@ export function requireUnlockedBankStatementEntryPeriod(
 ): Period {
   const entry = requireResource(
     getBankStatementEntry(entryId),
-    'Tilioteriviä ei löytynyt',
+    'Bank statement entry not found',
   );
   return requireUnlockedPeriod(
     resolvePeriodForDate(entry.entry_date),
-    'Tilioterivin tilikautta ei löytynyt',
+    'Bank statement entry period not found',
   );
 }
 
@@ -88,7 +88,7 @@ export function requireUnlockedBankStatementPeriod(
 ): Period {
   const statement = requireResource(
     getBankStatement(statementId),
-    'Tiliotetta ei löydy',
+    'Bank statement not found',
   );
   return requireUnlockedPeriod(
     getPeriods().find(
@@ -96,6 +96,6 @@ export function requireUnlockedBankStatementPeriod(
         period.start_date <= statement.period_start &&
         period.end_date >= statement.period_end,
     ),
-    'Tiliotteen tilikautta ei löytynyt',
+    'Bank statement period not found',
   );
 }

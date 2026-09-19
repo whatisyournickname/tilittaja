@@ -130,7 +130,7 @@ export default async function BankStatementDetailPage({ params }: PageProps) {
         </div>
         <div className="text-right text-sm">
           <div className="text-text-secondary">
-            Käsitelty: {statement.processed_count} / {statement.entry_count}
+            Processed: {statement.processed_count} / {statement.entry_count}
           </div>
         </div>
       </div>

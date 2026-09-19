@@ -61,4 +61,4 @@ export const PATCH = jsonActionRoute(async (
     accountNumber,
     accountName,
   };
-}, 'Vientirivin päivitys epäonnistui');
+}, 'Failed to update entry row');

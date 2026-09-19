@@ -22,7 +22,7 @@ export const POST = withDb(async (request: NextRequest) => {
       );
 
   if (!bankAccount) {
-    return jsonError('Pankkitiliä ei löydy', 400);
+    return jsonError('Bank account not found', 400);
   }
 
   const statement = createBankStatement({
@@ -71,4 +71,4 @@ export const POST = withDb(async (request: NextRequest) => {
     skipped,
   };
   return NextResponse.json(response);
-}, 'Tiliotteen luonti epäonnistui');
+}, 'Failed to create bank statement');

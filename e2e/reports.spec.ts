@@ -20,8 +20,8 @@ test.describe('Reports', () => {
     ).toBeVisible();
   });
 
-  test('tilinpaatos page loads', async ({ page }) => {
-    await page.goto('/reports/tilinpaatos');
+  test('financialStatement page loads', async ({ page }) => {
+    await page.goto('/reports/financial-statement');
     await expect(
       page.getByRole('heading', { name: /Tilinpäätös/i }),
     ).toBeVisible();

@@ -43,13 +43,13 @@ describe('SetupWizard', () => {
     render(<SetupWizard />);
 
     fireEvent.click(
-      screen.getByRole('button', { name: /Luo uusi tietokanta/i }),
+      screen.getByRole('button', { name: /Create new database/i }),
     );
 
     expect(
-      screen.getByRole('heading', { name: /Uusi kirjanpito/i }),
+      screen.getByRole('heading', { name: /New bookkeeping/i }),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText(/Yrityksen nimi/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Company name/i)).toBeInTheDocument();
   });
 
   it('submits the new database form and redirects on success', async () => {
@@ -60,19 +60,19 @@ describe('SetupWizard', () => {
 
     render(<SetupWizard />);
     fireEvent.click(
-      screen.getByRole('button', { name: /Luo uusi tietokanta/i }),
+      screen.getByRole('button', { name: /Create new database/i }),
     );
-    fireEvent.change(screen.getByLabelText(/Yrityksen nimi/i), {
+    fireEvent.change(screen.getByLabelText(/Company name/i), {
       target: { value: 'Demo Oy' },
     });
-    fireEvent.change(screen.getByLabelText(/Y-tunnus/i), {
+    fireEvent.change(screen.getByLabelText(/Business ID/i), {
       target: { value: '1234567-8' },
     });
-    fireEvent.change(screen.getByLabelText(/Ensimmäinen tilikausi/i), {
+    fireEvent.change(screen.getByLabelText(/First fiscal year/i), {
       target: { value: '2025' },
     });
 
-    fireEvent.submit(screen.getByLabelText(/Yrityksen nimi/i).closest('form')!);
+    fireEvent.submit(screen.getByLabelText(/Company name/i).closest('form')!);
 
     await waitFor(() => {
       expect(setupCreateNewDatabaseAction).toHaveBeenCalledWith({
@@ -85,10 +85,10 @@ describe('SetupWizard', () => {
   });
 
   it('shows action errors for archive import', async () => {
-    setupImportArchiveAction.mockRejectedValue(new Error('Import epäonnistui'));
+    setupImportArchiveAction.mockRejectedValue(new Error('Import failed'));
 
     render(<SetupWizard />);
-    fireEvent.click(screen.getByRole('button', { name: /Tuo vientipaketti/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Import archive/i }));
 
     const file = new File([Buffer.from('zip')], 'state.zip', {
       type: 'application/zip',
@@ -101,9 +101,9 @@ describe('SetupWizard', () => {
     await waitFor(() => {
       expect(setupImportArchiveAction).toHaveBeenCalledWith(file);
     });
-    expect(await screen.findByText('Import epäonnistui')).toBeInTheDocument();
+    expect(await screen.findByText('Import failed')).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /^Palauta$/i }),
+      screen.getByRole('button', { name: /^Restore$/i }),
     ).not.toBeDisabled();
   });
 
@@ -116,17 +116,17 @@ describe('SetupWizard', () => {
     render(<SetupWizard />);
     fireEvent.click(
       screen.getByRole('button', {
-        name: /Käytä olemassa olevaa tietokantaa/i,
+        name: /Use existing database/i,
       }),
     );
-    fireEvent.change(screen.getByLabelText(/Tiedostopolku/i), {
+    fireEvent.change(screen.getByLabelText(/File path/i), {
       target: { value: '/tmp/app.sqlite' },
     });
-    fireEvent.change(screen.getByLabelText(/^Nimi/i), {
+    fireEvent.change(screen.getByLabelText(/^Name/i), {
       target: { value: 'Vanha Oy' },
     });
 
-    fireEvent.submit(screen.getByLabelText(/Tiedostopolku/i).closest('form')!);
+    fireEvent.submit(screen.getByLabelText(/File path/i).closest('form')!);
 
     await waitFor(() => {
       expect(setupLinkExternalDatabaseAction).toHaveBeenCalledWith({

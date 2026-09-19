@@ -114,7 +114,7 @@ export default function VatWorkspace({
     try {
       const date = new Date(vatDate).getTime();
       if (!Number.isFinite(date)) {
-        throw new Error('Valitse ALV-ilmoitukselle päiväys.');
+        throw new Error('Select a date for the VAT return.');
       }
 
       const data = await createVatSettlementAction({ periodId, date });
@@ -134,7 +134,7 @@ export default function VatWorkspace({
           Kirjanpito
         </p>
         <h1 className="text-xl font-semibold tracking-tight text-text-primary">
-          Arvonlisävero
+          VAT
         </h1>
         <p className="mt-1 text-sm text-text-secondary">{periodLabel}</p>
       </div>
@@ -144,7 +144,7 @@ export default function VatWorkspace({
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-[repeat(2,minmax(0,220px))_auto] xl:items-end">
             <div>
               <label htmlFor="vat-start-date" className={fieldLabelClass}>
-                Ilmoitusjakson alku
+                Return period start
               </label>
               <input
                 id="vat-start-date"
@@ -161,7 +161,7 @@ export default function VatWorkspace({
             </div>
             <div>
               <label htmlFor="vat-end-date" className={fieldLabelClass}>
-                Ilmoitusjakson loppu
+                Return period end
               </label>
               <input
                 id="vat-end-date"
@@ -177,14 +177,14 @@ export default function VatWorkspace({
               />
             </div>
             <div>
-              <div className={fieldLabelClass}>Nopea rajaus</div>
+              <div className={fieldLabelClass}>Quick filter</div>
               <div className="flex flex-wrap gap-2">
                 {[1, 3, 12].map((months) => {
                   const label =
                     months === 1
                       ? 'Kuukausi'
                       : months === 3
-                        ? 'Neljännes'
+                        ? 'Quarter'
                         : 'Koko kausi';
                   return (
                     <button
@@ -227,26 +227,26 @@ export default function VatWorkspace({
           <div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className={sectionEyebrowClass}>
-                ALV-ilmoitus
+                VAT report
               </p>
               <h2 className="text-lg font-semibold tracking-tight text-text-primary">
-                ALV-ilmoitus ja tilitys
+                VAT report and settlement
               </h2>
               <p className="mt-1 max-w-3xl text-sm leading-6 text-text-secondary">
-                Muodosta ALV-tositteesta nollausvienti, joka siirtää ALV-tilien
-                saldot yhdelle tilitysvelan tai saamisen tilille.
+                Create a clearing entry from the VAT document that transfers the
+                VAT account balances to a single settlement payable or receivable account.
               </p>
             </div>
             {vatSettlement ? (
               <div className="rounded-lg border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">
-                {vatSettlement.settlementDebit ? 'Saatavaa' : 'Maksettavaa'}{' '}
+                {vatSettlement.settlementDebit ? 'Receivable' : 'Payable'}{' '}
                 <span className="font-mono font-semibold">
                   {formatCurrency(vatSettlement.settlementAmount)}
                 </span>
               </div>
             ) : (
               <div className="rounded-lg border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">
-                Ei siirrettävää ALV-saldoa
+                No transferable VAT balance
               </div>
             )}
           </div>
@@ -278,7 +278,7 @@ export default function VatWorkspace({
             </div>
             <div className="rounded-lg border border-border-subtle bg-surface-1/70 px-4 py-3">
               <div className={summaryLabelClass}>
-                Vähennettävä ALV
+                Input VAT
               </div>
               <div className="mt-1 font-mono text-xl text-text-primary">
                 {formatCurrency(vatReport.totals.deductibleVat)}
@@ -286,7 +286,7 @@ export default function VatWorkspace({
             </div>
             <div className="rounded-lg border border-border-subtle bg-surface-1/70 px-4 py-3">
               <div className={summaryLabelClass}>
-                {vatReport.totals.payableVat > 0 ? 'Maksettavaa' : 'Saatavaa'}
+                {vatReport.totals.payableVat > 0 ? 'Payable' : 'Receivable'}
               </div>
               <div className="mt-1 font-mono text-xl text-text-primary">
                 {formatCurrency(
@@ -302,11 +302,11 @@ export default function VatWorkspace({
             <div className="rounded-lg border border-border-subtle bg-surface-1/60 overflow-hidden">
               <div className="border-b border-border-subtle px-4 py-3">
                 <h3 className="text-base font-semibold text-text-primary">
-                  Tilit, jotka nollataan
+                  Accounts to be zeroed
                 </h3>
                 <p className="mt-1 text-sm leading-6 text-text-secondary">
-                  Muodostuksessa jokainen ALV-tili nollataan ja nettosumma
-                  kirjataan tilille{' '}
+                  During formation, each VAT account is zeroed and the net amount
+                  is posted to account{' '}
                   <span className="font-mono text-text-primary">
                     {vatSettlement?.settlementAccountNumber ?? '2939'}
                   </span>{' '}
@@ -321,16 +321,16 @@ export default function VatWorkspace({
                   <thead className="bg-surface-1/80">
                     <tr className="border-b border-border-subtle/70">
                       <th className={tableHeadClass}>
-                        Tili
+                        Account
                       </th>
                       <th className={tableHeadClass}>
-                        Nimi
+                        Name
                       </th>
                       <th className={tableHeadRightClass}>
-                        Nykyinen saldo
+                        Current balance
                       </th>
                       <th className={tableHeadRightClass}>
-                        Nollausvienti
+                        Zeroing entry
                       </th>
                     </tr>
                   </thead>
@@ -347,7 +347,7 @@ export default function VatWorkspace({
                           {formatCurrency(line.balance)}
                         </td>
                         <td className="px-3 py-1.5 text-right font-mono text-xs text-text-primary">
-                          {line.debit ? 'Debet ' : 'Kredit '}
+                          {line.debit ? 'Debit ' : 'Credit '}
                           {formatCurrency(line.amount)}
                         </td>
                       </tr>
@@ -373,7 +373,7 @@ export default function VatWorkspace({
                   Muodosta ALV-tosite
                 </h3>
                 <p className="mt-1 text-sm leading-6 text-text-secondary">
-                  Tosite siirtää ALV-tilien saldon tilille{' '}
+                  Document transfers VAT account balance to account{' '}
                   <span className="font-mono text-text-primary">
                     {vatSettlement?.settlementAccountNumber ?? '2939'}
                   </span>
@@ -383,7 +383,7 @@ export default function VatWorkspace({
 
               <label className="relative mb-4 block text-[11px] font-medium uppercase tracking-[0.15em] text-text-muted">
                 <span className="mb-2 block">
-                  Päiväys
+                  Date
                 </span>
                 <input
                   type="date"
@@ -399,8 +399,8 @@ export default function VatWorkspace({
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-text-secondary">
                       {vatSettlement.settlementDebit
-                        ? 'Saaminen tilille'
-                        : 'Velka tilille'}
+                        ? 'Receivable to account'
+                        : 'Liability to account'}
                     </span>
                     <span className="font-mono text-text-primary">
                       {formatCurrency(vatSettlement.settlementAmount)}
@@ -421,7 +421,7 @@ export default function VatWorkspace({
 
               {vatCreatedDocumentId != null ? (
                 <div className="mb-4 rounded-lg border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">
-                  ALV-tosite luotu ja lisätty alla olevaan laadittujen
+                  VAT document created and added to prepared
                   ilmoitusten listaan.
                 </div>
               ) : null}
@@ -460,10 +460,10 @@ export default function VatWorkspace({
                 <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <div className="text-base font-semibold text-text-primary">
-                      {document.name || 'ALV-ilmoitus'}
+                      {document.name || 'VAT report'}
                     </div>
                     <div className="mt-1 text-sm text-text-secondary">
-                      Tosite{' '}
+                      Document{' '}
                       <span className="font-mono text-accent-light">
                         {document.number}
                       </span>
@@ -473,14 +473,14 @@ export default function VatWorkspace({
                   </div>
                   <div className="flex items-center gap-3">
                     <span className={summaryLabelClass}>
-                      {document.entries.length} vientiriviä
+                      {document.entries.length} entry rows
                     </span>
                     <DeleteDocumentButton
                       documentId={document.id}
                       documentCode={`${document.number}`}
                       className="inline-flex items-center gap-1.5 rounded-lg border border-red-700/40 bg-red-900/20 px-2.5 py-2 text-xs font-medium text-red-300 transition-colors hover:bg-red-900/40 disabled:opacity-50"
                     >
-                      Poista
+                      Delete
                     </DeleteDocumentButton>
                   </div>
                 </div>
@@ -493,19 +493,19 @@ export default function VatWorkspace({
                       <thead className="bg-surface-1/80">
                         <tr className="border-b border-border-subtle/70">
                           <th className={tableHeadClass}>
-                            Rivi
+                            Row
                           </th>
                           <th className={tableHeadClass}>
-                            Tili
+                            Account
                           </th>
                           <th className={tableHeadClass}>
-                            Kuvaus
+                            Description
                           </th>
                           <th className={tableHeadRightClass}>
-                            Debet
+                            Debit
                           </th>
                           <th className={tableHeadRightClass}>
-                            Kredit
+                            Credit
                           </th>
                         </tr>
                       </thead>
@@ -522,7 +522,7 @@ export default function VatWorkspace({
                               {entry.accountName}
                             </td>
                             <td className="px-3 py-1.5 text-xs text-text-primary">
-                              {entry.description || 'ALV-ilmoitus'}
+                              {entry.description || 'VAT report'}
                             </td>
                             <td className="px-3 py-1.5 text-right text-xs font-mono text-text-primary">
                               {entry.debit ? formatCurrency(entry.amount) : ''}
@@ -546,10 +546,10 @@ export default function VatWorkspace({
                     initialReceiptPath={document.receiptPath}
                     initialReceiptSource={document.receiptSource}
                     attachmentLabel="Liitetty ilmoitus"
-                    attachButtonLabel="Liitä ilmoitus PDF"
+                    attachButtonLabel="Attach PDF form"
                     replaceButtonLabel="Vaihda ilmoitus PDF"
-                    emptyStateText="Tällä ALV-ilmoituksella ei vielä ole liitettä. Lisää valmis OmaVero-PDF kohdasta `Liitä ilmoitus PDF`."
-                    modalTitle={`Lisää PDF ilmoitukselle ${document.code}`}
+                    emptyStateText="This VAT return has no attachment yet. Add OmaVero PDF from `Attach PDF form`."
+                    modalTitle={`Add PDF for return  ${document.code}`}
                   />
                 </div>
               </div>
@@ -558,7 +558,7 @@ export default function VatWorkspace({
 
           {vatDocuments.length === 0 ? (
             <div className="py-10 text-center text-sm text-text-muted">
-              Ei laadittuja ALV-ilmoituksia tällä tilikaudella.
+              No prepared VAT returns for this fiscal year.
             </div>
           ) : null}
         </div>

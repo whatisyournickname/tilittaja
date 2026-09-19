@@ -25,7 +25,7 @@ export const GET = withDb(async (request: NextRequest) => {
 
   const source = resolveRequestDataSource(request);
   if (!source) {
-    return jsonError('Aktiivista tietolähdettä ei löytynyt.', 400);
+    return jsonError('Active datasource not found.', 400);
   }
   const absolutePath = resolveBankStatementPdfAbsolutePath(
     source,

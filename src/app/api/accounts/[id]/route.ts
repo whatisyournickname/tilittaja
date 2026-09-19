@@ -17,7 +17,7 @@ export const PATCH = jsonActionRoute(async (
   const accountId = await requireRouteId(params, 'tilin tunniste');
   const body = await readRequestJson(request);
   return updateAccountAction(accountId, body);
-}, 'Tilin päivitys epäonnistui');
+}, 'Failed to update account');
 
 export const DELETE = jsonActionRoute(async (
   _request: NextRequest,
@@ -25,4 +25,4 @@ export const DELETE = jsonActionRoute(async (
 ) => {
   const accountId = await requireRouteId(params, 'tilin tunniste');
   return deleteAccountAction(accountId);
-}, 'Tilin poisto epäonnistui');
+}, 'Failed to delete account');

@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
       if (!(file instanceof File)) {
         return NextResponse.json(
-          { error: 'Lähetä ZIP-tiedosto kentässä `file`' },
+          { error: 'Send a ZIP file in the .file. field' },
           { status: 400 },
         );
       }

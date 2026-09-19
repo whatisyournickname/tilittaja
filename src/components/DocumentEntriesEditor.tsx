@@ -122,7 +122,7 @@ export default function DocumentEntriesEditor({
         [entryId]:
           error instanceof Error
             ? error.message
-            : 'Kuvauksen tallennus epäonnistui.',
+            : 'Failed to save description.',
       }));
     } finally {
       setSavingDescriptionId((current) =>
@@ -225,7 +225,7 @@ export default function DocumentEntriesEditor({
       );
 
       if (parsedAmount == null) {
-        setAmountError('Korjaa kaikki summat muotoon 0,00 ennen tallennusta.');
+        setAmountError('Fix all amounts to 0.00 format before saving.');
         return;
       }
 
@@ -244,7 +244,7 @@ export default function DocumentEntriesEditor({
 
     if (payloadDebitTotal !== payloadCreditTotal) {
       setAmountError(
-        'Debet- ja kredit-summien pitää täsmätä ennen tallennusta.',
+        'Debit and credit totals must match before saving.',
       );
       return;
     }
@@ -284,7 +284,7 @@ export default function DocumentEntriesEditor({
       setAmountError(
         error instanceof Error
           ? error.message
-          : 'Summien tallennus epäonnistui.',
+          : 'Amounts save failed.',
       );
     } finally {
       setSavingAmounts(false);
@@ -298,14 +298,14 @@ export default function DocumentEntriesEditor({
       : hasInvalidAmounts
         ? {
             tone: 'warning' as const,
-            text: 'Korjaa keskeneräiset summat muotoon 0,00 ennen tallennusta.',
+            text: 'Fix incomplete amounts to valid format before saving.',
           }
         : !amountsBalanced
           ? {
               tone: 'warning' as const,
               text: `Erotus ${formatCurrency(
                 amountDifference / 100,
-              )}. Debet- ja kredit-summien pitää täsmätä ennen tallennusta.`,
+              )}. Debit and credit totals must match before saving.`,
             }
           : dirtyAmountCount > 0
             ? {
@@ -315,10 +315,10 @@ export default function DocumentEntriesEditor({
             : null;
 
   const amountSaveLabel = savingAmounts
-    ? 'Tallennetaan...'
+    ? 'Saving...'
     : dirtyAmountCount === 0
-      ? 'Ei muutoksia'
-      : `Tallenna ${formatAmountChangeCount(dirtyAmountCount)}`;
+      ? 'No changes'
+      : `Save ${formatAmountChangeCount(dirtyAmountCount)}`;
 
   const handleAmountKeyDown = (
     entryId: number,
@@ -348,21 +348,21 @@ export default function DocumentEntriesEditor({
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <div className="text-[10px] font-medium uppercase tracking-wider text-text-muted">
-              Tiliöinnit
+              Accounting entries
             </div>
             <div className="mt-1 text-xs text-text-secondary">
-              Kuvaukset tallentuvat automaattisesti, kun poistut kentästä tai
-              painat Enter.
+              Descriptions saved automatically when you leave the field or
+              press Enter.
             </div>
             <div className="mt-2 flex flex-wrap gap-3 text-xs text-text-secondary">
               <span>
-                Debet:{' '}
+                Debit:{' '}
                 <span className="font-mono text-text-primary">
                   {formatCurrency(draftDebitTotal / 100)}
                 </span>
               </span>
               <span>
-                Kredit:{' '}
+                Credit:{' '}
                 <span className="font-mono text-text-primary">
                   {formatCurrency(draftCreditTotal / 100)}
                 </span>
@@ -416,19 +416,19 @@ export default function DocumentEntriesEditor({
         <thead>
           <tr className="border-b border-border-subtle">
             <th className="text-left text-[10px] font-medium text-text-secondary uppercase tracking-wider px-3 py-2">
-              Rivi
+              Row
             </th>
             <th className="text-left text-[10px] font-medium text-text-secondary uppercase tracking-wider px-3 py-2">
-              Tili
+              Account
             </th>
             <th className="text-left text-[10px] font-medium text-text-secondary uppercase tracking-wider px-3 py-2">
-              Kuvaus
+              Description
             </th>
             <th className="text-right text-[10px] font-medium text-text-secondary uppercase tracking-wider px-3 py-2">
-              Debet
+              Debit
             </th>
             <th className="text-right text-[10px] font-medium text-text-secondary uppercase tracking-wider px-3 py-2">
-              Kredit
+              Credit
             </th>
           </tr>
         </thead>
@@ -486,12 +486,12 @@ export default function DocumentEntriesEditor({
                           handleDescriptionKeyDown(entry.id, event)
                         }
                         className="min-w-0 flex-1 rounded-md border border-border-subtle bg-surface-0/60 px-2 py-1 text-xs text-text-primary outline-none transition focus:border-accent/40 focus:ring-1 focus:ring-accent/20"
-                        placeholder="Kirjoita vientirivin kuvaus"
+                        placeholder="Enter a description for this row"
                       />
                       <div className="flex items-center gap-2 text-[11px] lg:min-h-7">
                         {isDescriptionSaving ? (
                           <span className="text-text-secondary">
-                            Tallennetaan...
+                            Saving...
                           </span>
                         ) : isDescriptionDirty ? (
                           <>
@@ -508,7 +508,7 @@ export default function DocumentEntriesEditor({
                             </button>
                           </>
                         ) : savedDescriptionId === entry.id ? (
-                          <span className="text-emerald-300">Tallennettu</span>
+                          <span className="text-emerald-300">Saved</span>
                         ) : (
                           <span className="text-text-muted">
                             Enter tallentaa
@@ -579,7 +579,7 @@ export default function DocumentEntriesEditor({
               colSpan={3}
               className="px-3 py-2 text-xs font-semibold text-text-primary"
             >
-              Yhteensä
+              Total
             </td>
             <td className="px-3 py-2 text-xs text-right font-semibold text-text-primary">
               <span className="font-mono tabular-nums">

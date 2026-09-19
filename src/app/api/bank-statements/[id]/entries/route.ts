@@ -19,7 +19,7 @@ export const PUT = withDb(
     if (parsed.documentId !== undefined && parsed.documentId !== null) {
       requireResource(
         getDocument(parsed.documentId),
-        'Tositetta ei löydy',
+        'Document not found',
       );
       requireUnlockedDocumentPeriodById(parsed.documentId);
     }
@@ -37,5 +37,5 @@ export const PUT = withDb(
 
     return NextResponse.json({ ok: true });
   },
-  'Päivitys epäonnistui',
+  'Update failed',
 );

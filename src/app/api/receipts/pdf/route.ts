@@ -27,7 +27,7 @@ export const GET = withDb(async (request: NextRequest) => {
 
   const source = resolveRequestDataSource(request);
   if (!source) {
-    return jsonError('Aktiivista tietolähdettä ei löytynyt.', 400);
+    return jsonError('Active datasource not found.', 400);
   }
   const pdfRoot = getPdfRoot(source);
   const receiptsRoot = getReceiptsRoot(source);
@@ -42,7 +42,7 @@ export const GET = withDb(async (request: NextRequest) => {
   } else if (Number.isInteger(documentId) && documentId > 0) {
     const document = getDocument(documentId);
     if (!document) {
-      return jsonError('Tositetta ei löytynyt', 404);
+      return jsonError('Document not found', 404);
     }
 
     const receiptIndex = buildReceiptIndex(receiptsRoot);
@@ -87,6 +87,6 @@ export const GET = withDb(async (request: NextRequest) => {
     return pdfResponse(file, path.basename(absolutePath), { noCache: true });
   } catch (error) {
     console.error('Error reading receipt PDF:', error);
-    return jsonError('PDF:n lataus epäonnistui');
+    return jsonError('PDF download failed');
   }
-}, 'Tositteen PDF-lataus epäonnistui');
+}, 'Document PDF download failed');

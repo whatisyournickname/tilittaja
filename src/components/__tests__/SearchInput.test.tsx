@@ -12,7 +12,7 @@ describe('SearchInput', () => {
   it('renders without crashing', () => {
     const onChange = vi.fn();
     render(<SearchInput value="" onChange={onChange} />);
-    expect(screen.getByPlaceholderText('Hae...')).toBeDefined();
+    expect(screen.getByPlaceholderText('Search...')).toBeDefined();
   });
 
   it('shows custom placeholder', () => {
@@ -31,7 +31,7 @@ describe('SearchInput', () => {
   it('shows clear control when value is non-empty and clears on click', () => {
     const onChange = vi.fn();
     render(<SearchInput value="hello" onChange={onChange} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Tyhjennä haku' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
     expect(onChange).toHaveBeenCalledWith('');
   });
 });

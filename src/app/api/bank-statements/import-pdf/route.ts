@@ -54,14 +54,14 @@ function buildStatementRelativePath(
 
 export const POST = withDb(async (request: NextRequest) => {
   if (!isMultipartRequest(request)) {
-    return jsonError('Lähetä PDF multipart-lomakkeena', 400);
+    return jsonError('Send PDF as multipart form', 400);
   }
 
   const formData = await readRequestFormData(request);
 
   const file = formData.get('file');
   if (!(file instanceof File)) {
-    return jsonError('Lähetä yksi PDF-tiedosto kentässä `file`', 400);
+    return jsonError('Send one PDF file in the .file. field', 400);
   }
 
   if (!isPdfFile(file)) {
@@ -73,12 +73,12 @@ export const POST = withDb(async (request: NextRequest) => {
   });
   const bankAccount = requireResource(
     getAccount(parsedForm.accountId),
-    'Pankkitiliä ei löydy',
+    'Bank account not found',
   );
 
   const bytes = Buffer.from(await file.arrayBuffer());
   if (bytes.length === 0) {
-    return jsonError('Lähetetty tiedosto on tyhjä', 400);
+    return jsonError('Uploaded file is empty', 400);
   }
 
   const imported = await extractImportedBankStatementFromPdf({
@@ -151,4 +151,4 @@ export const POST = withDb(async (request: NextRequest) => {
     }
     throw error;
   }
-}, 'Tiliotteen PDF-tuonti epäonnistui');
+}, 'Bank statement PDF import failed');

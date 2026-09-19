@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { buildTilinpaatosPdf } from './tilinpaatos-pdf';
-import type { TilinpaatosPackage, TilinpaatosRow } from '@/lib/tilinpaatos';
+import { buildFinancialStatementPdf } from './financial-statement-pdf';
+import type { FinancialStatementPackage, FinancialStatementRow } from '@/lib/financial-statement';
 
 function makePackage(
-  overrides?: Partial<TilinpaatosPackage>,
-): TilinpaatosPackage {
+  overrides?: Partial<FinancialStatementPackage>,
+): FinancialStatementPackage {
   return {
     companyName: 'Test Oy',
     businessId: '1234567-8',
@@ -85,25 +85,25 @@ function makePackage(
   };
 }
 
-describe('tilinpaatos-pdf', () => {
+describe('financialStatement-pdf', () => {
   it('builds a PDF buffer from a complete package', async () => {
-    const buffer = await buildTilinpaatosPdf(makePackage());
+    const buffer = await buildFinancialStatementPdf(makePackage());
     expect(buffer).toBeInstanceOf(Buffer);
     expect(buffer.length).toBeGreaterThan(0);
   });
 
   it('handles empty business ID', async () => {
-    const buffer = await buildTilinpaatosPdf(makePackage({ businessId: '' }));
+    const buffer = await buildFinancialStatementPdf(makePackage({ businessId: '' }));
     expect(buffer).toBeInstanceOf(Buffer);
   });
 
   it('handles empty notes array', async () => {
-    const buffer = await buildTilinpaatosPdf(makePackage({ notes: [] }));
+    const buffer = await buildFinancialStatementPdf(makePackage({ notes: [] }));
     expect(buffer).toBeInstanceOf(Buffer);
   });
 
   it('renders rows with different types correctly', async () => {
-    const buffer = await buildTilinpaatosPdf(
+    const buffer = await buildFinancialStatementPdf(
       makePackage({
         balanceSheetRows: [
           {
@@ -149,7 +149,7 @@ describe('tilinpaatos-pdf', () => {
   });
 
   it('includes previous amounts when provided', async () => {
-    const buffer = await buildTilinpaatosPdf(
+    const buffer = await buildFinancialStatementPdf(
       makePackage({
         balanceSheetRows: [
           {
@@ -160,7 +160,7 @@ describe('tilinpaatos-pdf', () => {
             visible: true,
             currentAmount: 1000,
             previousAmount: 800,
-          } satisfies TilinpaatosRow,
+          } satisfies FinancialStatementRow,
         ],
       }),
     );

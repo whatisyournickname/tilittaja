@@ -49,12 +49,12 @@ export default async function AccountsPage() {
     <div className="p-5 max-w-4xl overflow-x-auto">
       <div className="mb-6">
         <p className="text-[11px] uppercase tracking-[0.2em] text-text-muted font-semibold mb-1">
-          Järjestelmä
+          System
         </p>
         <h1 className="text-xl font-semibold text-text-primary tracking-tight">
           Tilikartta
         </h1>
-        <p className="text-sm text-text-secondary mt-1">{accounts.length} tiliä</p>
+        <p className="text-sm text-text-secondary mt-1">{accounts.length} accounts</p>
       </div>
 
       <div className="space-y-4">

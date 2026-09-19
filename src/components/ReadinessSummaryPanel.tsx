@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { ReadinessSummary } from '@/lib/tilinpaatos';
+import type { ReadinessSummary } from '@/lib/financial-statement';
 import { setPeriodLockAction } from '@/actions/app-actions';
 
 function StatusDot({ ok }: { ok: boolean }) {
@@ -39,15 +39,15 @@ function SummaryText({
   blockerCount: number;
 }) {
   if (periodLocked) {
-    return <span className="text-yellow-400">Tilikausi on lukittu</span>;
+    return <span className="text-yellow-400">Period is locked</span>;
   }
   if (allOk) {
     return (
-      <span className="text-emerald-300">Kaikki tarkistukset kunnossa</span>
+      <span className="text-emerald-300">All checks passed</span>
     );
   }
   return (
-    <span className="text-text-secondary">{blockerCount} huomautusta</span>
+    <span className="text-text-secondary">{blockerCount} issues</span>
   );
 }
 
@@ -70,7 +70,7 @@ export default function ReadinessSummaryPanel({
   async function handleLock() {
     if (
       !confirm(
-        'Haluatko lukita tilikauden? Lukittu tilikausi on vain luku -tilassa. Voit avata sen myöhemmin asetuksista.',
+        'Do you want to lock the fiscal year? A locked fiscal year is read-only. You can unlock it later from settings.',
       )
     ) {
       return;
@@ -122,14 +122,14 @@ export default function ReadinessSummaryPanel({
                   clipRule="evenodd"
                 />
               </svg>
-              Tilikausi on lukittu — avaa lukitus asetuksista
+              Period is locked — unlock in settings
             </span>
           ) : (
             <>
               <p className="text-sm text-text-secondary">
                 {summary.canLock
-                  ? 'Tilikausi voidaan lukita.'
-                  : 'Täsmäämättömiä tositteita — tilikautta ei voi vielä lukita.'}
+                  ? 'Period can be locked.'
+                  : 'Unbalanced documents — fiscal year cannot be locked yet.'}
               </p>
               <button
                 onClick={handleLock}
@@ -137,8 +137,8 @@ export default function ReadinessSummaryPanel({
                 className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-accent/90 hover:bg-accent text-white shrink-0"
                 title={
                   !summary.canLock
-                    ? 'Täsmäämättömiä tositteita – ei voi lukita'
-                    : 'Lukitse tilikausi'
+                    ? 'Unbalanced documents — cannot lock'
+                    : 'Lock period'
                 }
               >
                 <svg
@@ -152,7 +152,7 @@ export default function ReadinessSummaryPanel({
                     clipRule="evenodd"
                   />
                 </svg>
-                {locking ? 'Lukitaan...' : 'Lukitse tilikausi'}
+                {locking ? 'Locking...' : 'Lock period'}
               </button>
             </>
           )}

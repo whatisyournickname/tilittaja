@@ -20,18 +20,18 @@ import { periodLabel } from '@/lib/accounting';
 import DataSourceSelector from './DataSourceSelector';
 
 const mainNav = [
-  { name: 'Tiliotteet', href: '/bank-statements', icon: Landmark },
-  { name: 'Tositteet', href: '/documents', icon: FileText },
-  { name: 'Tilit ja viennit', href: '/accounts-entries', icon: BookOpen },
-  { name: 'Arvonlisävero', href: '/vat', icon: Percent },
+  { name: 'Bank statements', href: '/bank-statements', icon: Landmark },
+  { name: 'Documents', href: '/documents', icon: FileText },
+  { name: 'Accounts & entries', href: '/accounts-entries', icon: BookOpen },
+  { name: 'VAT', href: '/vat', icon: Percent },
 ];
 
 const reportNav = [
-  { name: 'Tase', href: '/reports/balance-sheet', icon: Scale },
-  { name: 'Tuloslaskelma', href: '/reports/income-statement', icon: BarChart3 },
-  { name: 'Pääkirja', href: '/reports/general-ledger', icon: BookOpen },
-  { name: 'Päiväkirja', href: '/reports/journal', icon: FileText },
-  { name: 'Tilinpäätös', href: '/reports/tilinpaatos', icon: BarChart3 },
+  { name: 'Balance sheet', href: '/reports/balance-sheet', icon: Scale },
+  { name: 'Income statement', href: '/reports/income-statement', icon: BarChart3 },
+  { name: 'General ledger', href: '/reports/general-ledger', icon: BookOpen },
+  { name: 'Journal', href: '/reports/journal', icon: FileText },
+  { name: 'Financial statements', href: '/reports/financial-statement', icon: BarChart3 },
 ];
 
 type NavItem = (typeof mainNav)[number];
@@ -133,11 +133,11 @@ export default function Sidebar({
         <div className="px-2.5">
           <label className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-text-muted mb-1 px-0.5 font-medium">
             <CalendarRange className="w-3 h-3" />
-            Tilikausi
+            Period
           </label>
           <select
             id="sidebar-period-select"
-            aria-label="Tilikausi"
+            aria-label="Period"
             value={selectedPeriodId}
             onChange={(e) => {
               const params = new URLSearchParams(searchParams.toString());
@@ -150,7 +150,7 @@ export default function Sidebar({
             {periods.map((period) => (
               <option key={period.id} value={period.id}>
                 {periodLabel(period.start_date, period.end_date)}
-                {period.locked ? ' (lukittu)' : ''}
+                {period.locked ? ' (locked)' : ''}
               </option>
             ))}
           </select>
@@ -169,7 +169,7 @@ export default function Sidebar({
 
         <div className="pt-3 pb-1.5 px-2.5">
           <span className="text-[10px] uppercase tracking-[0.15em] text-text-muted font-semibold">
-            Raportit
+            Reports
           </span>
         </div>
 
@@ -184,17 +184,17 @@ export default function Sidebar({
 
         <div className="pt-3 pb-1.5 px-2.5">
           <span className="text-[10px] uppercase tracking-[0.15em] text-text-muted font-semibold">
-            Järjestelmä
+            System
           </span>
         </div>
         <NavLink
-          item={{ name: 'Asetukset', href: '/settings', icon: Settings }}
+          item={{ name: 'Settings', href: '/settings', icon: Settings }}
           active={isActive('/settings', { exact: true })}
           href={buildHref('/settings')}
         />
         <NavLink
           item={{
-            name: 'Tuonti ja vienti',
+            name: 'Export & import',
             href: '/settings/export-import',
             icon: Database,
           }}
@@ -203,7 +203,7 @@ export default function Sidebar({
         />
         <NavLink
           item={{
-            name: 'Tilikauden avaus',
+            name: 'Opening balance',
             href: '/settings/opening-balance-import',
             icon: FileText,
           }}
@@ -211,7 +211,7 @@ export default function Sidebar({
           href={buildHref('/settings/opening-balance-import')}
         />
         <NavLink
-          item={{ name: 'Tilikartta', href: '/accounts', icon: List }}
+          item={{ name: 'Chart of accounts', href: '/accounts', icon: List }}
           active={isActive('/accounts')}
           href={buildHref('/accounts')}
         />
@@ -223,10 +223,10 @@ export default function Sidebar({
             type="button"
             onClick={onToggle}
             className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-text-muted transition-colors hover:bg-surface-3/60 hover:text-text-secondary"
-            aria-label="Piilota sivupalkki"
+            aria-label="Hide sidebar"
           >
             <PanelLeftClose className="h-4 w-4" />
-            Piilota sivupalkki
+            Hide sidebar
           </button>
         </div>
       ) : null}

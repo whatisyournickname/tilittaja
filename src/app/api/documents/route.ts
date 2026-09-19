@@ -5,4 +5,4 @@ import { jsonActionRoute, readRequestJson } from '@/lib/api-helpers';
 export const POST = jsonActionRoute(async (request: NextRequest) => {
   const body = await readRequestJson(request);
   return createDocumentAction(body);
-}, 'Tositteen luonti epäonnistui');
+}, 'Failed to create document');

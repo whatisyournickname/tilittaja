@@ -11,11 +11,11 @@ const baseRevalidationPaths = [
   '/bank-statements',
   '/settings',
   '/vat',
-  '/reports/tilinpaatos',
+  '/reports/financial-statement',
 ] as const;
 
 function formatZodError(error: z.ZodError): string {
-  return error.issues[0]?.message || 'Virheellinen syöte.';
+  return error.issues[0]?.message || 'Invalid input.';
 }
 
 function withStatus(message: string, status: number): ActionError {

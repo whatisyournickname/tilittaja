@@ -21,7 +21,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Päiväkirja – Tilittaja' };
+export const metadata: Metadata = { title: 'Journal – Tilittaja' };
 
 export default async function JournalPage({
   searchParams,
@@ -175,7 +175,7 @@ export default async function JournalPage({
             Raportit
           </p>
           <h1 className="text-xl font-semibold tracking-tight text-text-primary">
-            Päiväkirja
+            Journal
           </h1>
           <p className="mt-1 text-sm text-text-secondary">
             {periodLabel(period.start_date, period.end_date)}
@@ -183,10 +183,10 @@ export default async function JournalPage({
         </div>
 
         <a
-          href={`/api/reports/materials/pdf?period=${period.id}&kind=paivakirja`}
+          href={`/api/reports/materials/pdf?period=${period.id}&kind=journal`}
           className="inline-flex min-h-[32px] items-center text-sm text-accent underline hover:text-accent-light"
         >
-          Lataa PDF
+          Download PDF
         </a>
       </div>
 

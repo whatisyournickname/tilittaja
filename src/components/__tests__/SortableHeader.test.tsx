@@ -67,7 +67,7 @@ describe('SortableHeader', () => {
     );
     expect(
       screen.getByRole('separator', {
-        name: /Muuta sarakkeen Summa leveyttä/i,
+        name: /Resize column Summa width/i,
       }),
     ).toBeDefined();
   });

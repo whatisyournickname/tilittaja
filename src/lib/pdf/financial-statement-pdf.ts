@@ -1,5 +1,5 @@
 import PDFDocument from 'pdfkit';
-import { TilinpaatosPackage, TilinpaatosRow } from '@/lib/tilinpaatos';
+import { FinancialStatementPackage, FinancialStatementRow } from '@/lib/financial-statement';
 import { formatCurrencyForPdf } from '@/lib/accounting';
 
 function formatAmountForPdf(amount?: number): string {
@@ -7,17 +7,10 @@ function formatAmountForPdf(amount?: number): string {
   return formatCurrencyForPdf(amount);
 }
 
-function retentionDate(periodEnd: string): string {
-  const [day, month, year] = periodEnd.split('.');
-  const yearNumber = Number(year);
-  if (!day || !month || !year || Number.isNaN(yearNumber)) return periodEnd;
-  return `${day}.${month}.${yearNumber + 10}`;
-}
-
 function drawStatementTable(
   doc: InstanceType<typeof PDFDocument>,
   title: string,
-  rows: TilinpaatosRow[],
+  rows: FinancialStatementRow[],
 ) {
   const LABEL_BASE_X = 50;
   const CURRENT_X = 330;
@@ -31,16 +24,16 @@ function drawStatementTable(
   const drawColumns = () => {
     const headerY = doc.y;
     doc.font('Helvetica-Bold').fontSize(9);
-    doc.text('Erä', LABEL_BASE_X, headerY, {
+    doc.text('Item', LABEL_BASE_X, headerY, {
       width: LABEL_MAX_WIDTH,
       lineBreak: false,
     });
-    doc.text('Nykyinen', CURRENT_X, headerY, {
+    doc.text('Current', CURRENT_X, headerY, {
       width: 90,
       align: 'right',
       lineBreak: false,
     });
-    doc.text('Vertailu', PREVIOUS_X, headerY, {
+    doc.text('Comparative', PREVIOUS_X, headerY, {
       width: 90,
       align: 'right',
       lineBreak: false,
@@ -51,7 +44,7 @@ function drawStatementTable(
   const ensureFits = (requiredHeight: number) => {
     if (doc.y + requiredHeight <= BOTTOM_Y) return;
     doc.addPage();
-    doc.font('Helvetica-Bold').fontSize(12).text(`${title} (jatkuu)`);
+    doc.font('Helvetica-Bold').fontSize(12).text(`${title} (continued)`);
     doc.moveDown(0.4);
     drawColumns();
   };
@@ -123,8 +116,8 @@ function drawStatementTable(
   }
 }
 
-export async function buildTilinpaatosPdf(
-  pkg: TilinpaatosPackage,
+export async function buildFinancialStatementPdf(
+  pkg: FinancialStatementPackage,
 ): Promise<Buffer> {
   const doc = new PDFDocument({ size: 'A4', margin: 50 });
   const chunks: Buffer[] = [];
@@ -137,7 +130,7 @@ export async function buildTilinpaatosPdf(
   const coverWidth = doc.page.width - 100;
   const hasBusinessId = pkg.businessId.trim().length > 0;
   const periodY = hasBusinessId ? 444 : 421;
-  doc.font('Helvetica-Bold').fontSize(22).text('TILINPÄÄTÖS', 50, 276, {
+  doc.font('Helvetica-Bold').fontSize(22).text('FINANCIAL STATEMENTS', 50, 276, {
     width: coverWidth,
     align: 'center',
   });
@@ -149,7 +142,7 @@ export async function buildTilinpaatosPdf(
     doc
       .font('Helvetica')
       .fontSize(10)
-      .text(`Y-tunnus: ${pkg.businessId}`, 50, 398, {
+      .text(`Business ID: ${pkg.businessId}`, 50, 398, {
         width: coverWidth,
         align: 'center',
       });
@@ -162,7 +155,7 @@ export async function buildTilinpaatosPdf(
     .font('Helvetica')
     .fontSize(10)
     .text(
-      `Tämä tilinpäätös on säilytettävä ${retentionDate(pkg.periodEnd)} asti`,
+      `These financial statements must be retained for at least 10 years from the end of the period and the voucher material for at least 6 years.`,
       50,
       603,
       {
@@ -173,36 +166,36 @@ export async function buildTilinpaatosPdf(
 
   doc.addPage();
 
-  drawStatementTable(doc, 'Tase', pkg.balanceSheetRows);
-  drawStatementTable(doc, 'Tuloslaskelma', pkg.incomeStatementRows);
+  drawStatementTable(doc, 'Balance sheet', pkg.balanceSheetRows);
+  drawStatementTable(doc, 'Income statement', pkg.incomeStatementRows);
 
   doc.addPage();
-  doc.font('Helvetica-Bold').fontSize(12).text('Tilinpäätöksen liitetiedot');
+  doc.font('Helvetica-Bold').fontSize(12).text('Notes to the financial statements');
   doc.moveDown(0.5);
   doc.font('Helvetica').fontSize(10);
   for (const note of pkg.notes) {
     doc.text(note, { paragraphGap: 6 });
   }
   doc.moveDown(0.5);
-  doc.font('Helvetica-Bold').text('Oman pääoman muutokset');
+  doc.font('Helvetica-Bold').text('Changes in equity');
   doc
     .font('Helvetica')
     .text(
-      `Edellisten tilikausien voitto: ${formatAmountForPdf(
+      `Prior periods' profit: ${formatAmountForPdf(
         pkg.equity.previousPeriodsProfit,
       )}`,
     )
     .text(
-      `Tilikauden tulos: ${formatAmountForPdf(pkg.equity.currentPeriodProfit)}`,
+      `Current period result: ${formatAmountForPdf(pkg.equity.currentPeriodProfit)}`,
     )
     .text(
-      `Jakokelpoinen oma pääoma yhteensä: ${formatAmountForPdf(
+      `Total distributable equity: ${formatAmountForPdf(
         pkg.equity.distributableEquity,
       )}`,
     );
 
   doc.addPage();
-  doc.font('Helvetica-Bold').fontSize(12).text('Tilinpäätöksen allekirjoitus');
+  doc.font('Helvetica-Bold').fontSize(12).text('Signatures');
   doc.moveDown(2);
   doc
     .font('Helvetica')
@@ -214,19 +207,19 @@ export async function buildTilinpaatosPdf(
         .join('.')}`,
     );
   doc.moveDown(1.2);
-  doc.text('<sähköinen allekirjoitus>');
+  doc.text('<electronic signature>');
   doc.text(pkg.metadata.signerName);
   doc.text(pkg.metadata.signerTitle);
 
   doc.moveDown(2);
-  doc.font('Helvetica-Bold').text('Luettelo kirjanpidoista ja aineistoista');
+  doc.font('Helvetica-Bold').text('List of accounting records and materials');
   doc
     .font('Helvetica')
-    .text('- Päiväkirja: Sähköinen arkisto')
-    .text('- Pääkirja: Sähköinen arkisto')
-    .text('- Tilinpäätös: Sähköinen arkisto')
-    .text('- Tase-erittelyt: Sähköinen arkisto')
-    .text('- Tositteet: Sähköinen arkisto');
+    .text('- Journal: Electronic archive')
+    .text('- General ledger: Electronic archive')
+    .text('- Financial statements: Electronic archive')
+    .text('- Balance sheet details: Electronic archive')
+    .text('- Documents: Electronic archive');
 
   doc.end();
   return done;

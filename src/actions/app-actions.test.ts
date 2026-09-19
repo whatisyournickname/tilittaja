@@ -198,7 +198,7 @@ describe('saveDocumentEntriesAction', () => {
           { id: 11, amount: 100 },
         ],
       }),
-    ).rejects.toThrow('täsmätä');
+    ).rejects.toThrow('balance');
   });
 
   it('rejects when fewer than 2 entries remain after deletion', async () => {
@@ -233,7 +233,7 @@ describe('saveDocumentEntriesAction', () => {
         entries: [{ id: 10, amount: 100 }],
         deletedEntryIds: [11],
       }),
-    ).rejects.toThrow('vähintään kaksi');
+    ).rejects.toThrow('at least two');
   });
 });
 
@@ -344,7 +344,7 @@ describe('duplicateDocumentAction', () => {
     dbMocks.getEntriesForDocument.mockReturnValue([]);
 
     await expect(duplicateDocumentAction(1)).rejects.toThrow(
-      'kopioitavia vientirivejä',
+      'no entry rows to copy',
     );
   });
 });
@@ -394,7 +394,7 @@ describe('createVatSettlementAction', () => {
 
     await expect(
       createVatSettlementAction({ periodId: 1, date: Date.UTC(2025, 0, 31) }),
-    ).rejects.toThrow('siirrettävää saldoa');
+    ).rejects.toThrow('transferable balance');
   });
 });
 
@@ -402,7 +402,7 @@ describe('importStateTransferAction', () => {
   it('rejects non-File input', async () => {
     await expect(
       importStateTransferAction('not a file' as unknown as File),
-    ).rejects.toThrow('ZIP-paketti');
+    ).rejects.toThrow('ZIP package');
   });
 
   it('rejects when active datasource DB not found', async () => {
@@ -411,7 +411,7 @@ describe('importStateTransferAction', () => {
       type: 'application/zip',
     });
     await expect(importStateTransferAction(file)).rejects.toThrow(
-      'SQLite-kantaa ei löytynyt',
+      'SQLite database not found',
     );
   });
 });
@@ -431,7 +431,7 @@ describe('deleteDocumentAction', () => {
   it('rejects when document not found', async () => {
     dbMocks.getDocument.mockReturnValue(null);
     await expect(deleteDocumentAction(999)).rejects.toThrow(
-      'Tositetta ei löytynyt',
+      'Document not found',
     );
   });
 });

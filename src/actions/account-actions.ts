@@ -34,7 +34,7 @@ export async function createAccountAction(input: unknown) {
       }
       throw error;
     }
-  }, 'Tilin luonti epäonnistui.');
+  }, 'Failed to create account.');
 }
 
 export async function updateAccountAction(accountId: number, input: unknown) {
@@ -61,7 +61,7 @@ export async function updateAccountAction(accountId: number, input: unknown) {
       }
       throw error;
     }
-  }, 'Tilin päivitys epäonnistui.');
+  }, 'Failed to update account.');
 }
 
 export async function cloneAccountAction(accountId: number, input: unknown) {
@@ -86,7 +86,7 @@ export async function cloneAccountAction(accountId: number, input: unknown) {
       }
       throw error;
     }
-  }, 'Tilin kloonaus epäonnistui.');
+  }, 'Failed to clone account.');
 }
 
 export async function deleteAccountAction(accountId: number) {
@@ -105,5 +105,5 @@ export async function deleteAccountAction(accountId: number) {
       }
       throw error;
     }
-  }, 'Tilin poisto epäonnistui.');
+  }, 'Failed to delete account.');
 }

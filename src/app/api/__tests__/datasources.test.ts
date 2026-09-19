@@ -87,7 +87,7 @@ describe('datasources route', () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({
-      error: 'Virheellinen tietolähde',
+      error: 'Invalid datasource',
     });
   });
 

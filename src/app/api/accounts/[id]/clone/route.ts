@@ -14,4 +14,4 @@ export const POST = jsonActionRoute(async (
   const sourceId = await requireRouteId(params, 'tilin tunniste');
   const body = await readRequestJson(request);
   return cloneAccountAction(sourceId, body);
-}, 'Tilin kloonaus epäonnistui', { status: 201 });
+}, 'Failed to clone account', { status: 201 });

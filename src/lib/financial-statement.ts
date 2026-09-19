@@ -35,7 +35,7 @@ import {
   calculateVatReport,
 } from '@/lib/vat-report';
 
-export interface TilinpaatosMetadata {
+export interface FinancialStatementMetadata {
   place: string;
   signatureDate: string;
   preparedBy: string;
@@ -65,7 +65,7 @@ export function normalizeDischargeTarget(value?: string): DischargeTarget {
   }
 }
 
-export interface TilinpaatosRow {
+export interface FinancialStatementRow {
   type: ReportRow['type'];
   style: ReportRow['style'];
   level: number;
@@ -83,16 +83,16 @@ export interface ComplianceCheck {
   details: string;
 }
 
-export interface TilinpaatosPackage {
+export interface FinancialStatementPackage {
   companyName: string;
   businessId: string;
   periodLabel: string;
   periodStart: string;
   periodEnd: string;
   comparisonPeriodLabel: string | null;
-  metadata: TilinpaatosMetadata;
-  balanceSheetRows: TilinpaatosRow[];
-  incomeStatementRows: TilinpaatosRow[];
+  metadata: FinancialStatementMetadata;
+  balanceSheetRows: FinancialStatementRow[];
+  incomeStatementRows: FinancialStatementRow[];
   notes: string[];
   equity: {
     shareCapital: number;
@@ -114,7 +114,7 @@ export interface TilinpaatosPackage {
 
 const PROPERTY_PREFIX = 'tilinpaatos.';
 
-/** Kalenteripäivä (vvvv-kk-pp) Suomen ajan mukaan; ei UTC-toISOString(). */
+/** Calendar date (yyyy-mm-dd) in Finnish time zone; not UTC-toISOString(). */
 function toIsoDate(timestamp: number): string {
   return new Intl.DateTimeFormat('en-CA', {
     timeZone: 'Europe/Helsinki',
@@ -124,7 +124,7 @@ function toIsoDate(timestamp: number): string {
   }).format(new Date(timestamp));
 }
 
-export function fromIsoToFiDate(isoDate: string): string {
+export function formatFinnishDate(isoDate: string): string {
   if (!isoDate) return '';
   const [year, month, day] = isoDate.split('-');
   if (!year || !month || !day) return isoDate;
@@ -138,7 +138,7 @@ function addMonths(date: Date, months: number): Date {
 function reportRowsToComparativeRows(
   currentRows: ReportRow[],
   previousRows: ReportRow[],
-): TilinpaatosRow[] {
+): FinancialStatementRow[] {
   return currentRows.map((row, index) => {
     const previous = previousRows[index];
     return {
@@ -194,26 +194,26 @@ function getMetadataDefaults(
   companyName: string,
   businessId: string,
   periodEndDate: number,
-): TilinpaatosMetadata {
+): FinancialStatementMetadata {
   const defaultMeetingDate = toIsoDate(
     addMonths(new Date(periodEndDate), 3).getTime(),
   );
   return {
-    place: 'Kolarissa',
+    place: 'Kolari',
     signatureDate: toIsoDate(periodEndDate),
     preparedBy: companyName,
     signerName: '',
-    signerTitle: 'Hallituksen jäsen',
+    signerTitle: 'Member of the board',
     microDeclaration:
-      'Yritys/yhdistys on kirjanpitolain mukainen mikroyritys ja tilinpäätös on laadittu noudattaen PMA 4 luvun mikroyrityssäännöstöä.',
+      'The company/association is a micro-enterprise within the meaning of the Accounting Act and the financial statements have been prepared in accordance with the micro-enterprise provisions of Chapter 4 of the PMA.',
     boardProposal:
-      'Hallitus esittää, että tilikauden voitto siirretään voittovarojen lisäykseksi, eikä osinkoa jaeta.',
+      'The board proposes that the period profit be transferred as an addition to profit reserves and no dividend be distributed.',
     parentCompany: '',
     shareInfo:
-      'Yhtiössä on 100.000 kappaletta nimellisarvotonta samanlaiset oikeudet tuottavaa osaketta. Osakkeita koskee yhtiöjärjestyksen lunastuslauseke.',
+      'The company has 100,000 par value shares with equal rights. The articles of association contain a redemption clause for the shares.',
     personnelCount: '0',
     archiveNote:
-      'Tilinpäätös säilytetään vähintään 10 vuotta tilikauden päättymisestä ja tositeaineisto vähintään 6 vuotta.',
+      'The financial statements must be retained for at least 10 years from the end of the period and the voucher material for at least 6 years.',
     meetingDate: defaultMeetingDate,
     attendees: '',
     dischargeTarget: 'board-and-ceo',
@@ -224,7 +224,7 @@ function getMetadata(
   companyName: string,
   businessId: string,
   periodEndDate: number,
-): TilinpaatosMetadata {
+): FinancialStatementMetadata {
   const defaults = getMetadataDefaults(companyName, businessId, periodEndDate);
   const allProperties = getSettingProperties();
   return {
@@ -266,7 +266,7 @@ function getMetadata(
 }
 
 export function metadataToProperties(
-  metadata: TilinpaatosMetadata,
+  metadata: FinancialStatementMetadata,
 ): Record<string, string> {
   return {
     [`${PROPERTY_PREFIX}place`]: metadata.place,
@@ -293,7 +293,7 @@ function calculateStatementRows(
   accounts: Account[],
   currentBalances: Map<number, number>,
   previousBalances?: Map<number, number>,
-): TilinpaatosRow[] {
+): FinancialStatementRow[] {
   const structure = getReportStructure(structureId);
   if (!structure) return [];
   const baseRows = parseReportStructure(structure.data);
@@ -309,9 +309,9 @@ function calculateStatementRows(
 }
 
 function getIncomeStatementResultRow(
-  rows: TilinpaatosRow[],
-): TilinpaatosRow | undefined {
-  const resultLabelPattern = /tilikauden (voitto|tappio|tulos)/i;
+  rows: FinancialStatementRow[],
+): FinancialStatementRow | undefined {
+  const resultLabelPattern = /current period(?:'s)? (profit|loss|result)|current period result/i;
 
   return (
     [...rows]
@@ -328,7 +328,7 @@ function getIncomeStatementResultRow(
   );
 }
 
-export function getTilinpaatosMetadataDefaults(): TilinpaatosMetadata {
+export function getFinancialStatementMetadataDefaults(): FinancialStatementMetadata {
   const settings = getSettings();
   const periods = getPeriods();
   const current =
@@ -341,7 +341,7 @@ export function getTilinpaatosMetadataDefaults(): TilinpaatosMetadata {
   );
 }
 
-export function buildTilinpaatosPackage(periodId?: number): TilinpaatosPackage {
+export function buildFinancialStatementPackage(periodId?: number): FinancialStatementPackage {
   const settings = getSettings();
   const periods = getPeriods();
   const selectedPeriod =
@@ -350,7 +350,7 @@ export function buildTilinpaatosPackage(periodId?: number): TilinpaatosPackage {
     periods[0];
 
   if (!selectedPeriod) {
-    throw new Error('Tilikausia ei löytynyt.');
+    throw new Error('No periods found.');
   }
 
   const comparisonPeriod = findComparisonPeriod(selectedPeriod, periods);
@@ -459,46 +459,46 @@ export function buildTilinpaatosPackage(periodId?: number): TilinpaatosPackage {
   const checks: ComplianceCheck[] = [
     {
       id: 'balance-structure',
-      label: 'Taseen rakenne saatavilla',
+      label: 'Balance sheet structure available',
       severity: 'error',
       ok: balanceSheetRows.length > 0,
       details:
         balanceSheetRows.length > 0
-          ? 'Taseraportti muodostui.'
-          : 'Taseraportin rakennetta ei löytynyt tietokannasta.',
+          ? 'Balance sheet formed.'
+          : 'Balance sheet structure not found in database.',
     },
     {
       id: 'income-structure',
-      label: 'Tuloslaskelman rakenne saatavilla',
+      label: 'Income statement structure available',
       severity: 'error',
       ok: incomeStatementRows.length > 0,
       details:
         incomeStatementRows.length > 0
-          ? 'Tuloslaskelma muodostui.'
-          : 'Tuloslaskelman rakennetta ei löytynyt tietokannasta.',
+          ? 'Income statement formed.'
+          : 'Income statement structure not found in database.',
     },
     {
       id: 'comparative-figures',
-      label: 'Vertailukausi löydetty',
+      label: 'Comparison period found',
       severity: 'warning',
       ok: Boolean(comparisonPeriod),
       details: comparisonPeriod
-        ? `Vertailukausi: ${periodLabel(comparisonPeriod.start_date, comparisonPeriod.end_date)}`
-        : 'Vertailukautta ei löytynyt valitulle kaudelle.',
+        ? `Comparison period: ${periodLabel(comparisonPeriod.start_date, comparisonPeriod.end_date)}`
+        : 'No comparison period found for the selected period.',
     },
     {
       id: 'micro-declaration',
-      label: 'Mikroyrityslausuma annettu',
+      label: 'Micro declaration provided',
       severity: 'error',
       ok: metadata.microDeclaration.trim().length > 0,
       details:
         metadata.microDeclaration.trim().length > 0
-          ? 'Mikroyrityssäännöstöä koskeva teksti annettu.'
-          : 'Lisää mikroyrityslausuma ennen lopullista vientiä.',
+          ? 'Text on micro enterprise regulation provided.'
+          : 'Add micro enterprise declaration before final export.',
     },
     {
       id: 'signature-data',
-      label: 'Allekirjoitustiedot annettu',
+      label: 'Signature details provided',
       severity: 'error',
       ok:
         metadata.signerName.trim().length > 0 &&
@@ -508,21 +508,21 @@ export function buildTilinpaatosPackage(periodId?: number): TilinpaatosPackage {
         metadata.signerName.trim().length > 0 &&
         metadata.place.trim().length > 0 &&
         metadata.signatureDate.trim().length > 0
-          ? 'Allekirjoitussivu voidaan muodostaa.'
-          : 'Täydennä allekirjoittaja, paikka ja päiväys.',
+          ? 'Signature page can be generated.'
+          : 'Complete signer, place, and date.',
     },
   ];
 
   const notes = [
     metadata.microDeclaration,
-    `Henkilöstön määrä: ${metadata.personnelCount}`,
+    `Number of employees: ${metadata.personnelCount}`,
     ...(metadata.parentCompany
       ? [
-          `Yhtiö kuuluu konserniin, jonka emoyhtiö on ${metadata.parentCompany}.`,
+          `The company belongs to a group whose parent company is ${metadata.parentCompany}.`,
         ]
       : []),
     metadata.shareInfo,
-    'Laskelma OYL 13:5 § jakokelpoisesta vapaasta omasta pääomasta on mukana.',
+    'The calculation of distributable free equity pursuant to Section 13:5 of the Companies Act is included.',
     metadata.boardProposal,
     metadata.archiveNote,
   ];
@@ -573,7 +573,7 @@ export interface StatementSummary {
 }
 
 function getLatestRowAmount(
-  rows: TilinpaatosRow[],
+  rows: FinancialStatementRow[],
   matcher: RegExp,
 ): number | null {
   for (let index = rows.length - 1; index >= 0; index -= 1) {
@@ -585,44 +585,44 @@ function getLatestRowAmount(
 }
 
 export function getBalanceSheetSummary(
-  rows: TilinpaatosRow[],
+  rows: FinancialStatementRow[],
 ): StatementSummary {
-  const assetsTotal = getLatestRowAmount(rows, /^Vastaavaa yhteensä$/i);
-  const liabilitiesTotal = getLatestRowAmount(rows, /^Vastattavaa yhteensä$/i);
+  const assetsTotal = getLatestRowAmount(rows, /^Total assets$/i);
+  const liabilitiesTotal = getLatestRowAmount(rows, /^Total liabilities$/i);
 
   if (assetsTotal === null || liabilitiesTotal === null) {
-    return { ok: false, text: 'Loppusummia ei löytynyt' };
+    return { ok: false, text: 'Totals not found' };
   }
 
   const difference = Math.abs(assetsTotal - liabilitiesTotal);
   if (difference < 0.005) {
-    return { ok: true, text: 'Vastaavaa ja vastattavaa vastaa' };
+    return { ok: true, text: 'Assets and liabilities match' };
   }
 
-  return { ok: false, text: `Ei täsmää (${formatAmount(difference)})` };
+  return { ok: false, text: `Does not match (${formatAmount(difference)})` };
 }
 
 export function getIncomeStatementSummary(
-  rows: TilinpaatosRow[],
+  rows: FinancialStatementRow[],
 ): StatementSummary {
   const profitOrLoss = getLatestRowAmount(
     rows,
-    /Tilikauden voitto \(tappio\)|Tilikauden tulos/i,
+    /Current period(?:'s)? profit \(loss\)|Current period result/i,
   );
 
   if (profitOrLoss === null) {
     return {
       ok: rows.length > 0,
       text:
-        rows.length > 0 ? 'Tuloslaskelma muodostui' : 'Tuloslaskelma puuttuu',
+        rows.length > 0 ? 'Income statement formed' : 'Income statement missing',
     };
   }
 
-  return { ok: true, text: `Tilikauden tulos ${formatAmount(profitOrLoss)}` };
+  return { ok: true, text: `Period result ${formatAmount(profitOrLoss)}` };
 }
 
-export function signatureDateAsFi(metadata: TilinpaatosMetadata): string {
-  return fromIsoToFiDate(metadata.signatureDate);
+export function formatSignatureDate(metadata: FinancialStatementMetadata): string {
+  return formatFinnishDate(metadata.signatureDate);
 }
 
 interface ReadinessItem {
@@ -734,51 +734,51 @@ export function buildReadinessSummary(
     vatReport.lines.find((line) => Math.abs(line.amount) >= 0.005) != null;
 
   const documentSection: ReadinessSection = {
-    title: 'Tositteet',
+    title: 'Documents',
     items: [
       {
-        label: 'Tositteiden lukumäärä',
+        label: 'Number of documents',
         ok: documents.length > 0,
         count: documents.length,
         details:
           documents.length > 0
-            ? `${documents.length} tositetta tilikaudella`
-            : 'Tilikaudella ei ole yhtään tositetta',
+            ? `${documents.length} documents in period`
+            : 'No documents in this period',
       },
       {
-        label: 'Täsmäämättömät tositteet',
+        label: 'Unbalanced documents',
         ok: unbalancedDocs.length === 0,
         count: unbalancedDocs.length,
         total: documents.length,
         details:
           unbalancedDocs.length === 0
-            ? 'Kaikki tositteet täsmäävät (debet = kredit)'
-            : `${unbalancedDocs.length} tositetta, joissa debet ≠ kredit: ${unbalancedDocs
+            ? 'All documents balance (debit = credit)'
+            : `${unbalancedDocs.length} documents where debit ≠ credit: ${unbalancedDocs
                 .slice(0, 5)
                 .map((d) => `#${d.document_number}`)
                 .join(', ')}${unbalancedDocs.length > 5 ? '...' : ''}`,
       },
       {
-        label: 'Tyhjät tositteet',
+        label: 'Empty documents',
         ok: emptyDocs.length === 0,
         count: emptyDocs.length,
         details:
           emptyDocs.length === 0
-            ? 'Ei tyhjiä tositteita'
-            : `${emptyDocs.length} tositetta ilman vientejä: ${emptyDocs
+            ? 'No empty documents'
+            : `${emptyDocs.length} documents with no entries: ${emptyDocs
                 .slice(0, 5)
                 .map((d) => `#${d.document_number}`)
                 .join(', ')}${emptyDocs.length > 5 ? '...' : ''}`,
       },
       {
-        label: 'Tositteiden kuitit',
+        label: 'Document receipts',
         ok: docsMissingReceipt === 0,
         count: docsWithReceiptCount,
         total: documentIds.length,
         details:
           docsMissingReceipt === 0
-            ? 'Kaikilla tositteilla on kuitti'
-            : `${docsMissingReceipt} tositteelta puuttuu kuitti`,
+            ? 'All documents have receipts'
+            : `${docsMissingReceipt} documents missing receipts`,
       },
     ],
     allOk: false,
@@ -805,36 +805,36 @@ export function buildReadinessSummary(
   );
 
   const bankStatementSection: ReadinessSection = {
-    title: 'Tiliotteet',
+    title: 'Bank statements',
     items: [
       {
-        label: 'Tiliotteet tilikaudella',
+        label: 'Bank statements in period',
         ok: periodStatements.length > 0,
         count: periodStatements.length,
         details:
           periodStatements.length > 0
-            ? `${periodStatements.length} tiliotetta ladattu`
-            : 'Ei tiliotteita tilikaudelta',
+            ? `${periodStatements.length} bank statements imported`
+            : 'No bank statements for this period',
       },
       {
-        label: 'Linkittämättömät tilitapahtumat',
+        label: 'Unlinked bank transactions',
         ok: unlinkedEntries.length === 0,
         count: unlinkedEntries.length,
         total: totalBankEntries,
         details:
           unlinkedEntries.length === 0
-            ? 'Kaikki tilitapahtumat on linkitetty tositteisiin'
-            : `${unlinkedEntries.length} tilitapahtumaa ilman tositetta`,
+            ? 'All bank transactions are linked to documents'
+            : `${unlinkedEntries.length} bank transactions without a document`,
       },
       {
-        label: 'Käsitellyt tilitapahtumat',
+        label: 'Processed bank transactions',
         ok: totalProcessed === totalBankEntries && totalBankEntries > 0,
         count: totalProcessed,
         total: totalBankEntries,
         details:
           totalBankEntries === 0
-            ? 'Ei tilitapahtumia'
-            : `${totalProcessed}/${totalBankEntries} käsitelty`,
+            ? 'No bank transactions'
+            : `${totalProcessed}/${totalBankEntries} processed`,
       },
     ],
     allOk: false,
@@ -842,29 +842,29 @@ export function buildReadinessSummary(
   bankStatementSection.allOk = bankStatementSection.items.every((i) => i.ok);
 
   const vatSection: ReadinessSection = {
-    title: 'ALV',
+    title: 'VAT',
     items: [
       {
-        label: 'ALV-netto tilikaudella',
+        label: 'VAT net for period',
         ok: true,
         details: !hasVatActivity
-          ? 'Ei ALV-liikennettä tilikaudella'
+          ? 'No VAT activity during the period'
           : vatReport.totals.payableVat > 0
-            ? `Tilikaudella maksettavaa ALV:a ${formatCurrency(vatReport.totals.payableVat)}`
+            ? `VAT payable for period ${formatCurrency(vatReport.totals.payableVat)}`
             : vatReport.totals.receivableVat > 0
-              ? `Tilikaudella saatavaa ALV:a ${formatCurrency(vatReport.totals.receivableVat)}`
-              : 'Tilikauden ALV nettoutuu nollaan',
+              ? `VAT receivable for period ${formatCurrency(vatReport.totals.receivableVat)}`
+              : 'Period VAT nets to zero',
       },
       {
-        label: 'ALV-tilien tilitys',
+        label: 'VAT account settlement',
         ok: vatSettlement == null,
         details:
           vatSettlement == null
-            ? 'ALV-tilit on nollattu tai siirrettävää saldoa ei ole.'
-            : `${vatSettlement.settlementDebit ? 'Saatavaa' : 'Maksettavaa'} ${formatCurrency(vatSettlement.settlementAmount)} siirtämättä tilille ${vatSettlement.settlementAccountNumber} ${vatSettlement.settlementAccountName}`.trim(),
+            ? 'VAT accounts are zeroed or there is no transferable balance.'
+            : `${vatSettlement.settlementDebit ? 'Receivable' : 'Payable'} ${formatCurrency(vatSettlement.settlementAmount)} not yet transferred to account ${vatSettlement.settlementAccountNumber} ${vatSettlement.settlementAccountName}`.trim(),
       },
       {
-        label: 'ALV-ilmoitusten tositteet',
+        label: 'VAT return documents',
         ok:
           !hasVatActivity ||
           (vatDocuments.length > 0 && vatDocumentsMissingReceipt === 0),
@@ -873,11 +873,11 @@ export function buildReadinessSummary(
         details:
           vatDocuments.length === 0
             ? hasVatActivity
-              ? 'Tilikaudella on ALV-liikennettä, mutta ALV-tositteita ei ole laadittu.'
-              : 'Ei ALV-tositteita tällä tilikaudella.'
+              ? 'There is VAT activity during the period but no VAT documents have been prepared.'
+              : 'No VAT documents for this period.'
             : vatDocumentsMissingReceipt === 0
-              ? 'Kaikilla ALV-tositteilla on liite.'
-              : `${vatDocumentsMissingReceipt} ALV-tositteelta puuttuu liite.`,
+              ? 'All VAT documents have attachments.'
+              : `${vatDocumentsMissingReceipt} VAT documents missing attachments.`,
       },
     ],
     allOk: false,

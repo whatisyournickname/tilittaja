@@ -142,7 +142,7 @@ export async function createDocumentAction(input: unknown) {
 
     revalidateApp();
     return { id: document.id, number: document.number };
-  }, 'Tositteen luonti epäonnistui.');
+  }, 'Failed to create document.');
 }
 
 export async function updateDocumentAction(documentId: number, input: unknown) {
@@ -151,7 +151,7 @@ export async function updateDocumentAction(documentId: number, input: unknown) {
   return runDbAction(() => {
     const document = requireResource(
       getDocument(documentId),
-      'Tositetta ei löytynyt',
+      'Document not found',
     );
     requireUnlockedDocumentPeriod(document);
     requireUnlockedTargetPeriod(document.period_id, parsed.date);
@@ -169,7 +169,7 @@ export async function updateDocumentAction(documentId: number, input: unknown) {
       category: savedMetadata?.category ?? parsed.category.trim().toUpperCase(),
       name: savedMetadata?.name ?? parsed.name.trim(),
     };
-  }, 'Tositteen päivitys epäonnistui.');
+  }, 'Failed to update document.');
 }
 
 export async function saveDocumentEntriesAction(
@@ -181,7 +181,7 @@ export async function saveDocumentEntriesAction(
   return runDbAction(() => {
     const document = requireResource(
       getDocument(documentId),
-      'Tositetta ei löytynyt',
+      'Document not found',
     );
     requireUnlockedDocumentPeriod(document);
 
@@ -207,7 +207,7 @@ export async function saveDocumentEntriesAction(
 
       if (deletedEntryIdSet.has(entry.id)) {
         throw new ApiRouteError(
-          'Samaa vientiriviä ei voi sekä päivittää että poistaa',
+          'Cannot both update and delete the same entry row',
         );
       }
     }
@@ -221,7 +221,7 @@ export async function saveDocumentEntriesAction(
 
     if (nextEntries.length < 2) {
       throw new ApiRouteError(
-        'Tositteelle pitää jäädä vähintään kaksi vientiriviä.',
+        'Document must have at least two entry rows.',
       );
     }
 
@@ -234,7 +234,7 @@ export async function saveDocumentEntriesAction(
 
     if (debitTotal !== creditTotal) {
       throw new ApiRouteError(
-        'Debet- ja kredit-summien pitää täsmätä ennen tallennusta.',
+        'Debit and credit amounts must balance before saving.',
       );
     }
 
@@ -260,7 +260,7 @@ export async function saveDocumentEntriesAction(
       debitTotal: debitTotal / 100,
       creditTotal: creditTotal / 100,
     };
-  }, 'Vientien summien päivitys epäonnistui.');
+  }, 'Failed to update entry amounts.');
 }
 
 export async function duplicateDocumentAction(documentId: number) {
@@ -276,13 +276,13 @@ export async function duplicateDocumentAction(documentId: number) {
 
     const document = requireResource(
       getDocument(documentId),
-      'Tositetta ei löytynyt',
+      'Document not found',
     );
     requireUnlockedDocumentPeriod(document);
 
     const sourceEntries = getEntriesForDocument(documentId);
     if (sourceEntries.length === 0) {
-      throw new ApiRouteError('Tositteella ei ole kopioitavia vientirivejä');
+      throw new ApiRouteError('Document has no entry rows to copy');
     }
 
     const sourceMetadata = getDocumentMetadata(documentId);
@@ -380,20 +380,20 @@ export async function duplicateDocumentAction(documentId: number) {
         bankStatementLinks: [],
       },
     };
-  }, 'Tositteen kopiointi epäonnistui.');
+  }, 'Failed to copy document.');
 }
 
 export async function deleteDocumentAction(documentId: number) {
   return runDbAction(() => {
     const document = requireResource(
       getDocument(documentId),
-      'Tositetta ei löytynyt',
+      'Document not found',
     );
     requireUnlockedDocumentPeriod(document);
     deleteDocument(documentId);
     revalidateApp();
     return { ok: true };
-  }, 'Tositteen poisto epäonnistui.');
+  }, 'Failed to delete document.');
 }
 
 export async function deleteDocumentsAction(input: unknown) {
@@ -403,7 +403,7 @@ export async function deleteDocumentsAction(input: unknown) {
     for (const documentId of parsed.documentIds) {
       const document = requireResource(
         getDocument(documentId),
-        'Tositetta ei löytynyt',
+        'Document not found',
       );
       requireUnlockedDocumentPeriod(document);
       deleteDocument(documentId);
@@ -411,7 +411,7 @@ export async function deleteDocumentsAction(input: unknown) {
 
     revalidateApp();
     return { ok: true, deletedCount: parsed.documentIds.length };
-  }, 'Tositteiden poisto epäonnistui.');
+  }, 'Failed to delete documents.');
 }
 
 export async function updateEntryDescriptionAction(
@@ -421,12 +421,12 @@ export async function updateEntryDescriptionAction(
   const parsed = entryDescriptionSchema.parse(input);
 
   return runDbAction(() => {
-    const entry = requireResource(getEntry(entryId), 'Vientiriviä ei löytynyt');
+    const entry = requireResource(getEntry(entryId), 'Entry row not found');
     requireUnlockedEntryPeriod(entry);
     updateEntryDescription(entryId, parsed.description);
     revalidateApp();
     return { id: entryId, description: parsed.description };
-  }, 'Vientirivin päivitys epäonnistui.');
+  }, 'Failed to update entry row.');
 }
 
 export async function updateEntryAccountAction(
@@ -438,9 +438,9 @@ export async function updateEntryAccountAction(
   return runDbAction(() => {
     const account = requireResource(
       getAccount(parsed.accountId),
-      'Tiliä ei löytynyt',
+      'Account not found',
     );
-    const entry = requireResource(getEntry(entryId), 'Vientiriviä ei löytynyt');
+    const entry = requireResource(getEntry(entryId), 'Entry row not found');
     requireUnlockedEntryPeriod(entry);
     updateEntryAccount(entryId, account.id);
     revalidateApp();
@@ -450,7 +450,7 @@ export async function updateEntryAccountAction(
       accountNumber: account.number,
       accountName: account.name,
     };
-  }, 'Vientirivin päivitys epäonnistui.');
+  }, 'Failed to update entry row.');
 }
 
 export async function updateDocumentReceiptAction(
@@ -462,7 +462,7 @@ export async function updateDocumentReceiptAction(
   return runDbAction(async () => {
     const document = requireResource(
       getDocument(documentId),
-      'Tositetta ei löytynyt',
+      'Document not found',
     );
     requireUnlockedDocumentPeriod(document);
 
@@ -481,7 +481,7 @@ export async function updateDocumentReceiptAction(
 
     revalidateApp();
     return resolveReceiptResponse(documentId, document.number, source);
-  }, 'PDF-linkityksen tallennus epäonnistui.');
+  }, 'Failed to save PDF link.');
 }
 
 export async function uploadDocumentReceiptAction(
@@ -491,16 +491,16 @@ export async function uploadDocumentReceiptAction(
   return runDbAction(async () => {
     const document = requireResource(
       getDocument(documentId),
-      'Tositetta ei löytynyt',
+      'Document not found',
     );
     requireUnlockedDocumentPeriod(document);
     const period = requireResource(
       getPeriod(document.period_id),
-      'Tositteen tilikautta ei löytynyt',
+      'Document period not found',
     );
 
     if (!(file instanceof File)) {
-      throw new ApiRouteError('Lähetä yksi PDF-tiedosto kentässä `file`');
+      throw new ApiRouteError('Send one PDF file in the .file. field');
     }
 
     if (!isPdfFile(file)) {
@@ -509,7 +509,7 @@ export async function uploadDocumentReceiptAction(
 
     const bytes = Buffer.from(await file.arrayBuffer());
     if (bytes.length === 0) {
-      throw new ApiRouteError('Lähetetty tiedosto on tyhjä');
+      throw new ApiRouteError('Uploaded file is empty');
     }
 
     const source = await requireCurrentDataSource();
@@ -558,14 +558,14 @@ export async function uploadDocumentReceiptAction(
 
     revalidateApp();
     return resolveReceiptResponse(documentId, document.number, source);
-  }, 'PDF-upload epäonnistui.');
+  }, 'PDF upload failed.');
 }
 
 export async function deleteDocumentReceiptAction(documentId: number) {
   return runDbAction(async () => {
     const document = requireResource(
       getDocument(documentId),
-      'Tositetta ei löytynyt',
+      'Document not found',
     );
     requireUnlockedDocumentPeriod(document);
 
@@ -579,18 +579,18 @@ export async function deleteDocumentReceiptAction(documentId: number) {
 
     if (!currentReceipt.receiptPath) {
       throw new ApiRouteError(
-        'Tositteelle ei ole poistettavaa PDF-liitettä',
+        'Document has no PDF attachment to remove',
         404,
       );
     }
 
     const removed = removeReceiptFile(pdfRoot, currentReceipt.receiptPath);
     if (!removed) {
-      throw new ApiRouteError('PDF-tiedostoa ei löytynyt poistettavaksi', 404);
+      throw new ApiRouteError('PDF file not found for deletion', 404);
     }
 
     clearDocumentReceiptLink(documentId);
     revalidateApp();
     return resolveReceiptResponse(documentId, document.number, source);
-  }, 'PDF-liitteen poisto epäonnistui.');
+  }, 'Failed to remove PDF attachment.');
 }

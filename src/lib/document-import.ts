@@ -85,7 +85,7 @@ function loadPdfParse(): {
   };
   const PDFParse = pdfParseModule.PDFParse;
   if (!PDFParse) {
-    throw new ApiRouteError('PDF-parserin lataus epäonnistui', 500);
+    throw new ApiRouteError('Failed to load PDF parser', 500);
   }
 
   const bundledPdfParseMainPath = requireFromNode.resolve('pdf-parse');
@@ -180,7 +180,7 @@ function parseIsoDate(dateString: string, fieldLabel: string): number {
   const timestamp = Date.parse(`${dateString}T00:00:00.000Z`);
   if (Number.isNaN(timestamp)) {
     throw new ApiRouteError(
-      `GPT palautti virheellisen päivämäärän kenttään ${fieldLabel}`,
+      `GPT returned an invalid date for field ${fieldLabel}`,
       502,
     );
   }
@@ -258,7 +258,7 @@ function extractResponseText(payload: unknown): string {
     if (combined) return combined;
   }
 
-  throw new ApiRouteError('GPT ei palauttanut jäsennettävää tositedataa', 502);
+  throw new ApiRouteError('GPT did not return parseable document data', 502);
 }
 
 function parseAiPayload(jsonText: string): AiDocument {
@@ -266,7 +266,7 @@ function parseAiPayload(jsonText: string): AiDocument {
   try {
     parsedJson = JSON.parse(jsonText);
   } catch {
-    throw new ApiRouteError('GPT palautti virheellistä JSON-dataa', 502);
+    throw new ApiRouteError('GPT returned invalid JSON data', 502);
   }
 
   const parsed = aiDocumentSchema.safeParse(parsedJson);
@@ -279,12 +279,12 @@ function parseAiPayload(jsonText: string): AiDocument {
     );
     if (amountIssue) {
       throw new ApiRouteError(
-        'GPT ei saanut tositerivin summaa luettua luotettavasti PDF:stä',
+        'GPT could not reliably read the document entry amount from the PDF',
         502,
       );
     }
 
-    throw new ApiRouteError('GPT palautti virheellistä tositedataa', 502);
+    throw new ApiRouteError('GPT returned invalid document data', 502);
   }
 
   return parsed.data;
@@ -300,7 +300,7 @@ export function normalizeImportedDocument(
       const accountNumber = entry.accountNumber.trim();
       if (!accountNumbers.has(accountNumber)) {
         throw new ApiRouteError(
-          `GPT valitsi tuntemattoman tilin ${accountNumber}`,
+          `GPT selected unknown account ${accountNumber}`,
           502,
         );
       }
@@ -316,7 +316,7 @@ export function normalizeImportedDocument(
 
   if (normalizedEntries.length < 2) {
     throw new ApiRouteError(
-      'GPT ei saanut tositteelta tarpeeksi käyttökelpoisia vientirivejä',
+      'GPT could not get enough usable entry rows from the document',
       502,
     );
   }
@@ -335,7 +335,7 @@ export function normalizeImportedDocument(
 
   if (debitTotal !== creditTotal) {
     throw new ApiRouteError(
-      'GPT palautti epätasapainoisen tositteen, jossa debet ja kredit eivät täsmää',
+      'GPT returned an unbalanced document where debit and credit do not match',
       502,
     );
   }
@@ -464,7 +464,7 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
   const text = (result.text ?? '').replace(/\u0000/g, ' ').trim();
   if (!text) {
     throw new ApiRouteError(
-      'PDF:stä ei saatu luettua tekstiä GPT-parsintaa varten',
+      'No text could be read from the PDF for GPT parsing',
       400,
     );
   }
@@ -480,7 +480,7 @@ async function requestDocumentJson(params: {
   const env = getEnv();
   if (!env.OPENAI_API_KEY) {
     throw new ApiRouteError(
-      'OPENAI_API_KEY puuttuu palvelimen ympäristömuuttujista',
+      'OPENAI_API_KEY is missing from server environment variables',
       500,
     );
   }
@@ -531,7 +531,7 @@ async function requestDocumentJson(params: {
 
   const payload = await readJsonResponse(
     response,
-    'OpenAI API palautti virheellistä JSON-dataa',
+    'OpenAI API returned invalid JSON data',
   );
   if (!response.ok) {
     const apiMessage =
@@ -543,8 +543,8 @@ async function requestDocumentJson(params: {
       'message' in payload.error &&
       typeof payload.error.message === 'string'
         ? payload.error.message
-        : 'OpenAI API -kutsu epäonnistui';
-    throw new ApiRouteError(`GPT-parsinta epäonnistui: ${apiMessage}`, 502);
+        : 'OpenAI API request failed';
+    throw new ApiRouteError(`GPT parsing failed: ${apiMessage}`, 502);
   }
 
   return extractResponseText(payload);

@@ -33,12 +33,12 @@ export async function POST(request: NextRequest) {
 
     const source = resolveRequestDataSource(request);
     if (!source) {
-      return jsonError('Aktiivista tietolähdettä ei löytynyt.', 400);
+      return jsonError('Active datasource not found.', 400);
     }
     const dbPath = resolveDbPath(source);
     if (!dbPath) {
       return jsonError(
-        'Aktiivisen tietolähteen SQLite-kantaa ei löytynyt',
+        'Active datasource SQLite database not found',
         404,
       );
     }

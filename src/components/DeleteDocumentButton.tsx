@@ -32,9 +32,9 @@ export default function DeleteDocumentButton({
 
   const handleDelete = async () => {
     const confirmMessage = [
-      `Poistetaanko tosite ${documentCode}?`,
+      `Delete document ${documentCode}?`,
       '',
-      'Tositteen kaikki viennit ja mahdollinen PDF-linkitys poistetaan.',
+      'All entries and linked PDF of this document will be removed.',
     ].join('\n');
 
     if (!window.confirm(confirmMessage)) {
@@ -64,7 +64,7 @@ export default function DeleteDocumentButton({
       const message =
         error instanceof Error
           ? error.message
-          : 'Tositteen poisto epäonnistui.';
+          : 'Document deletion failed.';
       setLocalError(message);
       onError?.(message);
     } finally {
@@ -85,7 +85,7 @@ export default function DeleteDocumentButton({
         ) : (
           <Trash2 className="h-4 w-4" />
         )}
-        {children ?? 'Poista tosite'}
+        {children ?? 'Delete document'}
       </button>
       {localError && !onError && (
         <p className="text-xs text-red-300">{localError}</p>

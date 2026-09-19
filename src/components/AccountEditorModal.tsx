@@ -86,7 +86,7 @@ function AccountEditorModalContent({
           <div className="grid grid-cols-[100px_1fr] gap-4">
             <div>
               <label className="mb-1 block text-xs text-text-muted">
-                Tilinumero
+                Account number
               </label>
               <input
                 type="text"
@@ -99,13 +99,13 @@ function AccountEditorModalContent({
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-text-muted">Nimi</label>
+              <label className="mb-1 block text-xs text-text-muted">Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="input-field"
-                placeholder="Tilin nimi"
+                placeholder="Account name"
                 required
               />
             </div>
@@ -159,7 +159,7 @@ function AccountEditorModalContent({
               disabled={saving || !number.trim() || !name.trim()}
               className="rounded-lg bg-accent/90 px-4 py-2 text-xs font-semibold text-surface-0 transition hover:bg-accent disabled:opacity-40"
             >
-              {saving ? 'Tallennetaan...' : 'Tallenna'}
+              {saving ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>

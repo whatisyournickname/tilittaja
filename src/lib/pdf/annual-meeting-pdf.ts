@@ -1,9 +1,9 @@
 import PDFDocument from 'pdfkit';
 import {
   type DischargeTarget,
-  TilinpaatosPackage,
-  fromIsoToFiDate,
-} from '@/lib/tilinpaatos';
+  FinancialStatementPackage,
+  formatFinnishDate,
+} from '@/lib/financial-statement';
 import { formatNumber } from '@/lib/accounting';
 
 const L = 50;
@@ -13,8 +13,8 @@ function normalizeDecisionText(boardProposal: string, isLoss: boolean): string {
   const proposal = boardProposal.trim();
   if (!proposal) {
     return isLoss
-      ? 'Päätettiin hallituksen esityksen mukaisesti, että tilikauden tappio kirjataan edellisten tilikausien voitto/tappio -tilille.'
-      : 'Päätettiin hallituksen esityksen mukaisesti, että tilikauden voitto siirretään voittovarojen lisäykseksi, eikä osinkoa jaeta.';
+      ? 'It was resolved, in accordance with the board proposal, that the period loss is recorded against prior periods\' profit/loss account.'
+      : 'It was resolved, in accordance with the board proposal, that the period profit is transferred as an addition to profit reserves and no dividend is distributed.';
   }
 
   const withoutTrailingDot = proposal.replace(/[.]+$/, '');
@@ -23,7 +23,7 @@ function normalizeDecisionText(boardProposal: string, isLoss: boolean): string {
     '',
   );
   const normalized = stripped.charAt(0).toLowerCase() + stripped.slice(1);
-  return `Päätettiin hallituksen esityksen mukaisesti, että ${normalized}.`;
+  return `It was resolved, in accordance with the board proposal, that ${normalized}.`;
 }
 
 function formatPeriodForMinutes(
@@ -57,11 +57,11 @@ function buildSection4Text(
   boardProposal: string,
 ): string {
   const isProfit = currentPeriodProfit >= 0;
-  const resultWord = isProfit ? 'voittoa' : 'tappiota';
+  const resultWord = isProfit ? 'profit of' : 'loss of';
   const resultAmount = formatNumber(Math.abs(currentPeriodProfit));
   const distributableAmount = formatNumber(distributableEquity);
 
-  const line1 = `Todettiin, että vahvistettu tilinpäätös osoittaa ${resultWord} ${resultAmount} euroa ja voitonjakokelpoisia varoja ${distributableAmount} euroa.`;
+  const line1 = `It was noted that the confirmed financial statements show a ${resultWord} ${resultAmount} euros and distributable funds of ${distributableAmount} euros.`;
   const line2 = normalizeDecisionText(boardProposal, !isProfit);
   return `${line1} ${line2}`;
 }
@@ -73,20 +73,20 @@ export function buildDischargeText(
   const recipient = (() => {
     switch (dischargeTarget) {
       case 'board':
-        return 'hallitukselle';
+        return 'the board';
       case 'ceo':
-        return 'toimitusjohtajalle';
+        return 'the chief executive officer';
       case 'board-and-ceo':
       default:
-        return 'hallitukselle ja toimitusjohtajalle';
+        return 'the board and chief executive officer';
     }
   })();
 
-  return `Päätettiin myöntää ${recipient} vastuuvapaus päättyneeltä tilikaudelta ${periodShort}.`;
+  return `It was resolved to grant discharge from liability to ${recipient} for the ended period ${periodShort}.`;
 }
 
-export async function buildYhtiokokousPdf(
-  pkg: TilinpaatosPackage,
+export async function buildAnnualMeetingPdf(
+  pkg: FinancialStatementPackage,
 ): Promise<Buffer> {
   const doc = new PDFDocument({ size: 'A4', margin: 50 });
   const chunks: Buffer[] = [];
@@ -96,13 +96,13 @@ export async function buildYhtiokokousPdf(
   });
 
   const pageW = doc.page.width - 100;
-  const meetingDateFi = fromIsoToFiDate(pkg.metadata.meetingDate);
-  const sigDateFi = fromIsoToFiDate(pkg.metadata.signatureDate);
+  const meetingDateFi = formatFinnishDate(pkg.metadata.meetingDate);
+  const sigDateFi = formatFinnishDate(pkg.metadata.signatureDate);
 
   const attendeesText =
     pkg.metadata.attendees.trim() ||
     (pkg.metadata.signerName
-      ? `${pkg.metadata.signerName} omistaen yhtiön koko osakekannan.`
+      ? `${pkg.metadata.signerName} owning the entire share capital of the company.`
       : '');
 
   const periodShort = formatPeriodForMinutes(pkg.periodStart, pkg.periodEnd);
@@ -115,7 +115,7 @@ export async function buildYhtiokokousPdf(
   doc
     .font('Helvetica-Bold')
     .fontSize(10)
-    .text('Varsinainen yhtiökokous', L, headerY, {
+    .text('Annual general meeting', L, headerY, {
       width: pageW - 30,
       align: 'center',
       lineBreak: false,
@@ -128,20 +128,20 @@ export async function buildYhtiokokousPdf(
   doc.y = headerY + doc.currentLineHeight(true) + 2;
 
   if (pkg.businessId.trim()) {
-    doc.font('Helvetica').fontSize(10).text(`Y-tunnus ${pkg.businessId}`);
+    doc.font('Helvetica').fontSize(10).text(`Business ID ${pkg.businessId}`);
   }
   doc.moveDown(0.8);
 
-  doc.font('Helvetica-Bold').fontSize(12).text('PÖYTÄKIRJA');
+  doc.font('Helvetica-Bold').fontSize(12).text('MINUTES');
   doc.moveDown(0.6);
 
   const infoFont = 'Helvetica';
   const colSplit = 100;
 
   const infoRows: [string, string][] = [
-    ['Aika:', meetingDateFi || sigDateFi],
-    ['Paikka:', pkg.metadata.place || ''],
-    ['Läsnä:', attendeesText],
+    ['Date:', meetingDateFi || sigDateFi],
+    ['Place:', pkg.metadata.place || ''],
+    ['Present:', attendeesText],
   ];
   for (const [label, val] of infoRows) {
     const y = doc.y;
@@ -181,27 +181,27 @@ export async function buildYhtiokokousPdf(
 
   writeSection(
     '1§',
-    'Kokouksen avaaminen ja järjestäytyminen',
+    'Opening and organization of the meeting',
     pkg.metadata.signerName
-      ? `${pkg.metadata.signerName} avasi kokouksen. Hänet valittiin kokouksen puheenjohtajaksi.`
-      : 'Kokous avattiin. Puheenjohtaja valittiin.',
+      ? `${pkg.metadata.signerName} opened the meeting. They were elected as chairperson of the meeting.`
+      : 'The meeting was opened. The chairperson was elected.',
   );
 
   writeSection(
     '2§',
-    'Laillisuus ja päätösvaltaisuus',
-    'Todettiin kokous lailliseksi ja päätösvaltaiseksi.',
+    'Lawfulness and quorum',
+    'The meeting was noted as lawful and having a quorum.',
   );
 
   writeSection(
     '3§',
-    'Tilinpäätöksen vahvistaminen',
-    `Käsiteltiin ja vahvistettiin tilinpäätös tilikaudelta ${periodShort}.`,
+    'Approval of the financial statements',
+    `The financial statements for the period ${periodShort} were discussed and approved.`,
   );
 
   writeSection(
     '4§',
-    'Tuloksen käsittely',
+    'Disposition of the result',
     buildSection4Text(
       pkg.equity.currentPeriodProfit,
       pkg.equity.distributableEquity,
@@ -211,14 +211,14 @@ export async function buildYhtiokokousPdf(
 
   writeSection(
     '5§',
-    'Vastuuvapauden myöntäminen',
+    'Granting of discharge from liability',
     buildDischargeText(pkg.metadata.dischargeTarget, periodShort),
   );
 
   writeSection(
     '6§',
-    'Kokouksen päättäminen',
-    'Koska muita asioita ei ollut, puheenjohtaja päätti kokouksen.',
+    'Closing of the meeting',
+    'As there were no other matters, the chairperson closed the meeting.',
   );
 
   doc.moveDown(0.5);
@@ -229,7 +229,7 @@ export async function buildYhtiokokousPdf(
   doc
     .font('Helvetica')
     .fontSize(10)
-    .text((pkg.metadata.signerTitle || 'hallituksen jäsen').toLowerCase());
+    .text((pkg.metadata.signerTitle || 'member of the board').toLowerCase());
 
   doc.moveDown(1);
   doc
@@ -244,11 +244,11 @@ export async function buildYhtiokokousPdf(
   doc
     .font('Helvetica-Bold')
     .fontSize(9)
-    .text('Liite 1', L, attachmentY, { width: 50, lineBreak: false });
+    .text('Attachment 1', L, attachmentY, { width: 50, lineBreak: false });
   doc
     .font('Helvetica')
     .fontSize(9)
-    .text(`Tilinpäätös ${periodShort}.`, L + 50, attachmentY);
+    .text(`Financial statements ${periodShort}.`, L + 50, attachmentY);
 
   doc.end();
   return done;

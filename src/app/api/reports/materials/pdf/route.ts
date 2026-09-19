@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { withDb, jsonError } from '@/lib/api-helpers';
-import { buildMaterialPdf, isMaterialKind } from '@/lib/tilinpaatos-materials';
+import { buildMaterialPdf, isMaterialKind } from '@/lib/financial-statement-materials';
 import { pdfResponse } from '@/lib/pdf/pdf-response';
 
 export const runtime = 'nodejs';
@@ -12,7 +12,7 @@ export const GET = withDb(async (request: NextRequest) => {
 
   if (!isMaterialKind(kindParam)) {
     return jsonError(
-      'Virheellinen materiaali. Käytä kind-parametria: paakirja, paivakirja, tase-erittely, tase-laaja tai tulos-laaja.',
+      'Virheellinen materiaali. Käytä kind-parametria: general-ledger, journal, balance-sheet-detailed, balance-sheet-broad tai income-statement-broad.',
       400,
     );
   }

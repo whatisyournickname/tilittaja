@@ -39,7 +39,7 @@ describe('PeriodLockToggle', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(false);
 
     render(<PeriodLockToggle periodId={4} locked={false} label="2025" />);
-    fireEvent.click(screen.getByRole('button', { name: /Lukitse/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Lock/i }));
 
     expect(setPeriodLockAction).not.toHaveBeenCalled();
   });
@@ -48,7 +48,7 @@ describe('PeriodLockToggle', () => {
     setPeriodLockAction.mockResolvedValue({ ok: true, locked: true });
 
     render(<PeriodLockToggle periodId={4} locked={false} label="2025" />);
-    fireEvent.click(screen.getByRole('button', { name: /Lukitse/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Lock/i }));
 
     await waitFor(() => {
       expect(setPeriodLockAction).toHaveBeenCalledWith(4, true);
@@ -66,10 +66,10 @@ describe('PeriodLockToggle', () => {
     );
 
     render(<PeriodLockToggle periodId={4} locked={true} label="2025" />);
-    fireEvent.click(screen.getByRole('button', { name: /Avaa lukitus/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Unlock/i }));
 
     expect(
-      screen.getByRole('button', { name: /Tallennetaan/i }),
+      screen.getByRole('button', { name: /Saving/i }),
     ).toBeDisabled();
     resolveAction();
     await waitFor(() => {

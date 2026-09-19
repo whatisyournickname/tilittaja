@@ -119,7 +119,7 @@ export default function AccountsFilter({
         closeModal();
         router.refresh();
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Tilin luonti epäonnistui');
+        setError(e instanceof Error ? e.message : 'Account creation failed');
       } finally {
         setSaving(false);
       }
@@ -137,7 +137,7 @@ export default function AccountsFilter({
         closeModal();
         router.refresh();
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Tilin päivitys epäonnistui');
+        setError(e instanceof Error ? e.message : 'Account update failed');
       } finally {
         setSaving(false);
       }
@@ -158,7 +158,7 @@ export default function AccountsFilter({
         closeModal();
         router.refresh();
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Tilin kloonaus epäonnistui');
+        setError(e instanceof Error ? e.message : 'Account clone failed');
       } finally {
         setSaving(false);
       }
@@ -176,7 +176,7 @@ export default function AccountsFilter({
       router.refresh();
     } catch (e) {
       setDeleteError(
-        e instanceof Error ? e.message : 'Tilin poisto epäonnistui',
+        e instanceof Error ? e.message : 'Account deletion failed',
       );
     } finally {
       setDeleting(false);
@@ -209,11 +209,11 @@ export default function AccountsFilter({
 
   const modalTitle =
     modal.kind === 'create'
-      ? 'Uusi tili'
+      ? 'New account'
       : modal.kind === 'edit'
-        ? 'Muokkaa tiliä'
+        ? 'Edit account'
         : modal.kind === 'clone'
-          ? 'Kloonaa tili'
+          ? 'Clone account'
           : '';
 
   const modalAccount =
@@ -230,7 +230,7 @@ export default function AccountsFilter({
     if (modal.kind === 'clone' && modalAccount) {
       return {
         number: '',
-        name: `${modalAccount.name} (kopio)`,
+        name: `${modalAccount.name} (copy)`,
         type: modalAccount.type,
         vat_percentage: modalAccount.vat_percentage,
       };
@@ -253,7 +253,7 @@ export default function AccountsFilter({
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Hae tilejä..."
+          placeholder="Search accounts..."
           className="flex-1"
         />
         <div className="flex flex-wrap items-center gap-1">
@@ -265,7 +265,7 @@ export default function AccountsFilter({
                 : 'text-text-muted hover:text-text-primary hover:bg-surface-3/60'
             }`}
           >
-            Kaikki
+            All
           </button>
           {typeOptions.map((t) => (
             <button
@@ -286,7 +286,7 @@ export default function AccountsFilter({
           className="flex items-center gap-1.5 rounded-lg bg-accent/90 px-3 py-2 text-xs font-semibold text-surface-0 transition hover:bg-accent"
         >
           <Plus className="h-3.5 w-3.5" />
-          Uusi tili
+          New account
         </button>
       </div>
 
@@ -318,20 +318,20 @@ export default function AccountsFilter({
                 <thead>
                   <tr className="border-b border-border-subtle/50">
                     <SortableHeader
-                      label="Nro"
+                      label="No."
                       sortKey="number"
                       current={sort}
                       onSort={handleSort}
                       className="w-20"
                     />
                     <SortableHeader
-                      label="Nimi"
+                      label="Name"
                       sortKey="name"
                       current={sort}
                       onSort={handleSort}
                     />
                     <SortableHeader
-                      label="Tyyppi"
+                      label="Type"
                       sortKey="type"
                       current={sort}
                       onSort={handleSort}
@@ -398,8 +398,8 @@ export default function AccountsFilter({
                                 setModal({ kind: 'edit', account: acc })
                               }
                               className="rounded p-2 text-text-muted transition hover:bg-surface-3/80 hover:text-text-primary"
-                              title="Muokkaa"
-                              aria-label="Muokkaa tiliä"
+                              title="Edit"
+                              aria-label="Edit account"
                             >
                               <Pencil className="h-3.5 w-3.5" />
                             </button>
@@ -408,8 +408,8 @@ export default function AccountsFilter({
                                 setModal({ kind: 'clone', account: acc })
                               }
                               className="rounded p-2 text-text-muted transition hover:bg-surface-3/80 hover:text-text-primary"
-                              title="Kloonaa"
-                              aria-label="Kloonaa tili"
+                              title="Clone"
+                              aria-label="Clone account"
                             >
                               <Copy className="h-3.5 w-3.5" />
                             </button>
@@ -419,8 +419,8 @@ export default function AccountsFilter({
                                 setDeleteError(null);
                               }}
                               className="rounded p-2 text-text-muted transition hover:bg-error/10 hover:text-error"
-                              title="Poista"
-                              aria-label="Poista tili"
+                              title="Delete"
+                              aria-label="Delete account"
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </button>
@@ -438,7 +438,7 @@ export default function AccountsFilter({
 
       {(search || typeFilter !== null) && visibleCount !== totalCount && (
         <p className="text-xs text-text-muted">
-          {visibleCount} / {totalCount} tiliä
+          {visibleCount} / {totalCount} accounts
         </p>
       )}
 
@@ -462,17 +462,13 @@ export default function AccountsFilter({
           />
           <div className="relative w-full max-w-sm rounded-xl border border-border-subtle bg-surface-1 shadow-2xl p-6">
             <h2 className="text-sm font-semibold text-text-primary mb-2">
-              Poista tili?
+              Delete account?
             </h2>
             <p className="text-xs text-text-secondary mb-1">
-              Haluatko varmasti poistaa tilin{' '}
-              <span className="font-mono text-accent">
-                {deleteTarget.number}
-              </span>{' '}
-              {deleteTarget.name}?
+              Are you sure you want to delete account '{deleteTarget.number} {deleteTarget.name}'?
             </p>
             <p className="text-xs text-text-muted mb-4">
-              Tiliä ei voi poistaa, jos sillä on vientejä.
+              Account cannot be deleted if it has entries.
             </p>
             {deleteError && (
               <p className="text-xs text-error mb-3">{deleteError}</p>
@@ -484,7 +480,7 @@ export default function AccountsFilter({
                 disabled={deleting}
                 className="rounded-lg px-4 py-2 text-xs font-medium text-text-muted transition hover:bg-surface-3/60 hover:text-text-primary disabled:opacity-40"
               >
-                Peruuta
+                Cancel
               </button>
               <button
                 type="button"
@@ -492,7 +488,7 @@ export default function AccountsFilter({
                 disabled={deleting}
                 className="rounded-lg bg-error/90 px-4 py-2 text-xs font-semibold text-white transition hover:bg-error disabled:opacity-40"
               >
-                {deleting ? 'Poistetaan...' : 'Poista'}
+                {deleting ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>

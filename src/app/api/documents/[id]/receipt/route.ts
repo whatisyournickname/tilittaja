@@ -30,10 +30,10 @@ export const PATCH = withDb(
       });
       return NextResponse.json(result);
     } catch (error) {
-      return jsonActionError(error, 'PDF-linkityksen tallennus epäonnistui');
+      return jsonActionError(error, 'Failed to save PDF link');
     }
   },
-  'PDF-linkityksen tallennus epäonnistui',
+  'Failed to save PDF link',
 );
 
 export const POST = withDb(
@@ -41,14 +41,14 @@ export const POST = withDb(
     try {
       const documentId = await requireRouteId(params, 'tositteen tunniste');
       if (!isMultipartRequest(request)) {
-        return jsonError('Lähetä PDF multipart-lomakkeena', 400);
+        return jsonError('Send PDF as multipart form', 400);
       }
 
       const formData = await readRequestFormData(request);
 
       const file = formData.get('file');
       if (!(file instanceof File)) {
-        return jsonError('Lähetä yksi PDF-tiedosto kentässä `file`', 400);
+        return jsonError('Send one PDF file in the .file. field', 400);
       }
       if (!isPdfFile(file)) {
         return jsonError('Vain PDF-tiedostot ovat sallittuja', 400);
@@ -57,10 +57,10 @@ export const POST = withDb(
       const result = await uploadDocumentReceiptAction(documentId, file);
       return NextResponse.json(result);
     } catch (error) {
-      return jsonActionError(error, 'PDF-upload epäonnistui');
+      return jsonActionError(error, 'PDF upload failed');
     }
   },
-  'PDF-upload epäonnistui',
+  'PDF upload failed',
 );
 
 export const DELETE = withDb(
@@ -71,8 +71,8 @@ export const DELETE = withDb(
       const result = await deleteDocumentReceiptAction(documentId);
       return NextResponse.json(result);
     } catch (error) {
-      return jsonActionError(error, 'PDF-liitteen poisto epäonnistui');
+      return jsonActionError(error, 'Failed to remove PDF attachment');
     }
   },
-  'PDF-liitteen poisto epäonnistui',
+  'Failed to remove PDF attachment',
 );

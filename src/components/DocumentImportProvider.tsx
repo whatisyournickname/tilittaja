@@ -62,13 +62,13 @@ function getDateWarning(
   reason: DocumentImportApiSuccess['fallbackReason'] | undefined,
 ): string | undefined {
   if (reason === 'missing') {
-    return 'Päiväystä ei tunnistettu luotettavasti, joten käytettiin valitun kauden alkupäivää.';
+    return 'Date not reliably detected, used selected period start date.';
   }
   if (reason === 'shifted_year') {
-    return 'Päiväyksen vuosi korjattiin valitulle tilikaudelle.';
+    return 'Date year corrected to selected fiscal year.';
   }
   if (reason === 'outside_period') {
-    return 'Tunnistettu päiväys ei kuulunut valitulle kaudelle, joten käytettiin kauden alkupäivää.';
+    return 'Detected date not within selected period, used period start date.';
   }
   return undefined;
 }
@@ -96,12 +96,12 @@ function ToastTaskCard({
             ) : (
               <CheckCircle2 className="h-4 w-4 text-emerald-300" />
             )}
-            Tositteiden tuonti
+            Documents import
           </div>
           <div className="mt-1 text-xs text-text-secondary">
-            {task.completed} / {task.total} valmiina
-            {successCount > 0 ? ` · ${successCount} onnistui` : ''}
-            {errorCount > 0 ? ` · ${errorCount} epäonnistui` : ''}
+            {task.completed} / {task.total} done
+            {successCount > 0 ? ` · ${successCount} succeeded` : ''}
+            {errorCount > 0 ? ` · ${errorCount} failed` : ''}
           </div>
         </div>
         {!isRunning ? (
@@ -109,7 +109,7 @@ function ToastTaskCard({
             type="button"
             onClick={() => onDismiss(task.id)}
             className="rounded p-1 text-text-muted transition-colors hover:text-text-primary"
-            aria-label="Sulje tuonti-ilmoitus"
+            aria-label="Close import notification"
           >
             <X className="h-4 w-4" />
           </button>
@@ -138,7 +138,7 @@ function ToastTaskCard({
               {item.status === 'success' ? (
                 <>
                   <div className="mt-1 text-xs text-text-secondary">
-                    Tosite #{item.documentNumber} luotu
+                    Document #{item.documentNumber} created
                     {item.category ? ` · ${item.category}` : ''}
                     {item.name ? ` · ${item.name}` : ''}
                   </div>
@@ -156,7 +156,7 @@ function ToastTaskCard({
         </div>
       ) : (
         <div className="mt-3 text-xs text-text-muted">
-          Tiedostot siirtyivät taustatuontiin. Voit jatkaa työskentelyä sillä välin.
+          Files moved to background import. You can keep working in meantime.
         </div>
       )}
     </div>
@@ -230,7 +230,7 @@ export default function DocumentImportProvider({
               | null;
 
             if (!response.ok || !payload?.id) {
-              throw new Error(payload?.error || 'Tositteen PDF-tuonti epäonnistui.');
+              throw new Error(payload?.error || 'Document PDF import failed.');
             }
 
             updateTask(taskId, (task) => {
@@ -262,7 +262,7 @@ export default function DocumentImportProvider({
                 error:
                   importError instanceof Error
                     ? importError.message
-                    : 'Tositteen PDF-tuonti epäonnistui.',
+                    : 'Document PDF import failed.',
               };
               return {
                 ...task,

@@ -88,7 +88,7 @@ describe('revalidateApp', () => {
     expect(revalidatePath).toHaveBeenCalledWith('/settings');
     expect(revalidatePath).toHaveBeenCalledWith('/settings/recurring-rent');
     expect(revalidatePath).toHaveBeenCalledWith('/vat');
-    expect(revalidatePath).toHaveBeenCalledWith('/reports/tilinpaatos');
+    expect(revalidatePath).toHaveBeenCalledWith('/reports/financial-statement');
     expect(revalidatePath).toHaveBeenCalledTimes(8);
   });
 });

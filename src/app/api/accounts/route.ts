@@ -8,9 +8,9 @@ export async function POST(request: NextRequest) {
     const account = await createAccountAction(body);
     return NextResponse.json(account, { status: 201 });
   } catch (error) {
-    if (error instanceof Error && error.message.includes('on jo käytössä')) {
+    if (error instanceof Error && error.message.includes('already exists')) {
       return jsonError(error.message, 409);
     }
-    return jsonActionError(error, 'Tilin luonti epäonnistui');
+    return jsonActionError(error, 'Failed to create account');
   }
 }

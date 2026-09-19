@@ -17,7 +17,7 @@ export const PATCH = jsonActionRoute(async (
   const documentId = await requireRouteId(params, 'tositteen tunniste');
   const body = await readRequestJson(request);
   return updateDocumentAction(documentId, body);
-}, 'Tositteen päivitys epäonnistui');
+}, 'Failed to update document');
 
 export const DELETE = jsonActionRoute(async (
   _request: NextRequest,
@@ -25,4 +25,4 @@ export const DELETE = jsonActionRoute(async (
 ) => {
   const documentId = await requireRouteId(params, 'tositteen tunniste');
   return deleteDocumentAction(documentId);
-}, 'Tositteen poisto epäonnistui');
+}, 'Failed to delete document');

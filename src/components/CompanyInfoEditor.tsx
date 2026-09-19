@@ -53,7 +53,7 @@ export default function CompanyInfoEditor({ name, businessId }: Props) {
       setSavedBusinessId(businessIdValue.trim());
       setEditing(false);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Tallennus epäonnistui');
+      setError(e instanceof Error ? e.message : 'Save failed');
     } finally {
       setSaving(false);
     }
@@ -64,14 +64,14 @@ export default function CompanyInfoEditor({ name, businessId }: Props) {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-            Perustiedot
+            Basic information
           </p>
           <h2 className="mt-2 text-lg font-semibold text-text-primary">
-            Yrityksen tiedot
+            Company information
           </h2>
           <p className="mt-1 max-w-xl text-sm leading-6 text-text-secondary">
-            Nimi ja Y-tunnus naytetaan raporteissa, PDF-aineistoissa ja muissa
-            yrityskohtaisissa nakymissa.
+            Name and business ID are shown on reports, PDF materials, and other
+            company-specific views.
           </p>
         </div>
 
@@ -81,7 +81,7 @@ export default function CompanyInfoEditor({ name, businessId }: Props) {
             className="inline-flex items-center gap-2 self-start rounded-xl border border-border-subtle bg-surface-0/60 px-3 py-2 text-sm font-medium text-text-primary transition hover:border-accent/30 hover:text-accent-light"
           >
             <Pencil size={14} />
-            Muokkaa
+            Edit
           </button>
         ) : (
           <div className="flex flex-wrap items-center gap-2">
@@ -120,7 +120,7 @@ export default function CompanyInfoEditor({ name, businessId }: Props) {
           <div className="flex items-center gap-2 text-text-secondary">
             <Building2 className="h-4 w-4 text-accent" />
             <label className="text-xs font-medium uppercase tracking-[0.16em]">
-              Nimi
+              Name
             </label>
           </div>
           {editing ? (

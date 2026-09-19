@@ -48,22 +48,22 @@ export default function OpeningBalanceImportPanel({
   const selectedSummary = useMemo(() => {
     if (selectedFiles.length === 0) return null;
     const totalBytes = selectedFiles.reduce((sum, file) => sum + file.size, 0);
-    return `${selectedFiles.length} PDF:tä, yhteensä ${formatBytes(totalBytes)}`;
+    return `${selectedFiles.length}  PDFs, total  ${formatBytes(totalBytes)}`;
   }, [selectedFiles]);
 
   async function handleImport() {
     if (periodLocked) {
-      setError('Tilikausi on lukittu. Avaa kausi ennen avaussaldojen tuontia.');
+      setError('Period is locked. Unlock period before importing opening balances.');
       return;
     }
 
     if (selectedFiles.length === 0) {
-      setError('Valitse vähintään yksi PDF-tiedosto.');
+      setError('Select at least one PDF file.');
       return;
     }
 
     if (selectedFiles.length > 10) {
-      setError('Voit lähettää korkeintaan 10 PDF-tiedostoa.');
+      setError('You can upload max 10 PDF files.');
       return;
     }
 
@@ -85,7 +85,7 @@ export default function OpeningBalanceImportPanel({
         | null;
 
       if (!response.ok || !payload?.ok) {
-        throw new Error(payload?.error || 'Tilikauden avauksen tuonti epäonnistui.');
+        throw new Error(payload?.error || 'Opening balance import failed.');
       }
 
       setSuccess(payload as OpeningBalanceImportApiSuccess);
@@ -95,7 +95,7 @@ export default function OpeningBalanceImportPanel({
       setError(
         importError instanceof Error
           ? importError.message
-          : 'Tilikauden avauksen tuonti epäonnistui.',
+          : 'Opening balance import failed.',
       );
     } finally {
       setIsImporting(false);
@@ -108,22 +108,20 @@ export default function OpeningBalanceImportPanel({
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-200/70">
-              Tilikauden avaus
+              Opening balance
             </p>
             <h2 className="mt-3 text-2xl font-semibold tracking-tight text-white">
-              Luo alkutilanne tilinpäätösmateriaaleista
+              Create opening balances from financial statement materials
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70">
-              Työkalu lukee 1-10 aiemman tilikauden PDF-materiaalia, poimii
-              tasetilien päättösaldot GPT:llä ja muodostaa valitun tilikauden
-              alkuun yhden avaus-tositteen.
+              The tool reads 1-10 PDF files from previous period financial statements, extracts ending balance sheet account balances using GPT, and creates a single opening document at the start of the selected period.
             </p>
           </div>
 
           <div className="grid gap-3 rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm sm:grid-cols-2">
             <div className="rounded-2xl border border-white/8 bg-black/20 px-4 py-3">
               <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
-                Kohdekausi
+                Target period
               </div>
               <div className="mt-2 text-sm font-medium text-white">
                 {periodLabel}
@@ -131,10 +129,10 @@ export default function OpeningBalanceImportPanel({
             </div>
             <div className="rounded-2xl border border-white/8 bg-black/20 px-4 py-3">
               <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
-                Tila
+                Status
               </div>
               <div className="mt-2 text-sm font-medium text-white">
-                {periodLocked ? 'Lukittu' : 'Avoin'}
+                {periodLocked ? 'Locked' : 'Open'}
               </div>
             </div>
           </div>
@@ -149,22 +147,20 @@ export default function OpeningBalanceImportPanel({
             </div>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                Aineisto
+                Materials
               </p>
               <h2 className="mt-2 text-xl font-semibold text-text-primary">
-                Valitse tilinpäätös-PDF:t
+                Select financial statement PDFs
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">
-                Suositeltuja tiedostoja ovat esimerkiksi tase, tase-erittely,
-                pääkirja, päiväkirja ja muu tilinpäätösaineisto. Mitä
-                täydellisempi aineisto, sitä varmempana avaus täsmää.
+                Recommended files include balance sheet, detailed balance sheet, general ledger, journal, and other financial statement materials. The more complete the materials, the more reliable the opening balance will be.
               </p>
             </div>
           </div>
 
           <div className="mt-6 space-y-4">
             <label className="block text-xs font-medium uppercase tracking-[0.16em] text-text-muted">
-              <span className="mb-2 block">PDF-tiedostot (1-10 kpl)</span>
+              <span className="mb-2 block">PDF files (1-10)</span>
               <input
                 type="file"
                 multiple
@@ -181,13 +177,13 @@ export default function OpeningBalanceImportPanel({
             </label>
 
             <div className="rounded-2xl border border-border-subtle bg-surface-0/35 px-4 py-3 text-sm text-text-secondary">
-              {selectedSummary ?? 'Valittuja tiedostoja ei ole.'}
+              {selectedSummary ?? 'No files selected.'}
             </div>
 
             {selectedFiles.length > 0 ? (
               <div className="rounded-2xl border border-border-subtle bg-surface-0/35 p-4">
                 <div className="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-text-muted">
-                  Valitut tiedostot
+                  Selected files
                 </div>
                 <div className="space-y-2">
                   {selectedFiles.map((file) => (
@@ -216,13 +212,13 @@ export default function OpeningBalanceImportPanel({
               <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
                 <div className="flex items-center gap-2 font-medium">
                   <CheckCircle2 className="h-4 w-4" />
-                  Avaustuonti onnistui
+                  Opening balance import successful
                 </div>
                 <p className="mt-2 leading-6">
-                  Tosite #{success.documentNumber} luotiin kaudelle {periodLabel}.
-                  Tuotuja tilejä: {success.importedAccounts}, vientejä:{' '}
-                  {success.createdEntries}, uusia tilejä: {success.createdAccounts}.
-                  Lähdeaineiston päättymispäivä: {success.previousPeriodEnd}.
+                  Document #{success.documentNumber} created for period {periodLabel}.
+                  Accounts imported: {success.importedAccounts}, entries:{' '}
+                  {success.createdEntries}, new accounts: {success.createdAccounts}.
+                  Source period end date: {success.previousPeriodEnd}.
                 </p>
               </div>
             ) : null}
@@ -238,12 +234,12 @@ export default function OpeningBalanceImportPanel({
               {isImporting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Luodaan avausta
+                  Creating opening balance
                 </>
               ) : (
                 <>
                   <Sparkles className="h-4 w-4" />
-                  Luo tilikauden avaus
+                  Create opening balance
                 </>
               )}
             </button>
@@ -257,36 +253,32 @@ export default function OpeningBalanceImportPanel({
             </div>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                Huomioi
+                Note
               </p>
               <h2 className="mt-2 text-xl font-semibold text-text-primary">
-                Mitä työkalu tekee
+                What the tool does
               </h2>
             </div>
           </div>
 
           <div className="mt-6 space-y-3 text-sm leading-6 text-text-secondary">
             <p>
-              PDF-aineisto lähetetään OpenAI API:lle, joka muodostaa siitä
-              tilikohtaiset päättösaldot.
+              PDF materials are sent to the OpenAI API, which extracts per-account ending balances.
             </p>
             <p>
-              Tuonti luo puuttuvat tasetilit automaattisesti, jos materiaalissa
-              on tilejä joita nykyisessä tilikartassa ei vielä ole.
+              The import automatically creates missing balance sheet accounts if the materials contain accounts not yet in the current chart of accounts.
             </p>
             <p>
-              Jos aineistosta saatavat saldot eivät täsmää debet/kredit-tasolla,
-              tuonti keskeytetään eikä avaus-tositetta luoda.
+              If the balances extracted from materials do not match at the debit/credit level, the import is aborted and no opening document is created.
             </p>
             <p>
-              Sama työkalu ei tee toista avausajoa kaudelle, jos siellä on jo
-              olemassa `AVAUS`-kategorian tosite.
+              The tool won't run a second opening balance import for a period that already has a document with the `AVAUS` category.
             </p>
           </div>
 
           {periodLocked ? (
             <div className="mt-6 rounded-2xl border border-amber-500/20 bg-amber-500/8 p-4 text-sm leading-6 text-amber-100/90">
-              Valittu tilikausi on lukittu. Avaa kausi asetuksista ennen tuontia.
+              Selected period is locked. Unlock period in settings before importing.
             </div>
           ) : null}
         </section>

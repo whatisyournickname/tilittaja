@@ -21,7 +21,7 @@ export {
 
 export {
   updateCompanyInfoAction,
-  updateTilinpaatosMetadataAction,
+  updateFinancialStatementMetadataAction,
   setPeriodLockAction,
   generateRecurringRentDocumentsAction,
 } from './settings-actions';

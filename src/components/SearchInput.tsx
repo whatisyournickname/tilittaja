@@ -13,7 +13,7 @@ interface SearchInputProps {
 export default function SearchInput({
   value,
   onChange,
-  placeholder = 'Hae...',
+  placeholder = 'Search...',
   className = '',
   autoFocus = false,
 }: SearchInputProps) {
@@ -34,7 +34,7 @@ export default function SearchInput({
           type="button"
           onClick={() => onChange('')}
           className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted transition hover:text-text-secondary"
-          aria-label="Tyhjennä haku"
+          aria-label="Clear search"
         >
           <X className="h-3.5 w-3.5" />
         </button>

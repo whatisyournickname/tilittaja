@@ -55,12 +55,12 @@ export default function StateTransferPanel({
 
   async function handleImport() {
     if (!selectedFile) {
-      setError('Valitse ensin export ZIP -paketti.');
+      setError('Select an export ZIP file first.');
       return;
     }
 
     const confirmed = window.confirm(
-      `Palautetaanko tietolähde ${sourceName} ZIP-paketista? Nykyinen tila ylikirjoitetaan kokonaan.`,
+      `Restore data source ${sourceName} from ZIP? Current state will be completely overwritten.`,
     );
     if (!confirmed) return;
 
@@ -77,7 +77,7 @@ export default function StateTransferPanel({
       setError(
         importError instanceof Error
           ? importError.message
-          : 'Import epäonnistui',
+          : 'Import failed',
       );
     } finally {
       setImporting(false);
@@ -91,23 +91,23 @@ export default function StateTransferPanel({
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-200/70">
-              Tuonti ja vienti
+              Import & Export
             </p>
             <h2 className="mt-3 text-2xl font-semibold tracking-tight text-white">
-              Koko kirjanpidon palautettava varmuuskopio
+              Full accounting backup, fully restorable
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70">
-              Vienti kokoaa aktiivisen tietolähteen yhteen ZIP-pakettiin:
-              SQLite-kannan, tositteiden PDF:t, tiliotteet sekä muun aineiston.
-              Import palauttaa saman paketin takaisin ja korvaa nykyisen tilan
-              kokonaan.
+              Export bundles the active data source into a single ZIP package:
+              SQLite database, document PDFs, bank statements, and other materials.
+              Import restores that same package back and replaces the current state
+              entirely.
             </p>
           </div>
 
           <div className="grid gap-3 rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm sm:grid-cols-2">
             <div className="rounded-2xl border border-white/8 bg-black/20 px-4 py-3">
               <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
-                Tietolähde
+                Data source
               </div>
               <div className="mt-2 text-sm font-medium text-white">
                 {sourceName}
@@ -133,15 +133,15 @@ export default function StateTransferPanel({
             </div>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                Vie tila
+                Export state
               </p>
               <h2 className="mt-2 text-xl font-semibold text-text-primary">
-                Lataa palautettava export
+                Download a restorable export
               </h2>
               <p className="mt-2 max-w-xl text-sm leading-6 text-text-secondary">
-                Paketti ottaa mukaan tietokannan snapshotin ja aktiivisen
-                tietolähteen tiedostot. Tämä on tarkoitettu siirtoon,
-                varmuuskopiointiin ja koko tilan palautukseen.
+                The package includes a consistent database snapshot and the
+                active data source files. Intended for transfer,
+                backup, and full state restoration.
               </p>
             </div>
           </div>
@@ -150,21 +150,21 @@ export default function StateTransferPanel({
             <div className="rounded-2xl border border-border-subtle bg-surface-0/40 p-4">
               <div className="flex items-center gap-2 text-sm font-medium text-text-primary">
                 <Database className="h-4 w-4 text-accent" />
-                SQL ja sovellustila
+                SQL and application state
               </div>
               <p className="mt-2 text-xs leading-5 text-text-secondary">
-                SQLite-kanta viedään konsistenttina snapshotina, joten palautus
-                ei riipu avoimesta WAL-tilasta.
+                SQLite database exported as consistent snapshot, so restoration
+                does not depend on an open WAL state.
               </p>
             </div>
             <div className="rounded-2xl border border-border-subtle bg-surface-0/40 p-4">
               <div className="flex items-center gap-2 text-sm font-medium text-text-primary">
                 <RefreshCw className="h-4 w-4 text-accent" />
-                Lähdeaineisto mukana
+                Source materials included
               </div>
               <p className="mt-2 text-xs leading-5 text-text-secondary">
-                Tositteet, tiliotteet ja muut aktiivisen tietolähteen tiedostot
-                kulkevat samassa ZIPissä.
+                Documents, bank statements, and other files from the active data
+                source travel in the same ZIP.
               </p>
             </div>
           </div>
@@ -175,11 +175,11 @@ export default function StateTransferPanel({
               className="inline-flex items-center gap-2 rounded-2xl bg-accent px-4 py-3 text-sm font-medium text-white transition hover:bg-accent-light hover:text-surface-0"
             >
               <Download className="h-4 w-4" />
-              Lataa export ZIP
+              Download export ZIP
             </a>
             <span className="text-xs leading-5 text-text-muted">
-              Suositus: ota uusi export ennen suurempia muutoksia tai importin
-              testausta.
+              Recommendation: take a fresh export before major changes or
+              before testing import.
             </span>
           </div>
         </section>
@@ -191,15 +191,14 @@ export default function StateTransferPanel({
             </div>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                Palauta tila
+                Restore state
               </p>
               <h2 className="mt-2 text-xl font-semibold text-text-primary">
-                Importtaa aiempi export
+                Import a previous export
               </h2>
               <p className="mt-2 max-w-xl text-sm leading-6 text-text-secondary">
-                Import ylikirjoittaa koko aktiivisen tietolähteen. Käytä vain
-                tällä sivulla tuotettua ZIP-pakettia, joka kuuluu samalle
-                tietolähteelle.
+                Import overwrites the entire active data source. Use only a ZIP
+                produced from this page that belongs to this data source.
               </p>
             </div>
           </div>
@@ -208,8 +207,8 @@ export default function StateTransferPanel({
             <div className="flex items-start gap-3">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
               <p className="text-sm leading-6 text-amber-100/90">
-                Nykyinen tietokanta ja tiedostot korvataan kokonaan. Tee uusi
-                export ensin, jos haluat paluupisteen ennen palautusta.
+                The current database and files will be replaced entirely.
+                Take a fresh export first if you want a rollback point before restoring.
               </p>
             </div>
           </div>
@@ -217,7 +216,7 @@ export default function StateTransferPanel({
           <div className="mt-6 space-y-4">
             <label className="block text-xs font-medium uppercase tracking-[0.16em] text-text-muted">
               <span className="mb-2 block">
-                Valitse ZIP-paketti
+                Select ZIP package
               </span>
               <input
                 type="file"
@@ -233,7 +232,7 @@ export default function StateTransferPanel({
             </label>
 
             <div className="rounded-2xl border border-border-subtle bg-surface-0/35 px-4 py-3 text-sm text-text-secondary">
-              {selectedFileLabel ?? 'Valittua tiedostoa ei ole.'}
+              {selectedFileLabel ?? 'No file selected.'}
             </div>
 
             {error ? (
@@ -246,12 +245,11 @@ export default function StateTransferPanel({
               <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
                 <div className="flex items-center gap-2 font-medium">
                   <CheckCircle2 className="h-4 w-4" />
-                  Palautus onnistui
+                  Restore successful
                 </div>
                 <p className="mt-2 leading-6">
-                  {success.manifest.sourceName} palautettiin paketista, joka on
-                  luotu {formatDateTime(success.manifest.createdAt)}. Paketin
-                  tiedostoja: {success.fileCount}.
+                  {success.manifest.sourceName} was restored from a package created on
+                  {formatDateTime(success.manifest.createdAt)}. Files in package: {success.fileCount}.
                 </p>
               </div>
             ) : null}
@@ -267,12 +265,12 @@ export default function StateTransferPanel({
               {importing ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Palautetaan
+                  Restoring
                 </>
               ) : (
                 <>
                   <Upload className="h-4 w-4" />
-                  Palauta exportista
+                  Restore from export
                 </>
               )}
             </button>

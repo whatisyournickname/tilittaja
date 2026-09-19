@@ -232,7 +232,7 @@ export default function BankStatementEntries({
       setActionError(
         error instanceof Error
           ? error.message
-          : 'Tositteen liitos epäonnistui.',
+          : 'Document linking failed.',
       );
       return false;
     } finally {
@@ -321,7 +321,7 @@ export default function BankStatementEntries({
 
   const loadAiSuggestions = async () => {
     if (selectedUnprocessedEntryIds.length === 0) {
-      setAiError('Valitse vähintään yksi käsittelemätön rivi yhdistettäväksi.');
+      setAiError('Select at least one unprocessed row to link.');
       setAiSuggestions([]);
       setAiSelectedEntryIds(new Set());
       return;
@@ -348,7 +348,7 @@ export default function BankStatementEntries({
       setAiError(
         error instanceof Error
           ? error.message
-          : 'AI-ehdotusten haku epäonnistui.',
+          : 'AI suggestions search failed.',
       );
     } finally {
       setAiLoading(false);
@@ -358,7 +358,7 @@ export default function BankStatementEntries({
   const openAiModal = () => {
     if (periodLocked) return;
     if (selectedUnprocessedEntryIds.length === 0) {
-      setActionError('Valitse vähintään yksi käsittelemätön rivi yhdistettäväksi.');
+      setActionError('Select at least one unprocessed row to link.');
       return;
     }
 
@@ -400,7 +400,7 @@ export default function BankStatementEntries({
       }));
 
     if (links.length === 0) {
-      setAiError('Valitse vähintään yksi AI-ehdotus hyväksyttäväksi.');
+      setAiError('Select at least one AI suggestion to accept.');
       return;
     }
 
@@ -423,7 +423,7 @@ export default function BankStatementEntries({
       setAiError(
         error instanceof Error
           ? error.message
-          : 'AI-ehdotusten hyväksyntä epäonnistui.',
+          : 'AI suggestion acceptance failed.',
       );
     } finally {
       setAiApplying(false);
@@ -440,16 +440,16 @@ export default function BankStatementEntries({
 
       {periodLocked ? (
         <div className="mb-4 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-100">
-          Tilikausi on lukittu. Tilioterivien linkitys ja tositteiden luonti
-          ovat vain luku -tilassa.
+          Period is locked. Bank statement row linking and document creation
+          are read-only.
         </div>
       ) : null}
 
       {unprocessedCount > 0 && (
         <div className="flex items-center justify-between mb-4">
           <div className="text-sm text-text-secondary">
-            {selectedUnprocessedEntryIds.length} / {unprocessedCount} valittu
-            yhdistettäväksi
+            {selectedUnprocessedEntryIds.length} / {unprocessedCount} selected
+            to link
           </div>
           <button
             type="button"
@@ -458,7 +458,7 @@ export default function BankStatementEntries({
             className="flex items-center gap-2 bg-accent hover:bg-amber-700 disabled:bg-surface-3 disabled:text-text-muted text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           >
             <Sparkles className="w-4 h-4" />
-            Yhdistä tositteisiin (AI)
+            Link to documents (AI)
           </button>
         </div>
       )}
@@ -478,7 +478,7 @@ export default function BankStatementEntries({
                       }
                       onChange={toggleAll}
                       className="rounded border-border-subtle bg-surface-0/60 text-accent focus:ring-accent/20"
-                      aria-label="Valitse kaikki rivit"
+                      aria-label="Valitse kaikki rowt"
                     />
                   </label>
                 </th>
@@ -522,7 +522,7 @@ export default function BankStatementEntries({
                             checked={selectedEntries.has(entry.id)}
                             onChange={() => toggleEntry(entry.id)}
                             className="rounded border-border-subtle bg-surface-0/60 text-accent focus:ring-accent/20"
-                            aria-label={`Valitse rivi: ${entry.counterparty || 'tiliotevienti'}`}
+                            aria-label={`Valitse row: ${entry.counterparty || 'tiliotevienti'}`}
                           />
                         </label>
                       )}
@@ -567,7 +567,7 @@ export default function BankStatementEntries({
                           onClick={() => void handleMarkUnprocessed(entry.id)}
                           disabled={periodLocked || linkingEntryId === entry.id}
                           className="inline-flex items-center gap-1 rounded border border-border-subtle bg-transparent px-2 py-1 text-xs text-text-secondary hover:bg-surface-3 hover:text-text-primary disabled:cursor-not-allowed disabled:text-text-muted"
-                          aria-label="Poista tositelinkki"
+                          aria-label="Remove receipt link"
                         >
                           {linkingEntryId === entry.id ? (
                             <Loader2 className="h-3 w-3 animate-spin" />
@@ -586,7 +586,7 @@ export default function BankStatementEntries({
                         >
                           {currentDocumentId
                             ? `#${entry.document_number ?? currentDocumentId}`
-                            : 'Liitä tosite'}
+                            : 'Attach document'}
                         </button>
                         {linkingEntryId === entry.id && (
                           <Loader2 className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-accent animate-spin" />
@@ -601,7 +601,7 @@ export default function BankStatementEntries({
         </table>
         {entries.length === 0 && (
           <div className="text-center py-8 text-text-muted text-sm">
-            Ei tapahtumia
+            No transactions
           </div>
         )}
       </div>

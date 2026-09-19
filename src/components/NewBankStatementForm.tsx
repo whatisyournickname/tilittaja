@@ -170,7 +170,7 @@ export default function NewBankStatementForm({ accounts }: Props) {
         });
 
       if (entries.length === 0) {
-        throw new Error('Lisää vähintään yksi rivi');
+        throw new Error('Add at least one row');
       }
 
       const data = await createBankStatementManualAction({
@@ -214,7 +214,7 @@ export default function NewBankStatementForm({ accounts }: Props) {
           Kirjanpito
         </p>
         <h1 className="text-xl font-semibold tracking-tight text-text-primary">
-          Lisää tiliote
+          Add bank statement
         </h1>
       </div>
 
@@ -276,7 +276,7 @@ export default function NewBankStatementForm({ accounts }: Props) {
           </div>
           <div>
             <label htmlFor="bs-period-end" className="mb-2 block text-sm font-medium text-text-secondary">
-              Kausi päättyy
+              Period ends
             </label>
             <input
               id="bs-period-end"
@@ -350,7 +350,7 @@ export default function NewBankStatementForm({ accounts }: Props) {
                     type="date"
                     value={row.date}
                     onChange={(e) => updateRow(index, 'date', e.target.value)}
-                    aria-label="Tapahtumapäivä"
+                    aria-label="Transaction date"
                     className="rounded border border-border-subtle bg-surface-0/60 px-2.5 py-1.5 text-sm text-text-primary outline-none transition focus:border-accent/40 focus:ring-1 focus:ring-accent/20"
                   />
                 </td>
@@ -409,7 +409,7 @@ export default function NewBankStatementForm({ accounts }: Props) {
                     onClick={() => removeRow(index)}
                     className="rounded p-2 text-text-muted transition-colors hover:text-rose-400"
                     disabled={rows.length <= 1}
-                    aria-label="Poista rivi"
+                    aria-label="Delete row"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -426,11 +426,11 @@ export default function NewBankStatementForm({ accounts }: Props) {
                   className="flex min-h-[32px] items-center gap-1 text-sm text-accent transition-colors hover:text-accent-light"
                 >
                   <Plus className="h-4 w-4" />
-                  Lisää rivi
+                  Add row
                 </button>
               </td>
               <td className="px-4 py-3 text-center text-xs text-text-secondary">
-                {validEntryCount} riviä
+                {validEntryCount} rows
               </td>
               <td className="px-4 py-3 text-right font-mono text-sm text-text-secondary">
                 <span className="text-emerald-400">
@@ -450,15 +450,15 @@ export default function NewBankStatementForm({ accounts }: Props) {
       <div className="flex items-center justify-between">
         <div className="text-sm text-text-secondary">
           {validEntryCount === 0
-            ? 'Lisää rivejä tiliotteelle'
-            : `${validEntryCount} rivi${validEntryCount === 1 ? '' : 'ä'}`}
+            ? 'Add rows to bank statement'
+            : `${validEntryCount} row${validEntryCount === 1 ? '' : 's'}`}
         </div>
         <button
           type="submit"
           disabled={saving || !bankAccountId || validEntryCount === 0}
           className="rounded-lg bg-accent px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-700 disabled:bg-surface-3 disabled:text-text-muted"
         >
-          {saving ? 'Tallennetaan...' : 'Tallenna'}
+          {saving ? 'Saving...' : 'Save'}
         </button>
       </div>
 
@@ -477,7 +477,7 @@ export default function NewBankStatementForm({ accounts }: Props) {
           onSelectAccount={picker.setSelectedAccountId}
           onClose={closeAccountPicker}
           onConfirm={picker.confirm}
-          confirmLabel="Valitse tili"
+          confirmLabel="Select account"
           confirmDisabled={
             picker.selectedAccountId == null ||
             picker.selectedAccountId === bankAccountId

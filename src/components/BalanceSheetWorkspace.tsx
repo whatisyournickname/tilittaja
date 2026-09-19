@@ -178,7 +178,7 @@ export default function BalanceSheetWorkspace({
         <div className="rounded-xl border border-border-subtle bg-surface-1/50 p-3">
           <div className="mb-3">
             <h2 className="text-sm font-semibold text-text-primary">
-              Tilin tapahtumat
+              Account transactions
             </h2>
             {selectedDetail ? (
               <p className="mt-1 text-xs text-text-secondary">
@@ -189,7 +189,7 @@ export default function BalanceSheetWorkspace({
               </p>
             ) : (
               <p className="mt-1 text-xs text-text-muted">
-                Valitse vasemmalta tili, niin sen tapahtumat näkyvät tässä.
+                Select an account on the left to see its transactions here.
               </p>
             )}
           </div>
@@ -203,7 +203,7 @@ export default function BalanceSheetWorkspace({
                       Nro
                     </th>
                     <th className="px-2 py-1.5 text-left font-medium text-text-muted w-[72px]">
-                      Päivä
+                      Date
                     </th>
                     <th className="px-2 py-1.5 text-left font-medium text-text-muted">
                       Kuvaus
@@ -264,7 +264,7 @@ export default function BalanceSheetWorkspace({
                       colSpan={4}
                       className="px-2 py-1.5 font-medium text-text-secondary"
                     >
-                      Yhteensä
+                      Total
                     </td>
                     <td className="px-2 py-1.5 text-right font-mono font-medium text-text-primary tabular-nums whitespace-nowrap">
                       {formatCurrency(runningBalance)}
@@ -277,10 +277,10 @@ export default function BalanceSheetWorkspace({
             <div className="flex items-center justify-center rounded-lg border border-dashed border-border-subtle bg-surface-2/30 p-8 text-center">
               <div>
                 <div className="text-sm font-medium text-text-secondary">
-                  Ei tapahtumia tällä tilikaudella
+                  No transactions this period
                 </div>
                 <div className="mt-2 text-xs text-text-muted">
-                  Tilin saldo voi muodostua aiemmilta tilikausilta.
+                  Account balance may come from prior periods.
                 </div>
               </div>
             </div>
@@ -288,10 +288,10 @@ export default function BalanceSheetWorkspace({
             <div className="flex items-center justify-center rounded-lg border border-dashed border-border-subtle bg-surface-2/30 p-8 text-center">
               <div>
                 <div className="text-sm font-medium text-text-secondary">
-                  Ei valittua tiliä
+                  No account selected
                 </div>
                 <div className="mt-2 text-xs text-text-muted">
-                  Klikkaa taserakenteen tiliriviä nähdäksesi tilin tapahtumat.
+                  Click account rows in the balance sheet to see account transactions.
                 </div>
               </div>
             </div>

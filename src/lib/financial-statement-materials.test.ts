@@ -117,9 +117,9 @@ import {
   buildMaterialPdf,
   isMaterialKind,
   MATERIALS,
-} from './tilinpaatos-materials';
+} from './financial-statement-materials';
 
-describe('tilinpaatos-materials', () => {
+describe('financialStatement-materials', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     getAccounts.mockReturnValue([
@@ -224,11 +224,11 @@ describe('tilinpaatos-materials', () => {
 
   describe('isMaterialKind', () => {
     it('returns true for valid material kinds', () => {
-      expect(isMaterialKind('paakirja')).toBe(true);
-      expect(isMaterialKind('paivakirja')).toBe(true);
-      expect(isMaterialKind('tase-erittely')).toBe(true);
-      expect(isMaterialKind('tase-laaja')).toBe(true);
-      expect(isMaterialKind('tulos-laaja')).toBe(true);
+      expect(isMaterialKind('general-ledger')).toBe(true);
+      expect(isMaterialKind('journal')).toBe(true);
+      expect(isMaterialKind('balance-sheet-detailed')).toBe(true);
+      expect(isMaterialKind('balance-sheet-broad')).toBe(true);
+      expect(isMaterialKind('income-statement-broad')).toBe(true);
     });
 
     it('returns false for invalid values', () => {
@@ -251,48 +251,48 @@ describe('tilinpaatos-materials', () => {
   });
 
   describe('buildMaterialPdf', () => {
-    it('builds paakirja PDF and returns buffer with filename', async () => {
-      const result = await buildMaterialPdf('paakirja', 2);
+    it('builds general-ledger PDF and returns buffer with filename', async () => {
+      const result = await buildMaterialPdf('general-ledger', 2);
       expect(result.buffer).toBeInstanceOf(Buffer);
       expect(result.buffer.length).toBeGreaterThan(0);
-      expect(result.filename).toBe('paakirja-test-oy-2025.pdf');
-      expect(result.title).toBe('Pääkirja');
+      expect(result.filename).toBe('general-ledger-test-oy-2025.pdf');
+      expect(result.title).toBe('General ledger');
     });
 
-    it('builds paivakirja PDF', async () => {
-      const result = await buildMaterialPdf('paivakirja', 2);
+    it('builds journal PDF', async () => {
+      const result = await buildMaterialPdf('journal', 2);
       expect(result.buffer).toBeInstanceOf(Buffer);
-      expect(result.filename).toContain('paivakirja');
+      expect(result.filename).toContain('journal');
     });
 
-    it('builds tase-laaja PDF', async () => {
-      const result = await buildMaterialPdf('tase-laaja', 2);
+    it('builds balance-sheet-broad PDF', async () => {
+      const result = await buildMaterialPdf('balance-sheet-broad', 2);
       expect(result.buffer).toBeInstanceOf(Buffer);
-      expect(result.filename).toContain('tase-laaja');
+      expect(result.filename).toContain('balance-sheet-broad');
     });
 
-    it('builds tase-erittely PDF with detail rows only', async () => {
-      const result = await buildMaterialPdf('tase-erittely', 2);
+    it('builds balance-sheet-detailed PDF with detail rows only', async () => {
+      const result = await buildMaterialPdf('balance-sheet-detailed', 2);
       expect(result.buffer).toBeInstanceOf(Buffer);
-      expect(result.filename).toContain('tase-erittely');
+      expect(result.filename).toContain('balance-sheet-detailed');
     });
 
-    it('builds tulos-laaja PDF', async () => {
-      const result = await buildMaterialPdf('tulos-laaja', 2);
+    it('builds income-statement-broad PDF', async () => {
+      const result = await buildMaterialPdf('income-statement-broad', 2);
       expect(result.buffer).toBeInstanceOf(Buffer);
-      expect(result.filename).toContain('tulos-laaja');
+      expect(result.filename).toContain('income-statement-broad');
     });
 
     it('falls back to the current settings period when periodId is not provided', async () => {
-      const result = await buildMaterialPdf('paakirja');
+      const result = await buildMaterialPdf('general-ledger');
       expect(result.buffer).toBeInstanceOf(Buffer);
     });
 
     it('throws when no period found', async () => {
       const { getPeriods } = await import('@/lib/db');
       (getPeriods as ReturnType<typeof vi.fn>).mockReturnValue([]);
-      await expect(buildMaterialPdf('paakirja')).rejects.toThrow(
-        'Tilikautta ei löytynyt',
+      await expect(buildMaterialPdf('general-ledger')).rejects.toThrow(
+        'No period found',
       );
     });
 
@@ -303,8 +303,8 @@ describe('tilinpaatos-materials', () => {
           : { id, data: 'balance-rows' },
       );
 
-      await expect(buildMaterialPdf('tulos-laaja', 2)).rejects.toThrow(
-        'Tuloslaskelman laajaa rakennetta ei löytynyt.',
+      await expect(buildMaterialPdf('income-statement-broad', 2)).rejects.toThrow(
+        'Detailed income statement structure not found.',
       );
     });
 
@@ -313,8 +313,8 @@ describe('tilinpaatos-materials', () => {
         id === 'balance-sheet-detailed' ? null : { id, data: 'income-rows' },
       );
 
-      await expect(buildMaterialPdf('tase-laaja', 2)).rejects.toThrow(
-        'Taseen laajaa rakennetta ei löytynyt.',
+      await expect(buildMaterialPdf('balance-sheet-broad', 2)).rejects.toThrow(
+        'Detailed balance sheet structure not found.',
       );
     });
   });

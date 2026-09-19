@@ -32,7 +32,7 @@ describe('POST /api/documents/[id]/duplicate', () => {
 
   it('returns 404 when document does not exist', async () => {
     duplicateDocumentAction.mockRejectedValue(
-      new ApiRouteError('Tositetta ei löytynyt', 404),
+      new ApiRouteError('Document not found', 404),
     );
 
     const res = await POST(postRequest() as NextRequest, {
@@ -40,12 +40,12 @@ describe('POST /api/documents/[id]/duplicate', () => {
     });
     expect(res.status).toBe(404);
     const data = await res.json();
-    expect(data.error).toContain('löytynyt');
+    expect(data.error).toContain('not found');
   });
 
   it('returns 400 when document has no entries', async () => {
     duplicateDocumentAction.mockRejectedValue(
-      new ApiRouteError('Tositteella ei ole kopioitavia vientirivejä', 400),
+      new ApiRouteError('Document has no entry rows to copy', 400),
     );
 
     const res = await POST(postRequest() as NextRequest, {
@@ -53,7 +53,7 @@ describe('POST /api/documents/[id]/duplicate', () => {
     });
     expect(res.status).toBe(400);
     const data = await res.json();
-    expect(data.error).toContain('vientirivejä');
+    expect(data.error).toContain('entry rows to copy');
   });
 
   it('returns 200 and duplicates document on success', async () => {

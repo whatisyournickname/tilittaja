@@ -43,9 +43,9 @@ interface Props {
 }
 
 function sourceLabel(source: ReceiptSource): string {
-  if (source === 'manual') return 'Valittu kasin';
-  if (source === 'automatic') return 'Automaattinen';
-  return 'Ei tositetta';
+  if (source === 'manual') return 'Uploaded manually';
+  if (source === 'automatic') return 'Automatic';
+  return 'No receipt';
 }
 
 interface ReceiptPayload {
@@ -101,31 +101,31 @@ function ReceiptPreviewModal({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={`Tositteen ${documentNumber} PDF-esikatselu`}
+        aria-label={`Document ${documentNumber} PDF preview`}
         className="mx-auto flex h-full max-w-6xl flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface-0"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-center justify-between gap-4 border-b border-border-subtle px-4 py-3">
           <div>
             <div className="text-sm font-medium text-text-primary">
-              Tosite #{documentNumber}
+              Document #{documentNumber}
             </div>
             <div className="mt-1 text-xs text-text-secondary">
-              PDF-esikatselu koko näytöllä
+              Full-screen PDF preview
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="text-text-secondary transition hover:text-text-primary"
-            aria-label="Sulje PDF-esikatselu"
+            aria-label="Close PDF preview"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         <iframe
-          title={`Tosite ${documentNumber} PDF (laajennettu)`}
+          title={`Document ${documentNumber} PDF (expanded)`}
           src={previewSrc}
           className="min-h-0 flex-1 bg-white"
         />
@@ -143,10 +143,10 @@ export default function ReceiptAttachmentPanel({
   initialReceiptPath,
   initialReceiptSource,
   onReceiptChange,
-  attachmentLabel = 'Liitetty tosite',
-  attachButtonLabel = 'Liitä tosite',
-  replaceButtonLabel = 'Vaihda tiedosto',
-  emptyStateText = 'Tällä tositteella ei ole tositetta. Lisää PDF kohdasta `Liitä tosite`.',
+  attachmentLabel = 'Attached receipt',
+  attachButtonLabel = 'Attach document',
+  replaceButtonLabel = 'Replace file',
+  emptyStateText = 'This document has no receipt. Add a PDF from `Attach document`.',
   modalTitle,
 }: Props) {
   const [receiptPath, setReceiptPath] = useState(initialReceiptPath);
@@ -203,7 +203,7 @@ export default function ReceiptAttachmentPanel({
       setActionError(
         error instanceof Error
           ? error.message
-          : 'PDF-linkityksen tallennus epaonnistui.',
+          : 'Failed to save PDF link.',
       );
     } finally {
       setPendingAction(null);
@@ -232,7 +232,7 @@ export default function ReceiptAttachmentPanel({
       setIsPickerOpen(false);
     } catch (error) {
       setActionError(
-        error instanceof Error ? error.message : 'PDF-upload epäonnistui.',
+        error instanceof Error ? error.message : 'PDF upload failed.',
       );
     } finally {
       setPendingAction(null);
@@ -308,26 +308,26 @@ export default function ReceiptAttachmentPanel({
                 ) : (
                   <Unlink className="h-3.5 w-3.5" />
                 )}
-                Poista linkitys
+                Remove link
               </button>
             )}
           </div>
 
           <div className="rounded-lg border border-border-subtle bg-surface-0/40 p-3">
             <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
-              Nykyinen tiedosto
+              Current file
             </div>
             <div className="mt-2 flex items-start gap-2 font-mono text-xs text-text-primary">
               <span className="min-w-0 flex-1 break-all">
-                {receiptPath ?? 'Ei tositetta.'}
+                {receiptPath ?? 'No receipt.'}
               </span>
               {receiptPath && (
                 <a
                   href={`/api/receipts/pdf?documentId=${documentId}`}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label="Avaa PDF uudessa valilehdessa"
-                  title="Avaa PDF"
+                  aria-label="Open PDF in new tab"
+                  title="Open PDF"
                   className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded text-text-muted transition hover:text-text-primary"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
@@ -338,7 +338,7 @@ export default function ReceiptAttachmentPanel({
 
           {readOnly && (
             <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 text-xs text-yellow-100">
-              Tilikausi on lukittu. Liitteiden muokkaus on poistettu käytöstä.
+              Fiscal year is locked. Attachment editing is disabled.
             </div>
           )}
         </div>
@@ -355,10 +355,10 @@ export default function ReceiptAttachmentPanel({
           <div className="flex flex-col gap-4 border-b border-border-subtle p-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
-                PDF-esikatselu
+                PDF preview
               </div>
               <div className="mt-1 text-sm text-text-secondary">
-                Näytä liitetty tosite tässä tai avaa se suurempana.
+                View the attached document here or open it larger.
               </div>
             </div>
             <button
@@ -367,12 +367,12 @@ export default function ReceiptAttachmentPanel({
               className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border-subtle bg-surface-0/70 px-4 py-2 text-sm font-medium text-text-primary transition hover:border-accent/30 hover:bg-surface-0 hover:text-accent-light"
             >
               <ExternalLink className="h-4 w-4" />
-              Avaa suurempana
+              Open larger
             </button>
           </div>
 
           <iframe
-            title={`Tosite ${documentNumber} PDF`}
+            title={`Document ${documentNumber} PDF`}
             src={currentPreviewSrc}
             className="aspect-210/297 max-h-[72vh] w-full bg-white"
           />
@@ -395,18 +395,17 @@ export default function ReceiptAttachmentPanel({
             <div className="flex items-center justify-between gap-4 border-b border-border-subtle px-4 py-3">
               <div>
                 <div className="text-sm text-text-primary">
-                  {modalTitle ?? `Lisää PDF tositteelle #${documentNumber}`}
+                  {modalTitle ?? `Add PDF for document  #${documentNumber}`}
                 </div>
                 <div className="text-xs text-text-secondary">
-                  Pudota tiedosto tähän tai avaa tiedostonvalitsin klikkaamalla
-                  aluetta.
+                  Drop a file here or click to open file selector.
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setIsPickerOpen(false)}
                 className="text-text-muted hover:text-text-primary transition-colors"
-                aria-label="Sulje PDF-valitsin"
+                aria-label="Close PDF picker"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -455,18 +454,18 @@ export default function ReceiptAttachmentPanel({
                   <>
                     <Loader2 className="mb-4 h-10 w-10 animate-spin text-accent" />
                     <div className="text-sm font-medium text-text-primary">
-                      Ladataan PDF:ää...
+                      Loading PDF...
                     </div>
                   </>
                 ) : (
                   <>
                     <Upload className="mb-4 h-10 w-10 text-accent" />
                     <div className="text-base font-medium text-text-primary">
-                      Pudota PDF tähän tai klikkaa valitaksesi tiedosto
+                      Drop PDF here or click to select file
                     </div>
                     <div className="mt-2 max-w-md text-sm text-text-secondary">
-                      Tiedosto tallennetaan automaattisesti oikeaan
-                      tositekansioon nimellä{' '}
+                      The file is automatically saved to the correct
+                      folder named{' '}
                       {documentCode ?? `MU-${documentNumber}`}.pdf.
                     </div>
                   </>
@@ -474,8 +473,8 @@ export default function ReceiptAttachmentPanel({
               </button>
 
               <div className="mt-3 flex items-center justify-between gap-3 text-xs text-text-muted">
-                <div>Vain PDF-tiedostot ovat sallittuja.</div>
-                <div className="font-mono">{receiptPath ?? 'Ei tositetta'}</div>
+                <div>Only PDF files are allowed.</div>
+                <div className="font-mono">{receiptPath ?? 'No receipt'}</div>
               </div>
 
               {actionError && (

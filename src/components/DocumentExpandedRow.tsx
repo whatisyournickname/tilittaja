@@ -113,8 +113,8 @@ export default function DocumentExpandedRow({
       <div className="space-y-2.5">
         {periodLocked ? (
           <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-3 py-2 text-xs text-yellow-100">
-            Tilikausi on lukittu. Tositteen tiedot, viennit ja liitteet ovat
-            vain luku -tilassa.
+            Period is locked. Document details, entries, and attachments are
+            read-only.
           </div>
         ) : null}
         <div className="grid gap-2.5 xl:grid-cols-2">
@@ -135,7 +135,7 @@ export default function DocumentExpandedRow({
               {metadataMessage?.tone === 'success' && (
                 <span className="inline-flex items-center gap-1 rounded-full border border-green-400/20 bg-green-500/10 px-2 py-0.5 text-[10px] text-green-300">
                   <CheckCircle2 className="h-3 w-3" />
-                  Tallennettu
+                  Saved
                 </span>
               )}
             </div>
@@ -154,7 +154,7 @@ export default function DocumentExpandedRow({
                     type="text"
                     value={draftCategoryValue}
                     onChange={(e) => onCategoryChange(e.target.value)}
-                    aria-label="Tositteen kategoria"
+                    aria-label="Receipt kategoria"
                     className="input-field font-mono uppercase"
                     placeholder="MU"
                     disabled={periodLocked}
@@ -191,7 +191,7 @@ export default function DocumentExpandedRow({
                   type="date"
                   value={draftDateValue}
                   onChange={(e) => onDateChange(e.target.value)}
-                  aria-label="Tositteen päivämäärä"
+                  aria-label="Document date"
                   className="input-field"
                   disabled={periodLocked}
                 />
@@ -241,7 +241,7 @@ export default function DocumentExpandedRow({
                   className={`${primaryButtonClass} w-full`}
                 >
                   <Save className="h-3 w-3" />
-                  {isSavingDocument ? 'Tallennetaan...' : 'Tallenna'}
+                  {isSavingDocument ? 'Saving...' : 'Save'}
                 </button>
                 <button
                   type="button"
@@ -260,13 +260,13 @@ export default function DocumentExpandedRow({
                   disabled={periodLocked}
                   className="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-rose-400/15 bg-rose-500/8 px-2.5 py-1.5 text-xs font-medium text-rose-300 transition hover:border-rose-400/25 hover:bg-rose-500/12 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/4 disabled:text-text-muted"
                 >
-                  Poista tosite
+                  Delete document
                 </DeleteDocumentButton>
                 <Link
                   href={buildDocumentListHref(doc.id, periodId)}
                   className={`${secondaryButtonClass} w-full justify-center`}
                 >
-                  Pysyvä linkki
+                  Permanent link
                 </Link>
               </div>
             </div>
@@ -279,10 +279,10 @@ export default function DocumentExpandedRow({
               <div>
                 <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-text-muted">
                   <ReceiptText className="h-3 w-3" />
-                  Tiliöinnit
+                  Accounting entries
                 </div>
                 <p className="mt-1 text-xs text-text-secondary">
-                  Vientien summien pitää täsmätä ennen tallennusta.
+                  Entry totals must match before saving.
                 </p>
               </div>
               <span
@@ -299,13 +299,13 @@ export default function DocumentExpandedRow({
             <div className="flex flex-1 flex-col justify-between gap-3">
               <div className="grid gap-1.5 sm:grid-cols-3">
                 <span className="rounded-lg border border-border-subtle bg-surface-2/40 px-2.5 py-2 text-[11px] text-text-secondary">
-                  Debet{' '}
+                  Debit{' '}
                   <span className="ml-0.5 font-mono text-text-primary">
                     {formatCurrency(draftDebitTotal / 100)}
                   </span>
                 </span>
                 <span className="rounded-lg border border-border-subtle bg-surface-2/40 px-2.5 py-2 text-[11px] text-text-secondary">
-                  Kredit{' '}
+                  Credit{' '}
                   <span className="ml-0.5 font-mono text-text-primary">
                     {formatCurrency(draftCreditTotal / 100)}
                   </span>
@@ -364,8 +364,8 @@ export default function DocumentExpandedRow({
                   >
                     <Save className="h-3 w-3" />
                     {isSavingAmounts
-                      ? 'Tallennetaan summia...'
-                      : 'Tallenna summat'}
+                      ? 'Saving amounts...'
+                      : 'Save amounts'}
                   </button>
                 </div>
               </div>
@@ -378,16 +378,16 @@ export default function DocumentExpandedRow({
             <thead>
               <tr className="border-b border-white/8 bg-black/20">
                 <th className="w-[148px] py-1.5 pl-3 pr-2 text-left text-[10px] font-medium uppercase tracking-[0.15em] text-text-muted">
-                  Tili
+                  Account
                 </th>
                 <th className="px-2 py-1.5 text-left text-[10px] font-medium uppercase tracking-[0.15em] text-text-muted">
-                  Kuvaus
+                  Description
                 </th>
                 <th className="w-[88px] px-2 py-1.5 text-right text-[10px] font-medium uppercase tracking-[0.15em] text-text-muted">
-                  Debet
+                  Debit
                 </th>
                 <th className="w-[88px] px-2 py-1.5 text-right text-[10px] font-medium uppercase tracking-[0.15em] text-text-muted">
-                  Kredit
+                  Credit
                 </th>
                 <th className="w-24 px-2 py-1.5" />
               </tr>
@@ -479,7 +479,7 @@ export default function DocumentExpandedRow({
                         className="inline-flex shrink-0 items-center justify-center gap-1 rounded-md border border-rose-400/15 bg-rose-500/8 px-2.5 py-1.5 text-[11px] font-medium text-rose-300 transition hover:border-rose-400/25 hover:bg-rose-500/12 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/4 disabled:text-text-muted"
                       >
                         <Trash2 className="h-3 w-3" />
-                        Poista
+                        Delete
                       </button>
                     </td>
                   </tr>
