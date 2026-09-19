@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     if (error instanceof ApiRouteError) {
       return jsonError(error.message, error.status);
     }
-    console.error('Tilittaja state restore failed.', error);
+    console.error('Ledgely state restore failed.', error);
     return jsonError('State restore failed.');
   }
 }

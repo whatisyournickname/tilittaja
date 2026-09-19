@@ -10,7 +10,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'New Document – Tilittaja' };
+export const metadata: Metadata = { title: 'New Document – Ledgely' };
 
 export default async function NewDocumentPage({
   searchParams,

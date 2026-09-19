@@ -25,7 +25,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Documents – Tilittaja' };
+export const metadata: Metadata = { title: 'Documents – Ledgely' };
 
 export default async function DocumentsPage({
   searchParams,

@@ -25,7 +25,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'VAT – Tilittaja' };
+export const metadata: Metadata = { title: 'VAT – Ledgely' };
 
 function resolveTimestamp(
   raw: string | string[] | undefined,

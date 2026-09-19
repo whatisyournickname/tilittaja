@@ -22,7 +22,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'General ledger – Tilittaja' };
+export const metadata: Metadata = { title: 'General ledger – Ledgely' };
 
 export default async function GeneralLedgerPage({
   searchParams,

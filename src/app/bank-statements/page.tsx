@@ -13,7 +13,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Bank Statements – Tilittaja' };
+export const metadata: Metadata = { title: 'Bank Statements – Ledgely' };
 
 export default async function BankStatementsPage({
   searchParams,

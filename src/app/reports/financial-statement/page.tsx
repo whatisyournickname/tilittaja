@@ -23,7 +23,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Financial statement – Tilittaja' };
+export const metadata: Metadata = { title: 'Financial statement – Ledgely' };
 
 const MATERIAL_BUTTONS = [
   { label: 'Download general ledger PDF', kind: 'general-ledger' },

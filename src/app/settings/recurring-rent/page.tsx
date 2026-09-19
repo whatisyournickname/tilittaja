@@ -10,7 +10,7 @@ import { getRecurringRentPlan } from '@/lib/recurring-rent';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Recurring Rent – Tilittaja',
+  title: 'Recurring Rent – Ledgely',
 };
 
 export default async function RecurringRentPage({

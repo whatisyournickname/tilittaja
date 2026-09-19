@@ -116,11 +116,11 @@ export default function Sidebar({
         >
           <div className="w-7 h-7 bg-linear-to-br from-amber-500 to-amber-700 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-amber-900/20">
             <span className="text-white font-bold text-xs tracking-tight">
-              T
+              L
             </span>
           </div>
           <span className="text-base font-semibold text-text-primary tracking-tight truncate">
-            Tilittaja
+            Ledgely
           </span>
         </Link>
       </div>

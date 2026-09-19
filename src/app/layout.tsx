@@ -18,7 +18,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: 'Tilittaja – Bookkeeping',
+  title: 'Ledgerly – Bookkeeping',
   description: 'Modern bookkeeping app',
 };
 

@@ -25,7 +25,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Bank Statement – Tilittaja' };
+export const metadata: Metadata = { title: 'Bank Statement – Ledgely' };
 
 interface PageProps {
   params: Promise<{ id: string }>;

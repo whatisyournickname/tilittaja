@@ -21,7 +21,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Journal – Tilittaja' };
+export const metadata: Metadata = { title: 'Journal – Ledgely' };
 
 export default async function JournalPage({
   searchParams,

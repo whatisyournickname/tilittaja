@@ -85,7 +85,7 @@ export default function AppShell({ children, sidebar }: AppShellProps) {
               )}
             </button>
             <span className="text-sm font-semibold text-text-primary tracking-tight">
-              Tilittaja
+              Ledgely
             </span>
           </header>
 

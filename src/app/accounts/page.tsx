@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Chart of Accounts – Tilittaja' };
+export const metadata: Metadata = { title: 'Chart of Accounts – Ledgely' };
 
 export default async function AccountsPage() {
   const { accounts, headings } = await runWithResolvedDb(() => ({
