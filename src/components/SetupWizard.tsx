@@ -92,7 +92,7 @@ export default function SetupWizard() {
       <div className="w-full max-w-lg">
         <div className="mb-10 text-center">
           <h1 className="text-2xl font-bold tracking-tight text-text-primary">
-            Ledgely
+            Ledgerly
           </h1>
           <p className="mt-2 text-sm text-text-secondary">
             Welcome! Start by choosing a database.

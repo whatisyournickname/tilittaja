@@ -25,7 +25,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Balance sheet – Ledgely' };
+export const metadata: Metadata = { title: 'Balance sheet – Ledgerly' };
 
 export default async function BalanceSheetPage({
   searchParams,

@@ -10,7 +10,7 @@ import { getRecurringRentPlan } from '@/lib/recurring-rent';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Recurring Rent – Ledgely',
+  title: 'Recurring Rent – Ledgerly',
 };
 
 export default async function RecurringRentPage({

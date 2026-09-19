@@ -19,7 +19,7 @@ interface BootstrapOptions {
 }
 
 /**
- * Creates a brand-new Ledgely SQLite database with all required legacy tables,
+ * Creates a brand-new Ledgerly SQLite database with all required legacy tables,
  * a default Finnish chart of accounts, report structures, and a first period.
  * Returns the slug (directory name) under DATA_DIR.
  */
@@ -125,7 +125,7 @@ export function createNewDatabase(
 }
 
 /**
- * Validates that an external SQLite file has the expected Ledgely schema.
+ * Validates that an external SQLite file has the expected Ledgerly schema.
  * Copies it into DATA_DIR so the app can manage it uniformly.
  */
 export function linkExternalDatabase(

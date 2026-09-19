@@ -1,4 +1,4 @@
--- Ledgely database schema
+-- Ledgerly database schema
 -- Single source of truth for the expected SQLite table structure.
 --
 -- Legacy tables (created by the original Java Tilitin application and

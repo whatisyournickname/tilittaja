@@ -10,7 +10,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Tuonti ja vienti – Ledgely' };
+export const metadata: Metadata = { title: 'Tuonti ja vienti – Ledgerly' };
 
 export default async function ExportImportPage() {
   const sourceSlug = await requireCurrentDataSource();

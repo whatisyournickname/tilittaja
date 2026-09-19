@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Add bank statement – Ledgely' };
+export const metadata: Metadata = { title: 'Add bank statement – Ledgerly' };
 
 export default async function NewBankStatementPage() {
   const { accounts } = await runWithResolvedDb(() => ({

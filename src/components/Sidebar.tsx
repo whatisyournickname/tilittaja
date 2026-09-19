@@ -120,7 +120,7 @@ export default function Sidebar({
             </span>
           </div>
           <span className="text-base font-semibold text-text-primary tracking-tight truncate">
-            Ledgely
+            Ledgerly
           </span>
         </Link>
       </div>

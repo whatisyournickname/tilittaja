@@ -48,4 +48,4 @@ export const GET = withDb(async (request: NextRequest) => {
   } finally {
     prepared.cleanup();
   }
-}, 'Failed to export Ledgely full state.');
+}, 'Failed to export Ledgerly full state.');

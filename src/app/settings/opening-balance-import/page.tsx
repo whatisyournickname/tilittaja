@@ -9,7 +9,7 @@ import { type PageSearchParams, resolvePeriodId } from '@/lib/page-params';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Opening Balance – Ledgely',
+  title: 'Opening Balance – Ledgerly',
 };
 
 export default async function OpeningBalanceImportPage({

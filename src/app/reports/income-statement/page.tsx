@@ -23,7 +23,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Income Statement – Ledgely' };
+export const metadata: Metadata = { title: 'Income Statement – Ledgerly' };
 
 export default async function IncomeStatementPage({
   searchParams,

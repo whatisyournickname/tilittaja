@@ -16,7 +16,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Settings – Ledgely' };
+export const metadata: Metadata = { title: 'Settings – Ledgerly' };
 
 export default async function SettingsPage({
   searchParams,
