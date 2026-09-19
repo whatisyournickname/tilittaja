@@ -12,7 +12,7 @@ export const GET = withDb(async (request: NextRequest) => {
 
   if (!isMaterialKind(kindParam)) {
     return jsonError(
-      'Virheellinen materiaali. Käytä kind-parametria: general-ledger, journal, balance-sheet-detailed, balance-sheet-broad tai income-statement-broad.',
+      'Invalid material. Use kind parameter: general-ledger, journal, balance-sheet-detailed, balance-sheet-broad or income-statement-broad.',
       400,
     );
   }
@@ -21,4 +21,4 @@ export const GET = withDb(async (request: NextRequest) => {
   const { buffer, filename } = await buildMaterialPdf(kindParam, periodId);
 
   return pdfResponse(buffer, filename, { inline: preview });
-}, 'Materiaalin PDF-vienti epäonnistui.');
+}, 'Material PDF export failed.');

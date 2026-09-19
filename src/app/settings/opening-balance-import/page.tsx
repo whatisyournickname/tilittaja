@@ -9,7 +9,7 @@ import { type PageSearchParams, resolvePeriodId } from '@/lib/page-params';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Tilikauden avaus – Tilittaja',
+  title: 'Opening Balance – Tilittaja',
 };
 
 export default async function OpeningBalanceImportPage({
@@ -45,11 +45,10 @@ export default async function OpeningBalanceImportPage({
               System
             </p>
             <h1 className="text-xl font-semibold tracking-tight text-text-primary">
-              Tilikauden avaus
+              Opening Balance
             </h1>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary">
-              Create opening balances for selected fiscal year from prior financial statement materials
-              PDF-tiedostoista.
+              Create opening balances for the selected fiscal year from prior financial statement materials PDFs.
             </p>
           </div>
 
@@ -57,7 +56,7 @@ export default async function OpeningBalanceImportPage({
             href="/settings"
             className="inline-flex items-center gap-2 self-start rounded-xl border border-border-subtle bg-surface-0/60 px-4 py-2.5 text-sm font-medium text-text-primary transition hover:border-accent/30 hover:text-accent-light"
           >
-            Takaisin asetuksiin
+            Back to settings
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>

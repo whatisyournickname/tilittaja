@@ -272,7 +272,7 @@ export default function OpeningBalanceImportPanel({
               If the balances extracted from materials do not match at the debit/credit level, the import is aborted and no opening document is created.
             </p>
             <p>
-              The tool won't run a second opening balance import for a period that already has a document with the `AVAUS` category.
+              The tool won't run a second opening balance import for a period that already has a document with the `OPENING_BALANCE` category.
             </p>
           </div>
 

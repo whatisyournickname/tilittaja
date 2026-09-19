@@ -18,8 +18,8 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: 'Tilittaja – Kirjanpito',
-  description: 'Moderni kirjanpitosovellus',
+  title: 'Tilittaja – Bookkeeping',
+  description: 'Modern bookkeeping app',
 };
 
 export default async function RootLayout({

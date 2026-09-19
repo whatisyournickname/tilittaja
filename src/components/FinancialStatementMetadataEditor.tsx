@@ -89,7 +89,7 @@ export default function FinancialStatementMetadataEditor({
               htmlFor="tp-attendees"
               className="block text-sm text-text-secondary mb-1"
             >
-              Attendees (e.g. &quot;Matti Meikäläinen owning the entire share capital of the company.&quot;)
+              Attendees (e.g. &quot;Steve Jobs owning the entire share capital of the company.&quot;)
             </label>
             <textarea
               id="tp-attendees"

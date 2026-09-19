@@ -38,7 +38,7 @@ export const GET = withDb(async (request: NextRequest) => {
     periods[0];
 
   if (!selectedPeriod) {
-    return jsonError('Tilikautta ei löytynyt.', 404);
+    return jsonError('Period not found.', 404);
   }
 
   const statements = getBankStatements().filter((statement) =>
@@ -83,7 +83,7 @@ export const GET = withDb(async (request: NextRequest) => {
   }
 
   if (addedCount === 0) {
-    return jsonError('Yhtään tiliotetta ei löytynyt tältä tilikaudelta.', 404);
+    return jsonError('No bank statements found for this period.', 404);
   }
 
   const companySlug = sanitizeForFilename(settings.name);
@@ -95,4 +95,4 @@ export const GET = withDb(async (request: NextRequest) => {
   return zipResponse(zip, `tiliotteet-${companySlug}-${periodSlug}.zip`, {
     noCache: true,
   });
-}, 'Tiliotearkiston ZIP-vienti epäonnistui.');
+}, 'Bank statement archive ZIP export failed.');

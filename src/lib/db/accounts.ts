@@ -30,7 +30,7 @@ export function createAccount(input: CreateAccountInput): Account {
     .prepare('SELECT id FROM account WHERE number = ?')
     .get(input.number);
   if (existing) {
-    throw new Error(`Tilinumero ${input.number} on jo käytössä`);
+    throw new Error(`Account number ${input.number} is already in use`);
   }
 
   const result = db
@@ -69,7 +69,7 @@ export function updateAccount(id: number, input: UpdateAccountInput): Account {
     | Account
     | undefined;
   if (!existing) {
-    throw new Error('Tiliä ei löytynyt');
+    throw new Error('Account not found');
   }
 
   if (input.number !== undefined && input.number !== existing.number) {
@@ -77,7 +77,7 @@ export function updateAccount(id: number, input: UpdateAccountInput): Account {
       .prepare('SELECT id FROM account WHERE number = ? AND id != ?')
       .get(input.number, id);
     if (conflict) {
-      throw new Error(`Tilinumero ${input.number} on jo käytössä`);
+      throw new Error(`Account number ${input.number} is already in use`);
     }
   }
 
@@ -121,7 +121,7 @@ export function deleteAccount(id: number): void {
 
   const existing = db.prepare('SELECT id FROM account WHERE id = ?').get(id);
   if (!existing) {
-    throw new Error('Tiliä ei löytynyt');
+    throw new Error('Account not found');
   }
 
   const entryCount = db
@@ -129,7 +129,7 @@ export function deleteAccount(id: number): void {
     .get(id) as { cnt: number };
   if (entryCount.cnt > 0) {
     throw new Error(
-      `Tiliä ei voi poistaa, koska sillä on ${entryCount.cnt} vientiä`,
+      `Cannot delete account: it has ${entryCount.cnt} entries`,
     );
   }
 
@@ -147,7 +147,7 @@ export function cloneAccount(
     .prepare('SELECT * FROM account WHERE id = ?')
     .get(sourceId) as Account | undefined;
   if (!source) {
-    throw new Error('Lähdettiliä ei löytynyt');
+    throw new Error('Source account not found');
   }
 
   return createAccount({

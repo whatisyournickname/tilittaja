@@ -286,7 +286,7 @@ export async function applyBankStatementDocumentSuggestionsAction(input: unknown
 
     parsed.links.forEach((link) => {
       if (!statementEntryIds.has(link.entryId)) {
-        throw new ApiRouteError('Tilioterivi ei kuulu valittuun tiliotteeseen', 400);
+        throw new ApiRouteError('Bank statement row does not belong to the selected statement', 400);
       }
 
       requireUnlockedBankStatementEntryPeriod(link.entryId);

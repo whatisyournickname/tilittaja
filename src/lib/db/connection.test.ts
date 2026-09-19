@@ -89,7 +89,7 @@ describe('connection', () => {
       delete process.env.DATABASE_PATH;
 
       try {
-        expect(() => getDb()).toThrow('Tietokantaa ei ole määritetty');
+        expect(() => getDb()).toThrow('No database configured');
       } finally {
         if (origEnv !== undefined) process.env.DATABASE_PATH = origEnv;
       }

@@ -114,7 +114,7 @@ function AccountEditorModalContent({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="mb-1 block text-xs text-text-muted">
-                Tyyppi
+                Type
               </label>
               <select
                 value={type}
@@ -152,7 +152,7 @@ function AccountEditorModalContent({
               onClick={onClose}
               className="rounded-lg px-4 py-2 text-xs font-medium text-text-muted transition hover:bg-surface-3/60 hover:text-text-primary"
             >
-              Peruuta
+              Cancel
             </button>
             <button
               type="submit"

@@ -25,7 +25,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Tiliote – Tilittaja' };
+export const metadata: Metadata = { title: 'Bank Statement – Tilittaja' };
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -112,16 +112,16 @@ export default async function BankStatementDetailPage({ params }: PageProps) {
         className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary text-sm mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Takaisin tilioteisiin
+        Back to bank statements
       </Link>
 
       <div className="flex items-start justify-between mb-6">
         <div>
           <p className="text-[10px] uppercase tracking-[0.2em] text-text-muted font-semibold mb-2">
-            Tiliote
+            Bank statement
           </p>
           <h1 className="text-xl font-semibold text-text-primary tracking-tight">
-            Tiliote {periodLabel(statement.period_start, statement.period_end)}
+            Bank statement {periodLabel(statement.period_start, statement.period_end)}
           </h1>
           <p className="text-sm text-text-secondary mt-1">
             {statement.account_number} {statement.account_name} &middot;{' '}
@@ -213,14 +213,14 @@ export default async function BankStatementDetailPage({ params }: PageProps) {
                   rel="noreferrer"
                   className="text-xs text-accent-light hover:text-accent-light"
                 >
-                  Avaa PDF
+                  Open PDF
                 </a>
               )}
             </div>
 
             {statementPdfSrc ? (
               <iframe
-                title={`Tiliote ${statementId} PDF`}
+                title={`Bank statement ${statementId} PDF`}
                 src={statementPdfSrc}
                 className="h-[75vh] min-h-[640px] w-full bg-white"
               />

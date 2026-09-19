@@ -187,7 +187,7 @@ export default function GeneralLedgerFilter({
             disabled={sortedGroups.length === 0 || Boolean(search)}
             className="inline-flex min-h-9 items-center justify-center rounded-lg border border-border-subtle bg-surface-2/60 px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-3/50 hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Laita kaikki kiinni
+            Collapse all
           </button>
           <button
             type="button"
@@ -195,7 +195,7 @@ export default function GeneralLedgerFilter({
             disabled={sortedGroups.length === 0}
             className="inline-flex min-h-9 items-center justify-center rounded-lg border border-border-subtle bg-surface-2/60 px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-3/50 hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Laajenna kaikki
+            Expand all
           </button>
         </div>
 
@@ -239,7 +239,7 @@ export default function GeneralLedgerFilter({
                     <thead>
                       <tr className="border-b border-border-subtle/50">
                         <SortableHeader
-                          label="Nro"
+                          label="No."
                           sortKey="document_number"
                           current={sort}
                           onSort={handleSort}
@@ -276,7 +276,7 @@ export default function GeneralLedgerFilter({
                           className="w-20 py-1.5"
                         />
                         <SortableHeader
-                          label="Saldo"
+                          label="Balance"
                           sortKey="balance"
                           current={sort}
                           onSort={handleSort}
@@ -388,10 +388,10 @@ export default function GeneralLedgerFilter({
             <div className="flex aspect-210/297 items-center justify-center rounded-lg border border-dashed border-border-subtle bg-surface-2/30 p-6 text-center">
               <div>
                 <div className="text-sm font-medium text-text-secondary">
-                  Ei valittua kirjausta
+                  No entry selected
                 </div>
                 <div className="mt-2 text-xs text-text-muted">
-                  Preview-alue on varattu valitun tositteen PDF:lle.
+                  Preview area is reserved for the selected document's PDF.
                 </div>
               </div>
             </div>

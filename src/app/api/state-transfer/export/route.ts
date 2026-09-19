@@ -48,4 +48,4 @@ export const GET = withDb(async (request: NextRequest) => {
   } finally {
     prepared.cleanup();
   }
-}, 'Tilittajan koko tilan vienti epäonnistui.');
+}, 'Failed to export Tilittaja full state.');

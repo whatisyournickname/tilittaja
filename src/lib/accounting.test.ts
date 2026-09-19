@@ -25,7 +25,7 @@ describe('accounting report calculations', () => {
     const result1 = formatCurrency(-0.0001);
     const result2 = formatCurrency(-0.004);
     expect(result1).toContain('0,00');
-    expect(result1).toContain('€');
+    expect(result1).toContain('HKD');
     expect(result1).not.toContain('-');
     expect(result2).toContain('0,00');
     expect(result2).not.toContain('-');
@@ -373,7 +373,7 @@ describe('formatting functions', () => {
 
   it('formatNumber formats without currency symbol', () => {
     const result = formatNumber(1000);
-    expect(result).not.toContain('€');
+    expect(result).not.toContain('HKD');
     expect(result).toContain('1');
   });
 

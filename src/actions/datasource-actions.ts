@@ -108,11 +108,11 @@ export async function setupLinkExternalDatabaseAction(input: unknown) {
 
 export async function setupImportArchiveAction(file: File) {
   if (!(file instanceof File)) {
-    throw new Error('Lähetä ZIP-tiedosto kentässä `file`');
+    throw new Error('Send ZIP file in `file` field');
   }
 
   if (!file.type.includes('zip') && !file.name.toLowerCase().endsWith('.zip')) {
-    throw new Error('Vain ZIP-tiedostot ovat sallittuja');
+    throw new Error('Only ZIP files are allowed');
   }
 
   const archiveBuffer = Buffer.from(await file.arrayBuffer());

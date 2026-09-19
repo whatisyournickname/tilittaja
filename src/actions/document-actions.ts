@@ -121,7 +121,7 @@ export async function createDocumentAction(input: unknown) {
 
     for (const entry of parsed.entries) {
       if (!accountByNumber.has(entry.accountNumber)) {
-        throw new ApiRouteError(`Tiliä ${entry.accountNumber} ei löydy`);
+        throw new ApiRouteError(`Account ${entry.accountNumber} not found`);
       }
     }
 
@@ -195,14 +195,14 @@ export async function saveDocumentEntriesAction(
     for (const deletedEntryId of deletedEntryIdSet) {
       if (!currentEntryMap.has(deletedEntryId)) {
         throw new ApiRouteError(
-          'Poistettava vientirivi ei kuulu valittuun tositteeseen',
+          'Entry to delete does not belong to the selected document',
         );
       }
     }
 
     for (const entry of parsed.entries) {
       if (!currentEntryMap.has(entry.id)) {
-        throw new ApiRouteError('Vientirivi ei kuulu valittuun tositteeseen');
+        throw new ApiRouteError('Entry does not belong to the selected document');
       }
 
       if (deletedEntryIdSet.has(entry.id)) {
@@ -474,7 +474,7 @@ export async function updateDocumentReceiptAction(
     } else {
       const safePath = resolvePdfRelativePath(pdfRoot, parsed.receiptPath);
       if (!safePath) {
-        throw new ApiRouteError('Valittu PDF-tiedosto ei ole kelvollinen');
+        throw new ApiRouteError('Selected PDF file is not valid');
       }
       setDocumentReceiptLink(documentId, safePath);
     }
@@ -542,7 +542,7 @@ export async function uploadDocumentReceiptAction(
     ).get(document.id);
 
     if (!documentLabel) {
-      throw new ApiRouteError('Tositteen koodia ei voitu muodostaa', 500);
+      throw new ApiRouteError('Could not generate document code', 500);
     }
 
     const relativePath = buildUploadedReceiptPath(

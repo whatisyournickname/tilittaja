@@ -74,7 +74,7 @@ function walkFiles(
 
 function listDataSourceFiles(sourceRoot: string): StateExportFile[] {
   if (!fs.existsSync(sourceRoot)) {
-    throw new ApiRouteError('Tietolähdettä ei löytynyt.', 404);
+    throw new ApiRouteError('Data source not found.', 404);
   }
 
   const files: StateExportFile[] = [];
@@ -202,7 +202,7 @@ export async function importStateArchiveAsNewSource(
 
   if (fs.existsSync(dataSourceRoot)) {
     throw new ApiRouteError(
-      `Tietolähde "${slug}" on jo olemassa. Poista se ensin tai käytä tuontia asetuksista.`,
+      `Data source "${slug}" already exists. Remove it first or use import from settings.`,
       409,
     );
   }
@@ -261,7 +261,7 @@ export async function importStateArchiveAsNewSource(
     safeRemove(stageRoot);
     safeRemove(dataSourceRoot);
     if (error instanceof ApiRouteError) throw error;
-    throw new ApiRouteError('Vientipaketin palautus epäonnistui.', 500);
+    throw new ApiRouteError('Failed to restore export archive.', 500);
   }
 }
 
@@ -278,7 +278,7 @@ export async function readImportedStateArchive(
   const manifest = ensureExpectedManifest(JSON.parse(manifestText));
   if (manifest.sourceSlug !== expectedSource) {
     throw new ApiRouteError(
-      `Vientipaketti kuuluu tietolähteelle ${manifest.sourceSlug}, mutta aktiivinen tietolähde on ${expectedSource}.`,
+      `Export archive belongs to data source ${manifest.sourceSlug}, but active data source is ${expectedSource}.`,
       400,
     );
   }
@@ -363,6 +363,6 @@ export async function readImportedStateArchive(
     if (error instanceof ApiRouteError) {
       throw error;
     }
-    throw new ApiRouteError('Vientipaketin palautus epäonnistui.', 500);
+    throw new ApiRouteError('Failed to restore export archive.', 500);
   }
 }

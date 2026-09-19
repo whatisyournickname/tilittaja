@@ -346,7 +346,7 @@ function normalizeCurrencyDisplayAmount(amount: number): number {
 
 const CURRENCY_FORMATTER = new Intl.NumberFormat(LOCALE, {
   style: 'currency',
-  currency: 'EUR',
+  currency: 'HKD',
   ...FRACTION_DIGITS,
 });
 

@@ -25,13 +25,13 @@ export const GET = withDb(async (request: NextRequest) => {
     periods[0];
 
   if (!selectedPeriod) {
-    return jsonError('Tilikautta ei löytynyt.', 404);
+    return jsonError('Period not found.', 404);
   }
 
   const receipts = collectReceiptsForPeriod(selectedPeriod.id, source);
 
   if (receipts.length === 0) {
-    return jsonError('Yhtään tositetta ei löytynyt tältä tilikaudelta.', 404);
+    return jsonError('No documents found for this period.', 404);
   }
 
   const zip = new JSZip();
@@ -59,4 +59,4 @@ export const GET = withDb(async (request: NextRequest) => {
   return zipResponse(zip, `tositteet-${companySlug}-${periodSlug}.zip`, {
     noCache: true,
   });
-}, 'Tositearkiston ZIP-vienti epäonnistui.');
+}, 'Document archive ZIP export failed.');

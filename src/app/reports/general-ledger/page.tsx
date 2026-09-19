@@ -162,7 +162,7 @@ export default async function GeneralLedgerPage({
       <div className="flex items-center justify-between mb-6">
         <div>
           <p className="text-[11px] uppercase tracking-[0.2em] text-text-muted font-semibold mb-1">
-            Raportit
+            Reports
           </p>
           <h1 className="text-xl font-semibold text-text-primary tracking-tight">
             General ledger

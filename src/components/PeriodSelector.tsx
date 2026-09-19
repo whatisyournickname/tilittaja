@@ -34,7 +34,7 @@ export default function PeriodSelector({
       {periods.map((p) => (
         <option key={p.id} value={p.id}>
           {periodLabel(p.start_date, p.end_date)}
-          {p.locked ? ' (lukittu)' : ''}
+          {p.locked ? ' (locked)' : ''}
         </option>
       ))}
     </select>

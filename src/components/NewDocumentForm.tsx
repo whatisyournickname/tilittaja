@@ -196,15 +196,15 @@ export default function NewDocumentForm({
         className="mb-6 inline-flex min-h-[32px] items-center gap-2 text-sm text-text-secondary transition-colors hover:text-text-primary"
       >
         <ArrowLeft className="h-4 w-4" />
-        Takaisin tositteisiin
+        Back to documents
       </Link>
 
       <div className="mb-6">
         <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-          Kirjanpito
+          Bookkeeping
         </p>
         <h1 className="text-xl font-semibold tracking-tight text-text-primary">
-          Uusi tosite
+          New document
         </h1>
       </div>
 

@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
 const positiveInt = z
-  .number({ error: 'Virheellinen arvo' })
-  .int({ error: 'Arvon pitää olla kokonaisluku' })
-  .positive({ error: 'Arvon pitää olla positiivinen' });
+  .number({ error: 'Invalid value' })
+  .int({ error: 'Value must be an integer' })
+  .positive({ error: 'Value must be positive' });
 const nonEmptyTrimmedString = z
-  .string({ error: 'Puuttuva arvo' })
+  .string({ error: 'Missing value' })
   .trim()
-  .min(1, { error: 'Arvo on pakollinen' });
+  .min(1, { error: 'Value is required' });
 
 export const accountFormSchema = z.object({
   number: nonEmptyTrimmedString,
@@ -23,7 +23,7 @@ export const accountCloneSchema = z.object({
 });
 
 export const companyInfoSchema = z.object({
-  name: z.string().trim().min(1, { error: 'Yrityksen nimi on pakollinen' }),
+  name: z.string().trim().min(1, { error: 'Company name is required' }),
   businessId: z.string().trim().optional().default(''),
 });
 
@@ -33,7 +33,7 @@ export const datasourceSchema = z.object({
 
 export const documentCreateSchema = z.object({
   periodId: positiveInt,
-  date: z.number().finite().positive({ error: 'Puuttuvia tietoja' }),
+  date: z.number().finite().positive({ error: 'Missing information' }),
   entries: z
     .array(
       z.object({
@@ -44,7 +44,7 @@ export const documentCreateSchema = z.object({
         rowNumber: z.number().int().nonnegative(),
       }),
     )
-    .min(1, { error: 'Puuttuvia tietoja' }),
+    .min(1, { error: 'Missing information' }),
 });
 
 export const documentUpdateSchema = z.object({
@@ -55,7 +55,7 @@ export const documentUpdateSchema = z.object({
 
 export const documentBulkDeleteSchema = z.object({
   documentIds: z.array(positiveInt).min(1, {
-    error: 'Valitse vähintään yksi tosite',
+    error: 'Select at least one document',
   }),
 });
 
@@ -85,13 +85,13 @@ export const receiptLinkSchema = z.object({
 
 export const vatSettlementSchema = z.object({
   periodId: z
-    .number({ error: 'Virheellinen tilikausi tai päiväys' })
-    .int({ error: 'Virheellinen tilikausi tai päiväys' })
-    .positive({ error: 'Virheellinen tilikausi tai päiväys' }),
+    .number({ error: 'Invalid period or date' })
+    .int({ error: 'Invalid period or date' })
+    .positive({ error: 'Invalid period or date' }),
   date: z
-    .number({ error: 'Virheellinen tilikausi tai päiväys' })
-    .finite({ error: 'Virheellinen tilikausi tai päiväys' })
-    .positive({ error: 'Virheellinen tilikausi tai päiväys' }),
+    .number({ error: 'Invalid period or date' })
+    .finite({ error: 'Invalid period or date' })
+    .positive({ error: 'Invalid period or date' }),
 });
 
 export const periodLockSchema = z.object({
@@ -127,7 +127,7 @@ export const bankStatementAiApplySchema = z.object({
         documentId: positiveInt,
       }),
     )
-    .min(1, { error: 'Valitse vähintään yksi AI-ehdotus' }),
+    .min(1, { error: 'Select at least one AI suggestion' }),
 });
 
 export const bankStatementCreateSchema = z.object({
@@ -174,7 +174,7 @@ export const bankStatementManualCreateSchema = z.object({
         amount: z.number().finite(),
       }),
     )
-    .min(1, { error: 'Lisää vähintään yksi rivi' }),
+    .min(1, { error: 'Add at least one row' }),
 });
 
 export const bankStatementEntryPatchSchema = z.object({

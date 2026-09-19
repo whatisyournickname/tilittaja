@@ -84,7 +84,7 @@ export default function DocumentPickerModal({
             type="button"
             onClick={onClose}
             className="text-text-secondary hover:text-text-primary"
-            aria-label="Sulje tositteen valinta"
+            aria-label="Close document selection"
           >
             <X className="h-5 w-5" />
           </button>
@@ -95,7 +95,7 @@ export default function DocumentPickerModal({
             <SearchInput
               value={documentSearch}
               onChange={onDocumentSearchChange}
-              placeholder="Hae tositetta numerolla, paivalla tai kuvauksella..."
+              placeholder="Search documents by number, date or description..."
               className="mb-3"
             />
 
@@ -118,7 +118,7 @@ export default function DocumentPickerModal({
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
                             <div className="truncate text-sm font-medium">
-                              Tosite #{document.number}
+                              Document #{document.number}
                             </div>
                             <div className="truncate text-xs text-text-secondary">
                               {formatDate(document.date)}
@@ -137,10 +137,10 @@ export default function DocumentPickerModal({
                             }`}
                           >
                             {document.receiptSource === 'manual'
-                              ? 'Valittu kasin'
+                              ? 'Selected'
                               : document.receiptSource === 'automatic'
                                 ? 'Automatic PDF'
-                                : 'Ei PDF:aa'}
+                                : 'No PDF'}
                           </span>
                         </div>
                       </button>
@@ -149,14 +149,14 @@ export default function DocumentPickerModal({
                 </div>
               ) : (
                 <div className="flex h-full items-center justify-center px-4 text-center text-sm text-text-muted">
-                  Hakuehdolla ei loytynyt tositteita.
+                  No documents found with the search criteria.
                 </div>
               )}
             </div>
 
             <div className="mt-3 flex items-center justify-between gap-3">
               <div className="text-xs text-text-muted">
-                {filteredDocuments.length} / {documentCount} tositetta
+                {filteredDocuments.length} / {documentCount} document(s)
               </div>
               <button
                 type="button"
@@ -181,7 +181,7 @@ export default function DocumentPickerModal({
                   <div className="mb-4 flex items-start justify-between gap-4">
                     <div>
                       <h3 className="text-sm font-medium text-text-primary">
-                        Tosite #{selectedDocument.number}
+                        Document #{selectedDocument.number}
                       </h3>
                       <div className="mt-1 text-xs text-text-secondary">
                         {formatDate(selectedDocument.date)}
@@ -201,25 +201,25 @@ export default function DocumentPickerModal({
                       className="inline-flex items-center gap-1 text-xs text-accent-light hover:text-accent-light"
                     >
                       <FileText className="h-3.5 w-3.5" />
-                      Avaa tosite
+                      Open document
                     </Link>
                   </div>
 
                   {previewSrc ? (
                     <iframe
-                      title={`Tosite ${selectedDocument.number} PDF`}
+                      title={`Document ${selectedDocument.number} PDF`}
                       src={previewSrc}
                       className="h-full min-h-96 w-full rounded-lg border border-border-subtle bg-white"
                     />
                   ) : (
                     <div className="flex h-full min-h-96 items-center justify-center rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-6 text-center text-sm text-yellow-100">
-                      Valitulle tositteelle ei loydy PDF-liitetta esikatseluun.
+                      No PDF attachment found for the selected document to preview.
                     </div>
                   )}
                 </>
               ) : (
                 <div className="flex h-full min-h-96 items-center justify-center rounded-lg border border-border-subtle bg-surface-0 text-sm text-text-muted">
-                  Valitse listasta tosite esikatseltavaksi.
+                  Select a document from the list to preview.
                 </div>
               )}
             </div>

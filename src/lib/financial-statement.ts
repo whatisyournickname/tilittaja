@@ -199,7 +199,7 @@ function getMetadataDefaults(
     addMonths(new Date(periodEndDate), 3).getTime(),
   );
   return {
-    place: 'Kolari',
+    place: 'Helsinki',
     signatureDate: toIsoDate(periodEndDate),
     preparedBy: companyName,
     signerName: '',

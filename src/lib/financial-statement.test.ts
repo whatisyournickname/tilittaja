@@ -164,8 +164,8 @@ describe('financialStatement', () => {
   });
 
   it('formats rounded negative zero as zero', () => {
-    expect(formatAmount(-0.0001)).toBe('0,00 €');
-    expect(formatAmount(-0.004)).toBe('0,00 €');
+    expect(formatAmount(-0.0001)).toBe('0,00 HKD');
+    expect(formatAmount(-0.004)).toBe('0,00 HKD');
   });
 
   it('builds package with required compliance and equity figures', () => {
@@ -265,7 +265,7 @@ describe('financialStatement', () => {
 
     const result = buildFinancialStatementPackage(2);
 
-    expect(result.metadata.place).toBe('Kolari');
+    expect(result.metadata.place).toBe('Helsinki');
     expect(result.metadata.signerName).toBe('');
     expect(result.metadata.dischargeTarget).toBe('board-and-ceo');
     expect(result.metadata.microDeclaration).toContain('micro-enterprise');

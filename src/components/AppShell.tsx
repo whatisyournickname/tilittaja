@@ -76,7 +76,7 @@ export default function AppShell({ children, sidebar }: AppShellProps) {
               type="button"
               onClick={() => setMobileOpen((o) => !o)}
               className="inline-flex items-center justify-center rounded-lg p-2 text-text-secondary transition-colors hover:bg-surface-3/60 hover:text-text-primary"
-              aria-label={mobileOpen ? 'Sulje valikko' : 'Avaa valikko'}
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             >
               {mobileOpen ? (
                 <X className="h-5 w-5" />

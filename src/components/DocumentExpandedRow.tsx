@@ -129,7 +129,7 @@ export default function DocumentExpandedRow({
               <div>
                 <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-text-muted">
                   <CalendarDays className="h-3 w-3" />
-                  Tosite
+                  Document
                 </div>
               </div>
               {metadataMessage?.tone === 'success' && (
@@ -147,14 +147,14 @@ export default function DocumentExpandedRow({
                     htmlFor={`document-category-${doc.id}`}
                     className="mb-1 block text-[10px] font-medium uppercase tracking-[0.15em] text-text-muted"
                   >
-                    Kategoria
+                    Category
                   </label>
                   <input
                     id={`document-category-${doc.id}`}
                     type="text"
                     value={draftCategoryValue}
                     onChange={(e) => onCategoryChange(e.target.value)}
-                    aria-label="Receipt kategoria"
+                    aria-label="Receipt category"
                     className="input-field font-mono uppercase"
                     placeholder="MU"
                     disabled={periodLocked}
@@ -165,23 +165,23 @@ export default function DocumentExpandedRow({
                     htmlFor={`document-name-${doc.id}`}
                     className="mb-1 block text-[10px] font-medium uppercase tracking-[0.15em] text-text-muted"
                   >
-                    Viennin nimi
+                    Document name
                   </label>
                   <input
                     id={`document-name-${doc.id}`}
                     type="text"
                     value={draftNameValue}
                     onChange={(e) => onNameChange(e.target.value)}
-                    aria-label="Viennin nimi"
+                    aria-label="Document name"
                     className="input-field"
-                    placeholder="Perustamismenot"
+                    placeholder="Founding expenses"
                     disabled={periodLocked}
                   />
                 </div>
               </div>
               <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_152px]">
                 <div className="rounded-lg border border-border-subtle bg-surface-2/40 px-2.5 py-1.5 text-[11px] text-text-secondary">
-                  Koodi:{' '}
+                  Code:{' '}
                   <span className="font-mono text-text-primary">
                     {draftLabel.code}
                   </span>
@@ -250,7 +250,7 @@ export default function DocumentExpandedRow({
                   className={`${secondaryButtonClass} w-full justify-center`}
                 >
                   <Copy className="h-3 w-3" />
-                  {isDuplicating ? 'Kopioidaan...' : 'Kopioi uudeksi'}
+                  {isDuplicating ? 'Copying...' : 'Duplicate'}
                 </button>
                 <DeleteDocumentButton
                   documentId={doc.id}
@@ -292,7 +292,7 @@ export default function DocumentExpandedRow({
                     : 'border-amber-400/20 bg-amber-500/10 text-amber-200'
                 }`}
               >
-                {amountsBalanced ? 'Tasapainossa' : 'Vaatii tarkistuksen'}
+                {amountsBalanced ? 'Balanced' : 'Needs review'}
               </span>
             </div>
 
@@ -317,7 +317,7 @@ export default function DocumentExpandedRow({
                       : 'border-amber-400/20 bg-amber-500/10 text-amber-200'
                   }`}
                 >
-                  Erotus{' '}
+                  Difference{' '}
                   <span className="ml-0.5 font-mono">
                     {formatCurrency(
                       Math.abs(draftDebitTotal - draftCreditTotal) / 100,
@@ -347,7 +347,7 @@ export default function DocumentExpandedRow({
                       disabled={periodLocked || isSavingAmounts}
                       className={secondaryButtonClass}
                     >
-                      Peru poistot
+                      Cancel deletions
                     </button>
                   )}
                   <button

@@ -10,7 +10,7 @@ import { getRecurringRentPlan } from '@/lib/recurring-rent';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Kuukausivuokrat – Tilittaja',
+  title: 'Recurring Rent – Tilittaja',
 };
 
 export default async function RecurringRentPage({
@@ -48,10 +48,10 @@ export default async function RecurringRentPage({
               System
             </p>
             <h1 className="text-xl font-semibold tracking-tight text-text-primary">
-              Kuukausivuokrat
+              Recurring rent
             </h1>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary">
-              Luo tammikuun vuokrasopimuksista puuttuvat kuukausitositteet
+              Generate missing monthly rent documents from January
               valitulle kaudelle.
             </p>
           </div>
@@ -60,7 +60,7 @@ export default async function RecurringRentPage({
             href="/settings"
             className="inline-flex items-center gap-2 self-start rounded-xl border border-border-subtle bg-surface-0/60 px-4 py-2.5 text-sm font-medium text-text-primary transition hover:border-accent/30 hover:text-accent-light"
           >
-            Takaisin asetuksiin
+            Back to settings
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>

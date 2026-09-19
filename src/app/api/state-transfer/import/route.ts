@@ -24,11 +24,11 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file');
 
     if (!(file instanceof File)) {
-      return jsonError('Lähetä yksi ZIP-tiedosto kentässä `file`', 400);
+      return jsonError('Send one ZIP file in `file` field', 400);
     }
 
     if (!isZipFile(file)) {
-      return jsonError('Vain ZIP-paketit ovat sallittuja', 400);
+      return jsonError('Only ZIP packages are allowed', 400);
     }
 
     const source = resolveRequestDataSource(request);
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     if (error instanceof ApiRouteError) {
       return jsonError(error.message, error.status);
     }
-    console.error('Tilittajan tilan palautus epäonnistui.', error);
-    return jsonError('Tilan palautus epäonnistui.');
+    console.error('Tilittaja state restore failed.', error);
+    return jsonError('State restore failed.');
   }
 }

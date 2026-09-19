@@ -41,9 +41,9 @@ export const runtime = 'nodejs';
 
 const uploadSchema = z.object({
   periodId: z.coerce
-    .number({ error: 'Valitse tilikausi' })
-    .int({ error: 'Valitse tilikausi' })
-    .positive({ error: 'Valitse tilikausi' }),
+    .number({ error: 'Select a period' })
+    .int({ error: 'Select a period' })
+    .positive({ error: 'Select a period' }),
 });
 
 function getPeriodFolder(periodStart: number, periodEnd: number): string {
@@ -68,7 +68,7 @@ function buildImportedReceiptRelativePath(
 }
 
 function buildFallbackName(fileName: string): string {
-  return path.basename(fileName, path.extname(fileName)).trim() || 'Tuotu tosite';
+  return path.basename(fileName, path.extname(fileName)).trim() || 'Imported document';
 }
 
 function hashBuffer(buffer: Buffer): string {
@@ -188,7 +188,7 @@ export const POST = withDb(async (request: NextRequest) => {
   const accountByNumber = new Map(accounts.map((account) => [account.number, account]));
   for (const entry of imported.entries) {
     if (!accountByNumber.has(entry.accountNumber)) {
-      return jsonError(`Tiliä ${entry.accountNumber} ei löydy tilikartasta`, 400);
+      return jsonError(`Account ${entry.accountNumber} not found in chart of accounts`, 400);
     }
   }
 
@@ -224,7 +224,7 @@ export const POST = withDb(async (request: NextRequest) => {
   });
   if (duplicateByContent) {
     return jsonError(
-      `Vastaava tosite on jo olemassa (#${duplicateByContent.number}).`,
+      `Matching document already exists (#${duplicateByContent.number}).`,
       409,
     );
   }
@@ -246,7 +246,7 @@ export const POST = withDb(async (request: NextRequest) => {
       for (const entry of imported.entries) {
         const account = requireResource(
           accountByNumber.get(entry.accountNumber),
-          `Tiliä ${entry.accountNumber} ei löydy`,
+          `Account ${entry.accountNumber} not found`,
         );
         createEntry(
           document.id,

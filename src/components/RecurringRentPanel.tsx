@@ -30,7 +30,7 @@ export default function RecurringRentPanel({
 
   async function handleCreate() {
     if (periodLocked) {
-      setError('Period is locked. Avaa kausi ennen vuokratositteiden luontia.');
+      setError('Period is locked. Unlock the period before creating rent documents.');
       return;
     }
 
@@ -189,8 +189,8 @@ export default function RecurringRentPanel({
                   Vuokratositteet luotu
                 </div>
                 <p className="mt-2 leading-6">
-                  Luotiin {success.createdCount} uutta tositetta {success.templateCount}
-                  vuokrapohjasta. Olemassa olevia kuukausia ohitettiin{' '}
+                  Created {success.createdCount} new document(s) {success.templateCount}
+                  from the rent template. Existing months were skipped{' '}
                   {success.skippedExistingCount}.
                 </p>
               </div>
@@ -219,7 +219,7 @@ export default function RecurringRentPanel({
               jotka on jo liitetty `vuokrasopimus`-nimiseen tositteeseen.
             </p>
             <p>
-              Uusi kuukausitosite saa samat viennit, saman kategorian, saman nimen
+              Each new month document gets the same entries, category and name
               and same PDF link as source document.
             </p>
             <p>

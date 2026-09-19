@@ -20,10 +20,10 @@ function StatementTable({
               Item
             </th>
             <th className="text-right px-6 py-2 text-xs uppercase tracking-wide text-text-secondary">
-              Current kausi
+              Current period
             </th>
             <th className="text-right px-6 py-2 text-xs uppercase tracking-wide text-text-secondary">
-              {comparisonLabel || 'Vertailukausi'}
+              {comparisonLabel || 'Comparison period'}
             </th>
           </tr>
         </thead>
@@ -94,10 +94,10 @@ export function CollapsibleStatementCard({
             </p>
           </div>
           <span className="text-xs font-medium text-text-secondary group-open:hidden">
-            Avaa
+            Open
           </span>
           <span className="hidden text-xs font-medium text-text-secondary group-open:inline">
-            Sulje
+            Close
           </span>
         </div>
       </summary>

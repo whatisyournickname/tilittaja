@@ -151,7 +151,7 @@ describe('POST /api/setup', () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({
-      error: 'Vain ZIP-tiedostot ovat sallittuja',
+      error: 'Only ZIP files are allowed',
     });
   });
 

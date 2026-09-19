@@ -70,14 +70,14 @@ export async function updateFinancialStatementMetadataAction(
     updateSettingProperties(metadataToProperties(metadata));
     revalidateApp(['/settings/recurring-rent']);
     return { ok: true, metadata };
-  }, 'Tilinpäätösasetusten tallennus epäonnistui.');
+  }, 'Failed to save financial statement metadata.');
 }
 
 export async function setPeriodLockAction(periodId: number, locked: boolean) {
   const parsed = periodLockSchema.parse({ periodId, locked });
 
   return runDbAction(() => {
-    requireResource(getPeriod(parsed.periodId), 'Tilikautta ei löytynyt');
+    requireResource(getPeriod(parsed.periodId), 'Period not found');
     setPeriodLocked(parsed.periodId, parsed.locked);
     revalidateApp(['/settings/recurring-rent']);
     return { ok: true, locked: parsed.locked };

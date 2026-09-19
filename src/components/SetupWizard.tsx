@@ -186,7 +186,7 @@ export default function SetupWizard() {
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder="Esim. Firma Oy"
+                  placeholder="e.g. Acme Ltd"
                   className="input-field"
                   required
                   autoFocus
@@ -358,7 +358,7 @@ export default function SetupWizard() {
                   type="text"
                   value={externalName}
                   onChange={(e) => setExternalName(e.target.value)}
-                  placeholder="Esim. Firma Oy"
+                  placeholder="e.g. Acme Ltd"
                   className="input-field"
                 />
               </div>

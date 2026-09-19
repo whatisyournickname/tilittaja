@@ -16,10 +16,10 @@ export default function CollapsibleSection({
             <p className="mt-1 text-sm text-text-secondary">{summary}</p>
           </div>
           <span className="text-xs font-medium text-text-secondary group-open:hidden">
-            Avaa
+            Open
           </span>
           <span className="hidden text-xs font-medium text-text-secondary group-open:inline">
-            Sulje
+            Close
           </span>
         </div>
       </summary>

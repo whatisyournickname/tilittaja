@@ -13,7 +13,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Tiliotteet – Tilittaja' };
+export const metadata: Metadata = { title: 'Bank Statements – Tilittaja' };
 
 export default async function BankStatementsPage({
   searchParams,
@@ -50,14 +50,14 @@ export default async function BankStatementsPage({
       <div className="flex items-center justify-between mb-6">
         <div>
           <p className="text-[11px] uppercase tracking-[0.2em] text-text-muted font-semibold mb-1">
-            Kirjanpito
+            Bookkeeping
           </p>
           <h1 className="text-xl font-semibold text-text-primary tracking-tight">
-            Tiliotteet
+            Bank statements
           </h1>
           <p className="text-sm text-text-secondary mt-1">
             {periodLabel(period.start_date, period.end_date)} ·{' '}
-            {statements.length} tiliotetta
+            {statements.length} bank statement(s)
           </p>
         </div>
         <BankStatementImportButton bankAccounts={bankAccounts} />

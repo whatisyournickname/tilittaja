@@ -200,19 +200,19 @@ export default function BalanceSheetWorkspace({
                 <thead>
                   <tr className="border-b border-border-subtle bg-surface-2/60">
                     <th className="px-2 py-1.5 text-left font-medium text-text-muted w-8">
-                      Nro
+                      No.
                     </th>
                     <th className="px-2 py-1.5 text-left font-medium text-text-muted w-[72px]">
                       Date
                     </th>
                     <th className="px-2 py-1.5 text-left font-medium text-text-muted">
-                      Kuvaus
+                      Description
                     </th>
                     <th className="px-2 py-1.5 text-right font-medium text-text-muted w-[80px]">
-                      Summa
+                      Amount
                     </th>
                     <th className="px-2 py-1.5 text-right font-medium text-text-muted w-[80px]">
-                      Saldo
+                      Balance
                     </th>
                   </tr>
                 </thead>

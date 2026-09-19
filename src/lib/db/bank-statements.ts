@@ -345,7 +345,7 @@ export function createDocumentsFromBankStatementEntries(
     for (const entry of entries) {
       if (!entry.counterpart_account_id) {
         errors.push(
-          `Rivi ${entry.transaction_number}: vastatiliä ei ole valittu`,
+          `Row ${entry.transaction_number}: counterpart account not selected`,
         );
         continue;
       }

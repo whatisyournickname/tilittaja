@@ -20,7 +20,8 @@ export function toCents(amount: number): number {
 export function normalizeAmountSearchValue(value: string): string {
   return value
     .toLowerCase()
-    .replace(/[€\s\u00a0]/g, '')
+    .replace(/[\s\u00a0]/g, '')
+    .replace(/[€$]|HKD/gi, '')
     .replace(/\.(?=\d{3}(?:[.,]|$))/g, '')
     .replace(',', '.');
 }

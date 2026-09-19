@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         !file.name.toLowerCase().endsWith('.zip')
       ) {
         return NextResponse.json(
-          { error: 'Vain ZIP-tiedostot ovat sallittuja' },
+          { error: 'Only ZIP files are allowed' },
           { status: 400 },
         );
       }

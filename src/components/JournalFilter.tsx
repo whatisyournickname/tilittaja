@@ -230,7 +230,7 @@ export default function JournalFilter({
 
         {search && filteredGroups.length !== groups.length ? (
           <p className="text-xs text-text-muted">
-            {filteredGroups.length} / {groups.length} tositetta
+            {filteredGroups.length} / {groups.length} document(s)
           </p>
         ) : null}
       </div>
@@ -275,7 +275,7 @@ export default function JournalFilter({
             <div className="flex aspect-210/297 items-center justify-center rounded-lg border border-dashed border-border-subtle bg-surface-2/30 p-6 text-center">
               <div>
                 <div className="text-sm font-medium text-text-secondary">
-                  Ei valittua tositetta
+                  Ei valittua document(s)
                 </div>
                 <div className="mt-2 text-xs text-text-muted">
                   Preview-alue on varattu valitun tositteen PDF:lle.

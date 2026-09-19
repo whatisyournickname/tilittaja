@@ -28,8 +28,8 @@ interface Props {
 }
 
 function formatAmountChangeCount(count: number): string {
-  if (count === 1) return '1 summa';
-  return `${count} summaa`;
+  if (count === 1) return '1 amount';
+  return `${count} amounts`;
 }
 
 export default function DocumentEntriesEditor({
@@ -294,7 +294,7 @@ export default function DocumentEntriesEditor({
   const amountMessage = amountError
     ? { tone: 'error' as const, text: amountError }
     : amountSaved
-      ? { tone: 'success' as const, text: 'Summat tallennettu.' }
+      ? { tone: 'success' as const, text: 'Amounts saved.' }
       : hasInvalidAmounts
         ? {
             tone: 'warning' as const,
@@ -303,14 +303,14 @@ export default function DocumentEntriesEditor({
         : !amountsBalanced
           ? {
               tone: 'warning' as const,
-              text: `Erotus ${formatCurrency(
+              text: `Difference ${formatCurrency(
                 amountDifference / 100,
               )}. Debit and credit totals must match before saving.`,
             }
           : dirtyAmountCount > 0
             ? {
                 tone: 'warning' as const,
-                text: `${formatAmountChangeCount(dirtyAmountCount)} tallentamatta.`,
+                text: `${formatAmountChangeCount(dirtyAmountCount)} unsaved.`,
               }
             : null;
 
@@ -368,7 +368,7 @@ export default function DocumentEntriesEditor({
                 </span>
               </span>
               <span>
-                Erotus:{' '}
+                Difference:{' '}
                 <span
                   className={`font-mono ${
                     amountDifference === 0
@@ -496,7 +496,7 @@ export default function DocumentEntriesEditor({
                         ) : isDescriptionDirty ? (
                           <>
                             <span className="text-amber-300">
-                              Tallentamatta
+                              Unsaved
                             </span>
                             <button
                               type="button"
@@ -504,14 +504,14 @@ export default function DocumentEntriesEditor({
                               data-skip-description-autosave="true"
                               className="rounded-md border border-border-subtle px-2 py-1 text-text-secondary transition-colors hover:border-border-strong hover:text-text-primary"
                             >
-                              Peru
+                              Cancel
                             </button>
                           </>
                         ) : savedDescriptionId === entry.id ? (
                           <span className="text-emerald-300">Saved</span>
                         ) : (
                           <span className="text-text-muted">
-                            Enter tallentaa
+                            Enter to save
                           </span>
                         )}
                       </div>

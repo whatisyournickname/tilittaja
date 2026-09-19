@@ -102,7 +102,7 @@ export function useDocumentAccountPicker({
           (payload?.accountId ?? accountPicker.selectedAccountId),
       );
       if (!nextAccount) {
-        throw new Error('Valittua tiliä ei löytynyt.');
+        throw new Error('Selected account not found.');
       }
 
       setDocumentsState((prev) =>
@@ -131,7 +131,7 @@ export function useDocumentAccountPicker({
       closeAccountPicker();
     } catch (error) {
       setAccountModalError(
-        error instanceof Error ? error.message : 'Tilin vaihto epäonnistui.',
+        error instanceof Error ? error.message : 'Failed to switch account.',
       );
     } finally {
       setSavingAccountEntryId((current) =>

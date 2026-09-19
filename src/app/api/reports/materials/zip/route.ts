@@ -50,7 +50,7 @@ export const GET = withDb(async (request: NextRequest) => {
   try {
     selectedKinds = parseKinds(request.nextUrl.searchParams);
   } catch {
-    return jsonError('Materiaalien ZIP-vienti epäonnistui.', 400);
+    return jsonError('Materials ZIP export failed.', 400);
   }
 
   const zip = new JSZip();
@@ -75,4 +75,4 @@ export const GET = withDb(async (request: NextRequest) => {
     zip,
     `financialStatement-materiaalit-${companySlug}-${periodSlug}.zip`,
   );
-}, 'Materiaalien ZIP-vienti epäonnistui.');
+}, 'Materials ZIP export failed.');

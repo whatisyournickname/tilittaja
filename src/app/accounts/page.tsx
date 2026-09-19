@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Tilikartta – Tilittaja' };
+export const metadata: Metadata = { title: 'Chart of Accounts – Tilittaja' };
 
 export default async function AccountsPage() {
   const { accounts, headings } = await runWithResolvedDb(() => ({
@@ -52,7 +52,7 @@ export default async function AccountsPage() {
           System
         </p>
         <h1 className="text-xl font-semibold text-text-primary tracking-tight">
-          Tilikartta
+          Chart of Accounts
         </h1>
         <p className="text-sm text-text-secondary mt-1">{accounts.length} accounts</p>
       </div>

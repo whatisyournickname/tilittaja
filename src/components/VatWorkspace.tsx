@@ -121,7 +121,7 @@ export default function VatWorkspace({
       setVatCreatedDocumentId(data.id);
       router.refresh();
     } catch (error) {
-      setVatError(error instanceof Error ? error.message : 'Tuntematon virhe');
+      setVatError(error instanceof Error ? error.message : 'Unknown error');
     } finally {
       setVatSaving(false);
     }
@@ -131,7 +131,7 @@ export default function VatWorkspace({
     <div className="w-full max-w-[1400px] p-5">
       <div className="mb-6">
         <p className={sectionEyebrowClass}>
-          Kirjanpito
+          Bookkeeping
         </p>
         <h1 className="text-xl font-semibold tracking-tight text-text-primary">
           VAT
@@ -182,10 +182,10 @@ export default function VatWorkspace({
                 {[1, 3, 12].map((months) => {
                   const label =
                     months === 1
-                      ? 'Kuukausi'
+                      ? 'Month'
                       : months === 3
                         ? 'Quarter'
-                        : 'Koko kausi';
+                        : 'Full period';
                   return (
                     <button
                       key={months}
@@ -214,7 +214,7 @@ export default function VatWorkspace({
             </div>
           </div>
           <div className="rounded-xl border border-border-subtle bg-surface-0/35 px-4 py-3 lg:min-w-[240px]">
-            <div className={summaryLabelClass}>Valittu aikavali</div>
+            <div className={summaryLabelClass}>Selected period</div>
             <div className="mt-1 text-sm font-medium text-text-primary">
               {formatDate(reportStartDate)} – {formatDate(reportEndDate)}
             </div>
@@ -254,7 +254,7 @@ export default function VatWorkspace({
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
             <div className="rounded-lg border border-border-subtle bg-surface-1/70 px-4 py-3">
               <div className={summaryLabelClass}>
-                Verollinen myynti
+                Taxable sales
               </div>
               <div className="mt-1 font-mono text-xl text-text-primary">
                 {formatCurrency(vatReport.totals.salesBase)}
@@ -262,7 +262,7 @@ export default function VatWorkspace({
             </div>
             <div className="rounded-lg border border-border-subtle bg-surface-1/70 px-4 py-3">
               <div className={summaryLabelClass}>
-                Verolliset ostot
+                Taxable purchases
               </div>
               <div className="mt-1 font-mono text-xl text-text-primary">
                 {formatCurrency(vatReport.totals.purchaseBase)}
@@ -270,7 +270,7 @@ export default function VatWorkspace({
             </div>
             <div className="rounded-lg border border-border-subtle bg-surface-1/70 px-4 py-3">
               <div className={summaryLabelClass}>
-                Suoritettava ALV
+                Output VAT
               </div>
               <div className="mt-1 font-mono text-xl text-text-primary">
                 {formatCurrency(vatReport.totals.outputVat)}
@@ -358,7 +358,7 @@ export default function VatWorkspace({
                           colSpan={4}
                           className="px-3 py-8 text-center text-xs text-text-muted"
                         >
-                          ALV-tilit ovat jo nollassa valitulla tilikaudella.
+                          VAT accounts are already zeroed for the selected period.
                         </td>
                       </tr>
                     ) : null}
@@ -370,7 +370,7 @@ export default function VatWorkspace({
             <div className="rounded-lg border border-border-subtle bg-surface-1/60 p-4">
               <div className="mb-4">
                 <h3 className="text-base font-semibold text-text-primary">
-                  Muodosta ALV-tosite
+                  Create VAT document
                 </h3>
                 <p className="mt-1 text-sm leading-6 text-text-secondary">
                   Document transfers VAT account balance to account{' '}
@@ -422,7 +422,7 @@ export default function VatWorkspace({
               {vatCreatedDocumentId != null ? (
                 <div className="mb-4 rounded-lg border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">
                   VAT document created and added to prepared
-                  ilmoitusten listaan.
+                  returns list.
                 </div>
               ) : null}
 
@@ -432,7 +432,7 @@ export default function VatWorkspace({
                 disabled={vatSaving || !vatSettlement}
                 className="w-full rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-700 disabled:bg-surface-3 disabled:text-text-muted"
               >
-                {vatSaving ? 'Muodostetaan...' : 'Muodosta ALV-ilmoitus'}
+                {vatSaving ? 'Creating...' : 'Create VAT return'}
               </button>
             </div>
           </div>
@@ -441,12 +441,12 @@ export default function VatWorkspace({
 
       <section className="mt-6 card-panel">
         <div className="border-b border-border-subtle px-5 py-4">
-          <p className={sectionEyebrowClass}>ALV-tositteet</p>
+          <p className={sectionEyebrowClass}>VAT documents</p>
           <h2 className="text-lg font-semibold text-text-primary">
-            Laaditut ALV-ilmoitukset
+            Prepared VAT returns
           </h2>
           <p className="mt-1 text-sm leading-6 text-text-secondary">
-            Valitulle tilikaudelle jo muodostetut ALV-tositteet.
+            VAT returns already created for the selected period.
           </p>
         </div>
 
@@ -545,9 +545,9 @@ export default function VatWorkspace({
                     documentCode={document.code}
                     initialReceiptPath={document.receiptPath}
                     initialReceiptSource={document.receiptSource}
-                    attachmentLabel="Liitetty ilmoitus"
+                    attachmentLabel="Attached return"
                     attachButtonLabel="Attach PDF form"
-                    replaceButtonLabel="Vaihda ilmoitus PDF"
+                    replaceButtonLabel="Replace return PDF"
                     emptyStateText="This VAT return has no attachment yet. Add OmaVero PDF from `Attach PDF form`."
                     modalTitle={`Add PDF for return  ${document.code}`}
                   />

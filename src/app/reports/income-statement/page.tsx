@@ -23,7 +23,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Tuloslaskelma – Tilittaja' };
+export const metadata: Metadata = { title: 'Income Statement – Tilittaja' };
 
 export default async function IncomeStatementPage({
   searchParams,
@@ -108,10 +108,10 @@ export default async function IncomeStatementPage({
     <div className="p-5">
       <div className="mb-6">
         <p className="text-[11px] uppercase tracking-[0.2em] text-text-muted font-semibold mb-1">
-          Raportit
+          Reports
         </p>
         <h1 className="text-xl font-semibold text-text-primary tracking-tight">
-          Tuloslaskelma
+          Income statement
         </h1>
         <p className="text-sm text-text-secondary mt-1">
           {periodLabel(period.start_date, period.end_date)}

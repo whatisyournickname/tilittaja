@@ -25,7 +25,7 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'Tositteet – Tilittaja' };
+export const metadata: Metadata = { title: 'Documents – Tilittaja' };
 
 export default async function DocumentsPage({
   searchParams,
@@ -165,14 +165,14 @@ export default async function DocumentsPage({
       <div className="flex items-center justify-between mb-6">
         <div>
           <p className="text-[11px] uppercase tracking-[0.2em] text-text-muted font-semibold mb-1">
-            Kirjanpito
+            Bookkeeping
           </p>
           <h1 className="text-xl font-semibold text-text-primary tracking-tight">
-            Tositteet
+            Documents
           </h1>
           <p className="text-sm text-text-secondary mt-1">
             {periodLabel(period.start_date, period.end_date)} ·{' '}
-            {documents.length} tositetta
+            {documents.length} document(s)
           </p>
         </div>
         <div className="flex items-center gap-4">
@@ -183,7 +183,7 @@ export default async function DocumentsPage({
           {period.locked ? (
             <span className="flex items-center gap-1.5 rounded-lg bg-surface-3 px-3 py-2 text-xs font-medium text-text-muted">
               <Plus className="w-3.5 h-3.5" />
-              Uusi tosite
+              New document
             </span>
           ) : (
             <Link
@@ -191,7 +191,7 @@ export default async function DocumentsPage({
               className="flex items-center gap-1.5 bg-accent hover:bg-amber-700 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
-              Uusi tosite
+              New document
             </Link>
           )}
         </div>

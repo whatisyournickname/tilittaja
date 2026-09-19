@@ -11,9 +11,9 @@ import type { FinancialStatementMetadata } from '@/lib/financial-statement';
 export const GET = withDb(async () => {
   const defaults = getFinancialStatementMetadataDefaults();
   return NextResponse.json({ defaults });
-}, 'Tilinpäätösasetusten haku epäonnistui');
+}, 'Failed to load financial statement settings');
 
 export const POST = jsonActionRoute(async (request: NextRequest) => {
   const body = await readRequestJson<Partial<FinancialStatementMetadata>>(request);
   return updateFinancialStatementMetadataAction(body);
-}, 'Tilinpäätösasetusten tallennus epäonnistui');
+}, 'Failed to save financial statement settings');

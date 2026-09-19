@@ -1,11 +1,11 @@
 export const ACCOUNT_TYPES = {
-  0: 'Vastaavaa', // Assets
-  1: 'Vastattavaa', // Liabilities
-  2: 'Oma pääoma', // Equity
-  3: 'Tulot', // Revenue
-  4: 'Menot', // Expenses
-  5: 'Ed. tilikausien voitto', // Prior year profit
-  6: 'Tilikauden voitto', // Current year profit
+  0: 'Assets',
+  1: 'Liabilities',
+  2: 'Equity',
+  3: 'Revenue',
+  4: 'Expenses',
+  5: "Prior periods' profit",
+  6: "Current period's profit",
 } as const;
 
 export type AccountType = keyof typeof ACCOUNT_TYPES;

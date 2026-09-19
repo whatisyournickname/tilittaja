@@ -115,7 +115,7 @@ export function useDocumentEditing({
     if (!nextCategory) {
       setMetadataErrors((prev) => ({
         ...prev,
-        [doc.id]: 'Anna tositteen kategoria, kuten MU tai OL.',
+        [doc.id]: 'Set the document category, e.g. MU or OL.',
       }));
       return;
     }
@@ -306,7 +306,7 @@ export function useDocumentEditing({
       if (parsedAmount == null) {
         setAmountErrors((prev) => ({
           ...prev,
-          [doc.id]: 'Korjaa kaikki summat muotoon 0,00 ennen tallennusta.',
+          [doc.id]: 'Fix all amounts to 0.00 before saving.',
         }));
         return;
       }

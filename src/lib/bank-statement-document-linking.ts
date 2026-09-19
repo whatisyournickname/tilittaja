@@ -125,7 +125,7 @@ function tokenize(value: string): string[] {
     'the',
     'and',
     'tai',
-    'sekä',
+    'and',
     'tili',
     'tilisiirto',
     'payment',
@@ -369,7 +369,7 @@ function extractResponseText(payload: unknown): string {
     if (combined) return combined;
   }
 
-  throw new ApiRouteError('GPT ei palauttanut jäsennettävää linkitysehdotusta', 502);
+  throw new ApiRouteError('GPT did not return a parseable linking suggestion', 502);
 }
 
 function parseAiSuggestionPayload(jsonText: string): z.infer<typeof aiSuggestionResponseSchema> {
@@ -377,7 +377,7 @@ function parseAiSuggestionPayload(jsonText: string): z.infer<typeof aiSuggestion
   try {
     parsedJson = JSON.parse(jsonText);
   } catch {
-    throw new ApiRouteError('GPT palautti virheellistä JSON-dataa', 502);
+    throw new ApiRouteError('GPT returned invalid JSON data', 502);
   }
 
   return aiSuggestionResponseSchema.parse(parsedJson);
@@ -399,7 +399,7 @@ function normalizeSuggestions(params: {
         entryId: entry.id,
         documentId: null,
         confidence: 'low' as const,
-        rationale: 'AI ei löytänyt varmaa tositetta tälle riville.',
+        rationale: 'AI did not find a confident document for this row.',
       };
     }
 
@@ -414,7 +414,7 @@ function normalizeSuggestions(params: {
         entryId: entry.id,
         documentId: null,
         confidence: 'low' as const,
-        rationale: 'AI ehdotti rajauksen ulkopuolista tositetta, joten ehdotus hylättiin.',
+        rationale: 'AI suggested a document outside the selection, so the suggestion was rejected.',
       };
     }
 
@@ -437,7 +437,7 @@ async function requestSuggestionJson(params: {
   const env = getEnv();
   if (!env.OPENAI_API_KEY) {
     throw new ApiRouteError(
-      'OPENAI_API_KEY puuttuu palvelimen ympäristömuuttujista',
+      'OPENAI_API_KEY is missing from server environment variables',
       500,
     );
   }
@@ -487,7 +487,7 @@ async function requestSuggestionJson(params: {
 
   const payload = await readJsonResponse(
     response,
-    'OpenAI API palautti virheellistä JSON-dataa',
+    'OpenAI API returned invalid JSON data',
   );
   if (!response.ok) {
     const apiMessage =
@@ -499,8 +499,8 @@ async function requestSuggestionJson(params: {
       'message' in payload.error &&
       typeof payload.error.message === 'string'
         ? payload.error.message
-        : 'OpenAI API -kutsu epäonnistui';
-    throw new ApiRouteError(`AI-linkitys epäonnistui: ${apiMessage}`, 502);
+        : 'OpenAI API call failed';
+    throw new ApiRouteError(`AI linking failed: ${apiMessage}`, 502);
   }
 
   return extractResponseText(payload);

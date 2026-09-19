@@ -99,9 +99,9 @@ export default function BankStatementsList({ statements }: Props) {
     }
 
     const confirmMessage = [
-      `Poistetaanko ${selectedStatements.length} valittua tiliotetta listasta?`,
+      `Remove ${selectedStatements.length} selected bank statement(s) from the list?`,
       '',
-      'Valittujen tiliotteiden rowt poistetaan, mutta tositteita ei poisteta.',
+      'Selected bank statement rows are removed, but documents are not deleted.',
     ].join('\n');
 
     if (!window.confirm(confirmMessage)) {
@@ -181,13 +181,13 @@ export default function BankStatementsList({ statements }: Props) {
                     type="checkbox"
                     checked={allSelected}
                     onChange={toggleAll}
-                    aria-label="Valitse kaikki tiliotteet"
+                    aria-label="Select all bank statements"
                     className="h-4 w-4"
                   />
                 </label>
               </th>
               <th className="text-left text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2">
-                Kausi
+                Period
               </th>
               <th className="text-left text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2">
                 Bank account
@@ -224,7 +224,7 @@ export default function BankStatementsList({ statements }: Props) {
                         type="checkbox"
                         checked={selectedIds.has(statement.id)}
                         onChange={() => toggleSelection(statement.id)}
-                        aria-label={`Valitse tiliote ${statementPeriodLabel}`}
+                        aria-label={`Select bank statement ${statementPeriodLabel}`}
                         className="h-4 w-4"
                       />
                     </label>

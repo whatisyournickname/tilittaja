@@ -11,12 +11,12 @@ export const GET = withDb(async (request: NextRequest) => {
   const statementId = Number(statementIdParam);
 
   if (!Number.isInteger(statementId) || statementId <= 0) {
-    return jsonError('Virheellinen tiliote', 400);
+    return jsonError('Invalid bank statement', 400);
   }
 
   const statement = requireResource(
     getBankStatement(statementId),
-    'Tiliotetta ei loytynyt',
+    'Bank statement not found',
   );
 
   if (!statement.source_file) {

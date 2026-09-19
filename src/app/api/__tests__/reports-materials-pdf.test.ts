@@ -50,7 +50,7 @@ describe('GET /api/reports/materials/pdf', () => {
 
     expect(response.status).toBe(400);
     const body = await response.json();
-    expect(body.error).toContain('Virheellinen materiaali');
+    expect(body.error).toContain('Invalid material');
   });
 
   it('builds material PDF and returns response', async () => {

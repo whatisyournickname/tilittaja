@@ -16,7 +16,7 @@ export const GET = withDb(async (request: NextRequest) => {
 
   if (packageData.compliance.hardErrors > 0) {
     return jsonError(
-      'PDF-vienti estetty: pakollisia tilinpäätöksen tietoja puuttuu tarkistuslistan mukaan.',
+      'PDF export blocked: required financial statement data missing per readiness checklist.',
       400,
     );
   }
@@ -28,4 +28,4 @@ export const GET = withDb(async (request: NextRequest) => {
   return pdfResponse(buffer, `financialStatement-${companySlug}-${periodSlug}.pdf`, {
     inline: preview,
   });
-}, 'Tilinpäätös-PDF:n muodostus epäonnistui');
+}, 'Failed to generate financial statement PDF');

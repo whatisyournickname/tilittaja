@@ -9,7 +9,7 @@ import { getEnv } from '@/lib/env';
 const dbConnections = new Map<string, Database.Database>();
 const initializedDbs = new Set<string>();
 const requestDbPathStore = new AsyncLocalStorage<string>();
-const MISSING_DATA_SOURCE_ERROR = 'Aktiivista tietolähdettä ei löytynyt.';
+const MISSING_DATA_SOURCE_ERROR = 'No active data source found.';
 
 const DATA_DIR = path.resolve(
   /* turbopackIgnore: true */ process.cwd(),
@@ -205,7 +205,7 @@ export function getDb(): Database.Database {
     requestDbPathStore.getStore() ?? env.DATABASE_PATH;
   if (!rawPath) {
     throw new Error(
-      'Tietokantaa ei ole määritetty. Käytä runWithResolvedDb() tai aseta DATABASE_PATH.',
+      'No database configured. Use runWithResolvedDb() or set DATABASE_PATH.',
     );
   }
 

@@ -577,7 +577,7 @@ function getExistingOpeningDocumentId(periodId: number): number | null {
   const metadataMap = getDocumentMetadataMap(documents.map((document) => document.id));
   const existing = documents.find((document) => {
     const metadata = metadataMap.get(document.id);
-    return metadata?.category?.toUpperCase() === 'AVAUS';
+    return metadata?.category?.toUpperCase() === 'OPENING_BALANCE';
   });
 
   return existing?.id ?? null;
@@ -909,7 +909,7 @@ export async function applyImportedOpeningBalance(params: {
       }
 
       const document = createDocument(period.id, period.start_date);
-      const description = `Tilikauden avaus ${imported.previousPeriodEndIso}`;
+      const description = `Opening balance ${imported.previousPeriodEndIso}`;
 
       plan.entries.forEach((entry, index) => {
         const accountId = accountIdByNumber.get(entry.accountNumber);
@@ -932,8 +932,8 @@ export async function applyImportedOpeningBalance(params: {
 
       updateDocumentMetadata(
         document.id,
-        'AVAUS',
-        `Tilikauden avaus ${imported.previousPeriodEndIso}`,
+        'OPENING_BALANCE',
+        `Opening balance ${imported.previousPeriodEndIso}`,
       );
 
       return {

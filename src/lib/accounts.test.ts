@@ -106,7 +106,7 @@ describe('createAccount', () => {
     createAccount({ number: '1000', name: 'Kassa', type: 0 });
     expect(() =>
       createAccount({ number: '1000', name: 'Toinen kassa', type: 0 }),
-    ).toThrow('Tilinumero 1000 on jo käytössä');
+    ).toThrow('Account number 1000 is already in use');
   });
 
   it('persists account to database', () => {
@@ -147,7 +147,7 @@ describe('updateAccount', () => {
     insertAccount(testDb, { number: '1000', name: 'Kassa' });
     const second = insertAccount(testDb, { number: '1001', name: 'Pankki' });
     expect(() => updateAccount(second.id, { number: '1000' })).toThrow(
-      'Tilinumero 1000 on jo käytössä',
+      'Account number 1000 is already in use',
     );
   });
 
@@ -166,7 +166,7 @@ describe('updateAccount', () => {
 
   it('throws for nonexistent account', () => {
     expect(() => updateAccount(999, { name: 'Test' })).toThrow(
-      'Tiliä ei löytynyt',
+      'Account not found',
     );
   });
 
@@ -252,12 +252,12 @@ describe('cloneAccount', () => {
       type: 3,
     });
     expect(() => cloneAccount(source.id, '3000')).toThrow(
-      'Tilinumero 3000 on jo käytössä',
+      'Account number 3000 is already in use',
     );
   });
 
   it('throws for nonexistent source', () => {
-    expect(() => cloneAccount(999, '1000')).toThrow('Lähdettiliä ei löytynyt');
+    expect(() => cloneAccount(999, '1000')).toThrow('Source account not found');
   });
 
   it('creates independent database row', () => {
@@ -289,7 +289,7 @@ describe('deleteAccount', () => {
   });
 
   it('throws for nonexistent account', () => {
-    expect(() => deleteAccount(999)).toThrow('Tiliä ei löytynyt');
+    expect(() => deleteAccount(999)).toThrow('Account not found');
   });
 
   it('prevents deletion when account has entries', () => {
@@ -299,7 +299,7 @@ describe('deleteAccount', () => {
         "INSERT INTO entry (document_id, account_id, debit, amount, description, row_number, flags) VALUES (1, ?, 1, 100, 'test', 1, 0)",
       )
       .run(acc.id);
-    expect(() => deleteAccount(acc.id)).toThrow('ei voi poistaa');
+    expect(() => deleteAccount(acc.id)).toThrow('Cannot delete account');
   });
 
   it('allows deletion after entries are removed', () => {

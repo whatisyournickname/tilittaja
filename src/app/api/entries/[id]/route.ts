@@ -15,7 +15,7 @@ export const PATCH = jsonActionRoute(async (
   request: NextRequest,
   { params }: RouteIdParams,
 ) => {
-  const entryId = await requireRouteId(params, 'vientirivin tunniste');
+  const entryId = await requireRouteId(params, 'entry identifier');
   const body = (await readOptionalRequestJson(request)) as {
     description?: unknown;
     accountId?: unknown;

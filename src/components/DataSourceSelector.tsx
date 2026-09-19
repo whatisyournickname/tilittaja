@@ -23,11 +23,11 @@ export default function DataSourceSelector({
     <div className="px-2.5 pb-2.5">
       <label className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-text-muted mb-1 px-0.5 font-medium">
         <Database className="w-3 h-3" />
-        Tietokanta
+        Database
       </label>
       <select
         id="datasource-select"
-        aria-label="Tietokanta"
+        aria-label="Database"
         value={currentSource}
         onChange={handleChange}
         className="w-full bg-surface-2 border border-border-subtle text-text-primary text-xs rounded-lg px-2.5 py-1.5 focus:ring-1 focus:ring-accent/40 focus:border-accent/40 cursor-pointer transition-colors hover:border-border-medium outline-none"

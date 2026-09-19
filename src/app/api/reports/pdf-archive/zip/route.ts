@@ -41,7 +41,7 @@ export const GET = withDb(async (request: NextRequest) => {
   );
 
   if (!fs.existsSync(archiveRoot)) {
-    return jsonError('PDF-arkistoa ei löydy valitulle tietolähteelle.', 404);
+    return jsonError('PDF archive not found for this data source.', 404);
   }
 
   const relativePdfFiles: string[] = [];
@@ -72,4 +72,4 @@ export const GET = withDb(async (request: NextRequest) => {
   return zipResponse(zip, `pdf-arkisto-${companySlug}-${periodSlug}.zip`, {
     noCache: true,
   });
-}, 'PDF-arkiston ZIP-vienti epäonnistui.');
+}, 'PDF archive ZIP export failed.');

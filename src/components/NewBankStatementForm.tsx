@@ -206,12 +206,12 @@ export default function NewBankStatementForm({ accounts }: Props) {
         className="mb-6 inline-flex min-h-[32px] items-center gap-2 text-sm text-text-secondary transition-colors hover:text-text-primary"
       >
         <ArrowLeft className="h-4 w-4" />
-        Takaisin tilioteisiin
+        Back to bank statements
       </Link>
 
       <div className="mb-6">
         <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-          Kirjanpito
+          Bookkeeping
         </p>
         <h1 className="text-xl font-semibold tracking-tight text-text-primary">
           Add bank statement
@@ -264,7 +264,7 @@ export default function NewBankStatementForm({ accounts }: Props) {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="bs-period-start" className="mb-2 block text-sm font-medium text-text-secondary">
-              Kausi alkaa
+              Period start
             </label>
             <input
               id="bs-period-start"
@@ -464,8 +464,8 @@ export default function NewBankStatementForm({ accounts }: Props) {
 
       {showAccountPicker && (
         <AccountPickerModal
-          title="Valitse pankkitili"
-          subtitle="Valitse tili, johon tiliote liittyy"
+          title="Select bank account"
+          subtitle="Select the account this bank statement relates to"
           searchValue={accountSearch}
           onSearchChange={setAccountSearch}
           onClearSearch={() => setAccountSearch('')}

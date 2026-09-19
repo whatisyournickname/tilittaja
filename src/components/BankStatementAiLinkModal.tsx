@@ -142,7 +142,7 @@ export default function BankStatementAiLinkModal({
           {loading ? (
             <div className="flex h-full min-h-72 flex-col items-center justify-center gap-3 px-6 text-center text-sm text-text-secondary">
               <Loader2 className="h-6 w-6 animate-spin text-accent-light" />
-              AI etsii sopivia tositteita valituille tilioteriveille.
+              AI searches for matching documents for the selected bank statement rows.
             </div>
           ) : loadError ? (
             <div className="p-4">
@@ -165,10 +165,10 @@ export default function BankStatementAiLinkModal({
                     disabled={selectableSuggestionIds.length === 0}
                     className="h-4 w-4 rounded border-border-subtle bg-surface-0/60 text-accent focus:ring-accent/20"
                   />
-                  Valitse kaikki ehdotukset
+                  Select all suggestions
                 </label>
                 <div className="text-xs text-text-muted">
-                  {selectedCount} / {selectableSuggestionIds.length} valittu
+                  {selectedCount} / {selectableSuggestionIds.length} selected
                   to accept
                 </div>
               </div>
@@ -257,7 +257,7 @@ export default function BankStatementAiLinkModal({
                               className="inline-flex shrink-0 items-center gap-1 text-xs text-accent-light hover:text-accent-light"
                             >
                               <Check className="h-3.5 w-3.5" />
-                              Avaa tosite
+                              Open document
                             </Link>
                           </div>
 
@@ -273,7 +273,7 @@ export default function BankStatementAiLinkModal({
                       ) : (
                         <div className="text-sm text-text-muted">
                           AI did not suggest a matching existing
-                          tositetta.
+                          document(s).
                         </div>
                       )}
                     </div>

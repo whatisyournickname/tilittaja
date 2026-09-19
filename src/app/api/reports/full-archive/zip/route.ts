@@ -70,7 +70,7 @@ export const GET = withDb(async (request: NextRequest) => {
     periods[0];
 
   if (!selectedPeriod) {
-    return jsonError('Tilikautta ei löytynyt.', 404);
+    return jsonError('Period not found.', 404);
   }
 
   const zip = new JSZip();
@@ -180,4 +180,4 @@ export const GET = withDb(async (request: NextRequest) => {
     `financialStatement-arkisto-${companySlug}-${periodSlug}.zip`,
     { noCache: true },
   );
-}, 'Arkiston ZIP-vienti epäonnistui.');
+}, 'Archive ZIP export failed.');

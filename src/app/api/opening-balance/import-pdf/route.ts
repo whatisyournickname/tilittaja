@@ -14,9 +14,9 @@ export const runtime = 'nodejs';
 
 const uploadSchema = z.object({
   periodId: z.coerce
-    .number({ error: 'Valitse tilikausi' })
-    .int({ error: 'Valitse tilikausi' })
-    .positive({ error: 'Valitse tilikausi' }),
+    .number({ error: 'Select a period' })
+    .int({ error: 'Select a period' })
+    .positive({ error: 'Select a period' }),
 });
 
 export const POST = withDb(async (request: NextRequest) => {

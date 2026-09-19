@@ -65,7 +65,7 @@ describe('POST /api/state-transfer/import', () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({
-      error: 'Lähetä yksi ZIP-tiedosto kentässä `file`',
+      error: 'Send one ZIP file in `file` field',
     });
   });
 
@@ -76,7 +76,7 @@ describe('POST /api/state-transfer/import', () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({
-      error: 'Vain ZIP-paketit ovat sallittuja',
+      error: 'Only ZIP packages are allowed',
     });
   });
 
@@ -125,7 +125,7 @@ describe('POST /api/state-transfer/import', () => {
 
   it('maps ApiRouteError failures', async () => {
     readImportedStateArchive.mockRejectedValue(
-      new ApiRouteError('Virheellinen paketti', 400),
+      new ApiRouteError('Invalid package', 400),
     );
 
     const response = await POST(
@@ -138,7 +138,7 @@ describe('POST /api/state-transfer/import', () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({
-      error: 'Virheellinen paketti',
+      error: 'Invalid package',
     });
   });
 });

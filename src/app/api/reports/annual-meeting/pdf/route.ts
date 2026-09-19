@@ -19,4 +19,4 @@ export const GET = withDb(async (request: NextRequest) => {
   return pdfResponse(buffer, `annualMeeting-${companySlug}-${periodSlug}.pdf`, {
     inline: preview,
   });
-}, 'Yhtiökokous-PDF:n muodostus epäonnistui');
+}, 'Failed to generate annual meeting PDF');

@@ -29,7 +29,7 @@ export async function createAccountAction(input: unknown) {
       return account;
     } catch (error) {
       const message = error instanceof Error ? error.message : '';
-      if (message.includes('on jo käytössä')) {
+      if (message.includes('already in use')) {
         throw new ApiRouteError(message);
       }
       throw error;
@@ -53,10 +53,10 @@ export async function updateAccountAction(accountId: number, input: unknown) {
       return updated;
     } catch (error) {
       const message = error instanceof Error ? error.message : '';
-      if (message.includes('ei löytynyt')) {
+      if (message.includes('not found')) {
         throw new ApiRouteError(message, 404);
       }
-      if (message.includes('on jo käytössä')) {
+      if (message.includes('already in use')) {
         throw new ApiRouteError(message);
       }
       throw error;
@@ -78,10 +78,10 @@ export async function cloneAccountAction(accountId: number, input: unknown) {
       return cloned;
     } catch (error) {
       const message = error instanceof Error ? error.message : '';
-      if (message.includes('ei löytynyt')) {
+      if (message.includes('not found')) {
         throw new ApiRouteError(message, 404);
       }
-      if (message.includes('on jo käytössä')) {
+      if (message.includes('already in use')) {
         throw new ApiRouteError(message);
       }
       throw error;
@@ -97,10 +97,10 @@ export async function deleteAccountAction(accountId: number) {
       return { ok: true };
     } catch (error) {
       const message = error instanceof Error ? error.message : '';
-      if (message.includes('ei löytynyt')) {
+      if (message.includes('not found')) {
         throw new ApiRouteError(message, 404);
       }
-      if (message.includes('ei voi poistaa')) {
+      if (message.includes('Cannot delete')) {
         throw new ApiRouteError(message);
       }
       throw error;

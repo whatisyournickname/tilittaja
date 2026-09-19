@@ -11,6 +11,7 @@ import {
   getBalanceSheetSummary,
   getIncomeStatementSummary,
   formatSignatureDate,
+  formatFinnishDate,
 } from '@/lib/financial-statement';
 import FinancialStatementMaterialsPanel from '@/components/FinancialStatementMaterialsPanel';
 import FinancialStatementMetadataEditor from '@/components/FinancialStatementMetadataEditor';
@@ -100,11 +101,11 @@ export default async function TilinpaatosPage({
           </CollapsibleSection>
           <CollapsibleSection
             title="Annual meeting"
-            summary={`${financialStatement.metadata.meetingDate || 'Meeting date missing'} | ${
+            summary={`${
               financialStatement.metadata.attendees.trim()
                 ? 'Attendees provided'
                 : 'Attendees missing'
-            }`}
+            } | ${formatFinnishDate(financialStatement.metadata.meetingDate) || 'Meeting date missing'}`}
           >
             <FinancialStatementMetadataEditor
               initialMetadata={financialStatement.metadata}

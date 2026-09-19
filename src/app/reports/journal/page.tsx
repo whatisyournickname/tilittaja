@@ -172,7 +172,7 @@ export default async function JournalPage({
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-            Raportit
+            Reports
           </p>
           <h1 className="text-xl font-semibold tracking-tight text-text-primary">
             Journal

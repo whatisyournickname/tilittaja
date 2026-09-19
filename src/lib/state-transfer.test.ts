@@ -177,7 +177,7 @@ describe('readImportedStateArchive', () => {
 
     await expect(importStateArchiveAsNewSource(archive)).rejects.toMatchObject({
       message:
-        'Tietolähde "existing" on jo olemassa. Poista se ensin tai käytä tuontia asetuksista.',
+        'Data source "existing" already exists. Remove it first or use import from settings.',
     });
   });
 
@@ -196,7 +196,7 @@ describe('readImportedStateArchive', () => {
       readImportedStateArchive(archive, 'manolos'),
     ).rejects.toMatchObject({
       message:
-        'Vientipaketti kuuluu tietolähteelle other-source, mutta aktiivinen tietolähde on manolos.',
+        'Export archive belongs to data source other-source, but active data source is manolos.',
     });
   });
 
@@ -433,7 +433,7 @@ describe('readImportedStateArchive', () => {
     await expect(
       readImportedStateArchive(archive, 'manolos'),
     ).rejects.toMatchObject({
-      message: 'Vientipaketin palautus epäonnistui.',
+      message: 'Failed to restore export archive.',
     });
     expect(fs.readFileSync(path.join(sourceRoot, 'old.txt'), 'utf8')).toBe(
       'old-data',

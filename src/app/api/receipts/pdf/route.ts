@@ -66,7 +66,7 @@ export const GET = withDb(async (request: NextRequest) => {
     }
   } else {
     if (!Number.isInteger(number) || number < 0) {
-      return jsonError('Virheellinen tositenumero', 400);
+      return jsonError('Invalid document number', 400);
     }
 
     const matched = buildReceiptIndex(receiptsRoot).byNumber.get(number) ?? [];

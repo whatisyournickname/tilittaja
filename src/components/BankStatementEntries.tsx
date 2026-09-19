@@ -134,10 +134,10 @@ export default function BankStatementEntries({
         document.description,
         document.receiptPath ?? '',
         document.receiptSource === 'manual'
-          ? 'kasin'
+          ? 'manual'
           : document.receiptSource === 'automatic'
-            ? 'automaattinen'
-            : 'ei liitetta',
+            ? 'automatic'
+            : 'no attachment',
       ]
         .join(' ')
         .toLowerCase()
@@ -478,22 +478,22 @@ export default function BankStatementEntries({
                       }
                       onChange={toggleAll}
                       className="rounded border-border-subtle bg-surface-0/60 text-accent focus:ring-accent/20"
-                      aria-label="Valitse kaikki rowt"
+                      aria-label="Select all rows"
                     />
                   </label>
                 </th>
               )}
               <th className="text-left text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2 w-24">
-                Pvm
+                Date
               </th>
               <th className="text-left text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2">
-                Vastapuoli / Viesti
+                Counterparty / Message
               </th>
               <th className="text-right text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2 w-28">
-                Summa
+                Amount
               </th>
               <th className="text-right text-[10px] font-semibold text-text-muted uppercase tracking-[0.15em] px-3 py-2">
-                Tosite
+                Document
               </th>
             </tr>
           </thead>
@@ -522,7 +522,7 @@ export default function BankStatementEntries({
                             checked={selectedEntries.has(entry.id)}
                             onChange={() => toggleEntry(entry.id)}
                             className="rounded border-border-subtle bg-surface-0/60 text-accent focus:ring-accent/20"
-                            aria-label={`Valitse row: ${entry.counterparty || 'tiliotevienti'}`}
+                            aria-label={`Select row: ${entry.counterparty || 'bank statement entry'}`}
                           />
                         </label>
                       )}

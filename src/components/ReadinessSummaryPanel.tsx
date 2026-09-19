@@ -92,7 +92,7 @@ export default function ReadinessSummaryPanel({
         <div className="flex items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold text-text-primary">
-              Kirjanpidon valmius
+              Bookkeeping Readiness
             </h2>
             <p className="mt-1 text-sm">
               <SummaryText
@@ -103,10 +103,10 @@ export default function ReadinessSummaryPanel({
             </p>
           </div>
           <span className="text-xs font-medium text-text-secondary group-open:hidden">
-            Avaa
+            Open
           </span>
           <span className="hidden text-xs font-medium text-text-secondary group-open:inline">
-            Sulje
+            Close
           </span>
         </div>
       </summary>
